@@ -3,14 +3,21 @@ project(Falcon)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_definitions(-DBOOST_LOG_DYN_LINK)
-find_package(Boost 1.64.0 COMPONENTS log REQUIRED)
-if(Boost_FOUND)
-    #include_directories( ${Boost_INCLUDE_DIRS} )
-    link_libraries(${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
-else(Boost_FOUND)
-    message(FATAL_ERROR "Cannot link Boost libs.")
-endif(Boost_FOUND)
+# Set the output folder where your program will be created
+set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/bin)
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
+set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 
+add_definitions(-DLOGGING_LEVEL_1)
+
+# The following folder will be included
+include_directories("src/database")
+include_directories("src/base")
+
+add_subdirectory("src/database")
+add_subdirectory("src/base")
 set(SOURCE_FILES src/main.cpp)
+
 add_executable(Falcon ${SOURCE_FILES})
+
+target_link_libraries (Falcon database base)
