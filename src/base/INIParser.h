@@ -1,6 +1,7 @@
 #ifndef FALCON_INIPARSER_H
 #define FALCON_INIPARSER_H
 
+#include <iostream>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ini_parser.hpp>
 
