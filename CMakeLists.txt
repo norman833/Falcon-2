@@ -31,4 +31,4 @@ target_link_libraries (Falcon database base)
 # Testing
 enable_testing()
 
-add_test(NAME FalconTest COMMAND test)
+add_test(NAME FalconTest COMMAND TestRunner)

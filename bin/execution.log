@@ -1,0 +1,32 @@
+0000000 < Sun Jun 18 22:04:29 2017 - 0003938 > ~ <DEBUG> :Starting the application..
+0000001 < Sun Jun 18 22:04:29 2017 - 0004045 > ~ <ERROR> :error
+0000002 < Sun Jun 18 22:04:29 2017 - 0004069 > ~ <WARNING> :WARN
+0000003 < Sun Jun 18 22:04:29 2017 - 0004095 > ~ <DEBUG> :The value of 'i' is 0. 2 more iterations left 
+0000004 < Sun Jun 18 22:04:29 2017 - 0004117 > ~ <DEBUG> :The value of 'i' is 1. 1 more iterations left 
+0000005 < Sun Jun 18 22:04:29 2017 - 0004136 > ~ <DEBUG> :The value of 'i' is 2. 0 more iterations left 
+0000006 < Sun Jun 18 22:04:29 2017 - 0004155 > ~ <WARNING> :Loop over
+0000007 < Sun Jun 18 22:04:29 2017 - 0004172 > ~ <ERROR> :All good things come to an end.. :(
+0000000 < Sun Jun 18 22:07:42 2017 - 0004069 > ~ <DEBUG> :Starting the application..
+0000001 < Sun Jun 18 22:07:42 2017 - 0004217 > ~ <ERROR> :error
+0000002 < Sun Jun 18 22:07:42 2017 - 0004239 > ~ <WARNING> :WARN
+0000003 < Sun Jun 18 22:07:42 2017 - 0004261 > ~ <DEBUG> :The value of 'i' is 0. 2 more iterations left 
+0000004 < Sun Jun 18 22:07:42 2017 - 0004279 > ~ <DEBUG> :The value of 'i' is 1. 1 more iterations left 
+0000005 < Sun Jun 18 22:07:42 2017 - 0004296 > ~ <DEBUG> :The value of 'i' is 2. 0 more iterations left 
+0000006 < Sun Jun 18 22:07:42 2017 - 0004311 > ~ <WARNING> :Loop over
+0000007 < Sun Jun 18 22:07:42 2017 - 0004325 > ~ <ERROR> :All good things come to an end.. :(
+0000000 < Sun Jun 18 22:07:52 2017 - 0003737 > ~ <DEBUG> :Starting the application..
+0000001 < Sun Jun 18 22:07:52 2017 - 0003790 > ~ <ERROR> :error
+0000002 < Sun Jun 18 22:07:52 2017 - 0003805 > ~ <WARNING> :WARN
+0000003 < Sun Jun 18 22:07:52 2017 - 0003821 > ~ <DEBUG> :The value of 'i' is 0. 2 more iterations left 
+0000004 < Sun Jun 18 22:07:52 2017 - 0003834 > ~ <DEBUG> :The value of 'i' is 1. 1 more iterations left 
+0000005 < Sun Jun 18 22:07:52 2017 - 0003846 > ~ <DEBUG> :The value of 'i' is 2. 0 more iterations left 
+0000006 < Sun Jun 18 22:07:52 2017 - 0003857 > ~ <WARNING> :Loop over
+0000007 < Sun Jun 18 22:07:52 2017 - 0003868 > ~ <ERROR> :All good things come to an end.. :(
+0000000 < Sun Jun 18 22:08:38 2017 - 0004025 > ~ <DEBUG> :Starting the application..
+0000001 < Sun Jun 18 22:08:38 2017 - 0004133 > ~ <ERROR> :error
+0000002 < Sun Jun 18 22:08:38 2017 - 0004163 > ~ <WARNING> :WARN
+0000003 < Sun Jun 18 22:08:38 2017 - 0004193 > ~ <DEBUG> :The value of 'i' is 0. 2 more iterations left 
+0000004 < Sun Jun 18 22:08:38 2017 - 0004219 > ~ <DEBUG> :The value of 'i' is 1. 1 more iterations left 
+0000005 < Sun Jun 18 22:08:38 2017 - 0004245 > ~ <DEBUG> :The value of 'i' is 2. 0 more iterations left 
+0000006 < Sun Jun 18 22:08:38 2017 - 0004269 > ~ <WARNING> :Loop over
+0000007 < Sun Jun 18 22:08:38 2017 - 0004292 > ~ <ERROR> :All good things come to an end.. :(
