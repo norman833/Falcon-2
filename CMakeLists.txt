@@ -16,10 +16,13 @@ add_definitions(-DLOGGING_LEVEL_1)
 # The following folder will be included
 include_directories("src/database")
 include_directories("src/base")
+include_directories("src/network")
 
 # Add sub dirs
 add_subdirectory("src/database")
 add_subdirectory("src/base")
+add_subdirectory("src/network")
+
 add_subdirectory("src/test")
 
 set(SOURCE_FILES src/main.cpp)
