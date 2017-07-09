@@ -17,11 +17,13 @@ add_definitions(-DLOGGING_LEVEL_1)
 include_directories("src/database")
 include_directories("src/base")
 include_directories("src/network")
+include_directories("src/marketdata")
 
 # Add sub dirs
 add_subdirectory("src/database")
 add_subdirectory("src/base")
 add_subdirectory("src/network")
+add_subdirectory("src/marketdata")
 
 add_subdirectory("src/test")
 
@@ -29,7 +31,10 @@ set(SOURCE_FILES src/main.cpp)
 
 add_executable(Falcon ${SOURCE_FILES})
 
-target_link_libraries (Falcon database base)
+find_package(Boost 1.64 REQUIRED COMPONENTS system)
+message(STATUS "Boost libs are " ${Boost_LIBRARIES})
+
+target_link_libraries(Falcon database base network marketdata ${Boost_LIBRARIES})
 
 # Testing
 enable_testing()
