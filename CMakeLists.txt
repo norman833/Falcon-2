@@ -18,13 +18,25 @@ include_directories("src/database")
 include_directories("src/base")
 include_directories("src/network")
 include_directories("src/marketdata")
+include_directories("src/gateway")
+
+#gw included
+include_directories("src/gateway/cme")
+
+
 
 # Add sub dirs
 add_subdirectory("src/database")
 add_subdirectory("src/base")
 add_subdirectory("src/network")
 add_subdirectory("src/marketdata")
+add_subdirectory("src/marketaccess")
+add_subdirectory("src/gateway")
 
+#gw sub dirs
+add_subdirectory("src/gateway/cme")
+
+#test subdir
 add_subdirectory("src/test")
 
 set(SOURCE_FILES src/main.cpp)
@@ -32,9 +44,12 @@ set(SOURCE_FILES src/main.cpp)
 add_executable(Falcon ${SOURCE_FILES})
 
 find_package(Boost 1.64 REQUIRED COMPONENTS system)
-message(STATUS "Boost libs are " ${Boost_LIBRARIES})
+find_library(FIX8_LIB fix8)
 
-target_link_libraries(Falcon database base network marketdata ${Boost_LIBRARIES})
+message(STATUS "Boost libs are " ${Boost_LIBRARIES})
+message(STATUS "FIX8 lib is " ${FIX8_LIB})
+
+target_link_libraries(Falcon database base network marketdata marketaccess gateway cme ${FIX8_LIB} ${Boost_LIBRARIES} )
 
 # Testing
 enable_testing()

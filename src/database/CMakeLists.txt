@@ -1,1 +1,1 @@
-add_library(database  DatabaseTask.cpp)
+add_library(database  DBConnection.cpp)
