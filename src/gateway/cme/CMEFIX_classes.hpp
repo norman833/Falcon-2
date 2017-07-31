@@ -48,6 +48,9 @@ HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
 
 //-------------------------------------------------------------------------------------------------
 #include <fix8/f8config.h>
+#include <fix8/f8includes.hpp>
+#include "CMEFIX_types.hpp"
+
 #if defined FIX8_MAGIC_NUM && FIX8_MAGIC_NUM > 16793600L
 #error CMEFIX_classes.hpp version 1.4.0 is out of date. Please regenerate with f8c.
 #endif
