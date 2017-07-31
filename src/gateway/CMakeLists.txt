@@ -1,1 +1,1 @@
-add_library(gateway  GateWay.cpp)
+#add_library(gateway  GateWay.cpp)

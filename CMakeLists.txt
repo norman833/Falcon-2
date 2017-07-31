@@ -45,11 +45,17 @@ add_executable(Falcon ${SOURCE_FILES})
 
 find_package(Boost 1.64 REQUIRED COMPONENTS system)
 find_library(FIX8_LIB fix8)
+find_library(POCO_LIB PocoNet)
+find_library(MySQLConn_LIB mysqlcppconn)
+
 
 message(STATUS "Boost libs are " ${Boost_LIBRARIES})
 message(STATUS "FIX8 lib is " ${FIX8_LIB})
+message(STATUS "POCO lib is " ${POCO_LIB})
+message(STATUS "MySQL Connector lib is " ${MySQLConn_LIB})
 
-target_link_libraries(Falcon database base network marketdata marketaccess gateway cme ${FIX8_LIB} ${Boost_LIBRARIES} )
+
+target_link_libraries(Falcon database base network marketdata marketaccess cme ${FIX8_LIB} ${POCO_LIB} ${MySQLConn_LIB} ${Boost_LIBRARIES} )
 
 # Testing
 enable_testing()

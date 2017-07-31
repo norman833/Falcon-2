@@ -29,7 +29,7 @@ namespace falcon {
 
         private:
             bool started_;
-            falcon::db::DBConnection dbConnection_;
+            falcon::db::DBConnection* dbConnection_;
             std::unordered_map<std::string, falcon::gw::GateWay*> gateWayMap_;
         };
     } //namespace ma

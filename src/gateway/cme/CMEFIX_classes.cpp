@@ -1,5 +1,5 @@
 //-------------------------------------------------------------------------------------------------
-// *** f8c generated file: DO NOT EDIT! Created: 2017-07-17 23:06:04 ***
+// *** f8c generated file: DO NOT EDIT! Created: 2017-07-31 23:30:03 ***
 //-------------------------------------------------------------------------------------------------
 /*
 
@@ -92,30 +92,6 @@ namespace {
 const char *cn[] // Component names
 {
    "",
-   "CommissionData", // 1
-   "DiscretionInstructions", // 2
-   "FinancingDetails", // 3
-   "Instrument", // 4
-   "InstrumentExtension", // 5
-   "InstrumentLeg", // 6
-   "LegBenchmarkCurveData", // 7
-   "LegStipulations", // 8
-   "NestedParties", // 9
-   "NestedParties2", // 10
-   "NestedParties3", // 11
-   "OrderQtyData", // 12
-   "Parties", // 13
-   "PegInstructions", // 14
-   "PositionAmountData", // 15
-   "PositionQty", // 16
-   "SettlInstructionsData", // 17
-   "SettlParties", // 18
-   "SpreadOrBenchmarkCurveData", // 19
-   "Stipulations", // 20
-   "TrdRegTimestamps", // 21
-   "UnderlyingInstrument", // 22
-   "UnderlyingStipulations", // 23
-   "YieldData", // 24
 };
 
 } // namespace
@@ -129,58 +105,24 @@ const CMEFIX::CMEFIX_BaseMsgEntry::Pair msgpairs[]
    { "3", { Type2Type<CMEFIX::Reject>(), "Reject" } },
    { "4", { Type2Type<CMEFIX::SequenceReset>(), "SequenceReset" } },
    { "5", { Type2Type<CMEFIX::Logout>(), "Logout" } },
-   { "6", { Type2Type<CMEFIX::IOI>(), "IOI" } },
+   { "6", { Type2Type<CMEFIX::IndicationofInterest>(), "IndicationofInterest" } },
    { "7", { Type2Type<CMEFIX::Advertisement>(), "Advertisement" } },
    { "8", { Type2Type<CMEFIX::ExecutionReport>(), "ExecutionReport" } },
    { "9", { Type2Type<CMEFIX::OrderCancelReject>(), "OrderCancelReject" } },
    { "A", { Type2Type<CMEFIX::Logon>(), "Logon" } },
-   { "AA", { Type2Type<CMEFIX::DerivativeSecurityList>(), "DerivativeSecurityList" } },
-   { "AB", { Type2Type<CMEFIX::NewOrderMultileg>(), "NewOrderMultileg" } },
-   { "AC", { Type2Type<CMEFIX::MultilegOrderCancelReplace>(), "MultilegOrderCancelReplace" } },
-   { "AD", { Type2Type<CMEFIX::TradeCaptureReportRequest>(), "TradeCaptureReportRequest" } },
-   { "AE", { Type2Type<CMEFIX::TradeCaptureReport>(), "TradeCaptureReport" } },
-   { "AF", { Type2Type<CMEFIX::OrderMassStatusRequest>(), "OrderMassStatusRequest" } },
-   { "AG", { Type2Type<CMEFIX::QuoteRequestReject>(), "QuoteRequestReject" } },
-   { "AH", { Type2Type<CMEFIX::RFQRequest>(), "RFQRequest" } },
-   { "AI", { Type2Type<CMEFIX::QuoteStatusReport>(), "QuoteStatusReport" } },
-   { "AJ", { Type2Type<CMEFIX::QuoteResponse>(), "QuoteResponse" } },
-   { "AK", { Type2Type<CMEFIX::Confirmation>(), "Confirmation" } },
-   { "AL", { Type2Type<CMEFIX::PositionMaintenanceRequest>(), "PositionMaintenanceRequest" } },
-   { "AM", { Type2Type<CMEFIX::PositionMaintenanceReport>(), "PositionMaintenanceReport" } },
-   { "AN", { Type2Type<CMEFIX::RequestForPositions>(), "RequestForPositions" } },
-   { "AO", { Type2Type<CMEFIX::RequestForPositionsAck>(), "RequestForPositionsAck" } },
-   { "AP", { Type2Type<CMEFIX::PositionReport>(), "PositionReport" } },
-   { "AQ", { Type2Type<CMEFIX::TradeCaptureReportRequestAck>(), "TradeCaptureReportRequestAck" } },
-   { "AR", { Type2Type<CMEFIX::TradeCaptureReportAck>(), "TradeCaptureReportAck" } },
-   { "AS", { Type2Type<CMEFIX::AllocationReport>(), "AllocationReport" } },
-   { "AT", { Type2Type<CMEFIX::AllocationReportAck>(), "AllocationReportAck" } },
-   { "AU", { Type2Type<CMEFIX::ConfirmationAck>(), "ConfirmationAck" } },
-   { "AV", { Type2Type<CMEFIX::SettlementInstructionRequest>(), "SettlementInstructionRequest" } },
-   { "AW", { Type2Type<CMEFIX::AssignmentReport>(), "AssignmentReport" } },
-   { "AX", { Type2Type<CMEFIX::CollateralRequest>(), "CollateralRequest" } },
-   { "AY", { Type2Type<CMEFIX::CollateralAssignment>(), "CollateralAssignment" } },
-   { "AZ", { Type2Type<CMEFIX::CollateralResponse>(), "CollateralResponse" } },
    { "B", { Type2Type<CMEFIX::News>(), "News" } },
-   { "BA", { Type2Type<CMEFIX::CollateralReport>(), "CollateralReport" } },
-   { "BB", { Type2Type<CMEFIX::CollateralInquiry>(), "CollateralInquiry" } },
-   { "BC", { Type2Type<CMEFIX::NetworkCounterpartySystemStatusRequest>(), "NetworkCounterpartySystemStatusRequest" } },
-   { "BD", { Type2Type<CMEFIX::NetworkCounterpartySystemStatusResponse>(), "NetworkCounterpartySystemStatusResponse" } },
-   { "BE", { Type2Type<CMEFIX::UserRequest>(), "UserRequest" } },
-   { "BF", { Type2Type<CMEFIX::UserResponse>(), "UserResponse" } },
-   { "BG", { Type2Type<CMEFIX::CollateralInquiryAck>(), "CollateralInquiryAck" } },
-   { "BH", { Type2Type<CMEFIX::ConfirmationRequest>(), "ConfirmationRequest" } },
    { "C", { Type2Type<CMEFIX::Email>(), "Email" } },
    { "D", { Type2Type<CMEFIX::NewOrderSingle>(), "NewOrderSingle" } },
    { "E", { Type2Type<CMEFIX::NewOrderList>(), "NewOrderList" } },
    { "F", { Type2Type<CMEFIX::OrderCancelRequest>(), "OrderCancelRequest" } },
    { "G", { Type2Type<CMEFIX::OrderCancelReplaceRequest>(), "OrderCancelReplaceRequest" } },
    { "H", { Type2Type<CMEFIX::OrderStatusRequest>(), "OrderStatusRequest" } },
-   { "J", { Type2Type<CMEFIX::AllocationInstruction>(), "AllocationInstruction" } },
+   { "J", { Type2Type<CMEFIX::Allocation>(), "Allocation" } },
    { "K", { Type2Type<CMEFIX::ListCancelRequest>(), "ListCancelRequest" } },
    { "L", { Type2Type<CMEFIX::ListExecute>(), "ListExecute" } },
    { "M", { Type2Type<CMEFIX::ListStatusRequest>(), "ListStatusRequest" } },
    { "N", { Type2Type<CMEFIX::ListStatus>(), "ListStatus" } },
-   { "P", { Type2Type<CMEFIX::AllocationInstructionAck>(), "AllocationInstructionAck" } },
+   { "P", { Type2Type<CMEFIX::AllocationACK>(), "AllocationACK" } },
    { "Q", { Type2Type<CMEFIX::DontKnowTrade>(), "DontKnowTrade" } },
    { "R", { Type2Type<CMEFIX::QuoteRequest>(), "QuoteRequest" } },
    { "S", { Type2Type<CMEFIX::Quote>(), "Quote" } },
@@ -191,7 +133,7 @@ const CMEFIX::CMEFIX_BaseMsgEntry::Pair msgpairs[]
    { "Y", { Type2Type<CMEFIX::MarketDataRequestReject>(), "MarketDataRequestReject" } },
    { "Z", { Type2Type<CMEFIX::QuoteCancel>(), "QuoteCancel" } },
    { "a", { Type2Type<CMEFIX::QuoteStatusRequest>(), "QuoteStatusRequest" } },
-   { "b", { Type2Type<CMEFIX::MassQuoteAcknowledgement>(), "MassQuoteAcknowledgement" } },
+   { "b", { Type2Type<CMEFIX::QuoteAcknowledgement>(), "QuoteAcknowledgement" } },
    { "c", { Type2Type<CMEFIX::SecurityDefinitionRequest>(), "SecurityDefinitionRequest" } },
    { "d", { Type2Type<CMEFIX::SecurityDefinition>(), "SecurityDefinition" } },
    { "e", { Type2Type<CMEFIX::SecurityStatusRequest>(), "SecurityStatusRequest" } },
@@ -204,29 +146,17 @@ const CMEFIX::CMEFIX_BaseMsgEntry::Pair msgpairs[]
    { "k", { Type2Type<CMEFIX::BidRequest>(), "BidRequest" } },
    { "l", { Type2Type<CMEFIX::BidResponse>(), "BidResponse" } },
    { "m", { Type2Type<CMEFIX::ListStrikePrice>(), "ListStrikePrice" } },
-   { "o", { Type2Type<CMEFIX::RegistrationInstructions>(), "RegistrationInstructions" } },
-   { "p", { Type2Type<CMEFIX::RegistrationInstructionsResponse>(), "RegistrationInstructionsResponse" } },
-   { "q", { Type2Type<CMEFIX::OrderMassCancelRequest>(), "OrderMassCancelRequest" } },
-   { "r", { Type2Type<CMEFIX::OrderMassCancelReport>(), "OrderMassCancelReport" } },
-   { "s", { Type2Type<CMEFIX::NewOrderCross>(), "NewOrderCross" } },
-   { "t", { Type2Type<CMEFIX::CrossOrderCancelReplaceRequest>(), "CrossOrderCancelReplaceRequest" } },
-   { "trailer", { Type2Type<CMEFIX::trailer, bool>(), "trailer" } },
-   { "u", { Type2Type<CMEFIX::CrossOrderCancelRequest>(), "CrossOrderCancelRequest" } },
-   { "v", { Type2Type<CMEFIX::SecurityTypeRequest>(), "SecurityTypeRequest" } },
-   { "w", { Type2Type<CMEFIX::SecurityTypes>(), "SecurityTypes" } },
-   { "x", { Type2Type<CMEFIX::SecurityListRequest>(), "SecurityListRequest" } },
-   { "y", { Type2Type<CMEFIX::SecurityList>(), "SecurityList" } },
-   { "z", { Type2Type<CMEFIX::DerivativeSecurityListRequest>(), "DerivativeSecurityListRequest" } }
-}; // 94
+   { "trailer", { Type2Type<CMEFIX::trailer, bool>(), "trailer" } }
+}; // 48
 
 extern const CMEFIX_BaseEntry::Pair fldpairs[];
 
 /// Compiler generated metadata object, accessed through this function.
 const F8MetaCntx& ctx() // avoid SIOF
 {
-   static const CMEFIX_BaseMsgEntry bme(msgpairs, 94);
-   static const CMEFIX_BaseEntry be(fldpairs, 910);
-   static const F8MetaCntx _ctx(4400, bme, be, cn, "FIX.4.4");
+   static const CMEFIX_BaseMsgEntry bme(msgpairs, 48);
+   static const CMEFIX_BaseEntry be(fldpairs, 400);
+   static const F8MetaCntx _ctx(4200, bme, be, cn, "FIX.4.2");
    return _ctx;
 }
 

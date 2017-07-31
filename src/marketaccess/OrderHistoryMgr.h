@@ -2,6 +2,7 @@
 #define FALCON_ORDERHISTORYMGR_H
 
 #include <vector>
+#include <string>
 #include "DBConnection.h"
 
 namespace falcon {
@@ -14,7 +15,7 @@ namespace falcon {
             virtual ~OrderHistoryMgr();
             virtual std::vector<OrderHistory> getOrderHistoryByClientOrderID(std::string id);
         private:
-            falcon::db::DBConnection dbConnection_;
+            falcon::db::DBConnection* dbConnection_;
         };
     } //namespace ma
 } //namespace falcon

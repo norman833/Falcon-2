@@ -23,7 +23,7 @@ namespace falcon {
             virtual bool processOrderUpdate();
 
         private:
-            falcon::db::DBConnection dbConnection_;
+            falcon::db::DBConnection* dbConnection_;
         };
     } //namespace ma
 } //namespace falcon
