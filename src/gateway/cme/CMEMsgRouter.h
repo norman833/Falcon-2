@@ -4,10 +4,13 @@
 #include "CMEFIX_router.hpp"
 namespace falcon {
     namespace cme {
-        class CMESessionClientBase;
+        class CMESessionClient;
 
         class CMEMsgRouter : public FIX8::CMEFIX::CMEFIX_Router {
         public:
+
+            CMEMsgRouter(CMESessionClient& cmeSessionClient):session_(cmeSessionClient){};
+
             virtual bool operator() (const class Message *msg) const{ return false; };
             virtual bool operator() (const class Heartbeat *msg) const;
             virtual bool operator() (const class TestRequest *msg) const{ return false; };
@@ -56,7 +59,7 @@ namespace falcon {
             virtual bool operator() (const class BidResponse *msg) const { return false; }
             virtual bool operator() (const class ListStrikePrice *msg) const { return false; }
         private:
-            CMESessionClientBase*  cmeSessionClientBase_;
+            CMESessionClient&  session_;
         };
 } //namespace cme
 } //namespace falcon

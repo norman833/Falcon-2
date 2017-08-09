@@ -1,13 +1,12 @@
 #include "CMESessionClient.h"
-#include "CMEMsgRouter.h"
 
 namespace falcon {
     namespace cme {
-        using namespace FIX8;
 
-        bool CMESessionClientBase::handle_application(const unsigned seqnum, const Message *&msg) {
+        bool CMESessionClient::handle_application(const unsigned seqnum, const FIX8::Message *&msg) {
+            glout_info << "Processing seqnum " << seqnum << "\n";
 
-            return true;
+            return this->enforce(seqnum, msg) || msg->process(this->router_);
         }
     } //namespace cme
 } //namespace falcon

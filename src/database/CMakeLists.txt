@@ -1,1 +1,1 @@
-add_library(database  DBConnection.cpp)
+add_library(database  MySQLConn.cpp)

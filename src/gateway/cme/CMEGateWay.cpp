@@ -16,25 +16,25 @@ namespace falcon {
 
         };
 
-        bool CMEGateWay::setCMESessionClient(CMESessionClient *cmeSessionClient) {
-            if(this->cmeSessionClient_){
+        bool CMEGateWay::setCMESessionClient(ReliableCMESessionClient *reliableCMESessionClient) {
+            if(this->sessionClient_){
                 return false;
             }
             else{
-                this->cmeSessionClient_ = cmeSessionClient;
+                this->sessionClient_ = reliableCMESessionClient;
                 return true;
             }
         }
 
         int32_t CMEGateWay::start() {
 
-            this->cmeSessionClient_->start(false);
+            this->sessionClient_->start(false);
             return 0;
         };
 
         int32_t CMEGateWay::stop() {
 
-            this->cmeSessionClient_->session_ptr()->stop();
+            this->sessionClient_->session_ptr()->stop();
             return 0;
         };
 

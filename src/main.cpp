@@ -1,52 +1,58 @@
-#include "base/Logger.h"
-#include "base/INIParser.h"
+#include <string>
+#include <ctime>
 
 #include "CMEFIX_router.hpp"
 #include "CMEFIX_classes.hpp"
-#include "CMEFIX_types.hpp"
-#include "network/MultiCastConnMgr.h"
 
-#include "fix8/logger.hpp"
-#include "MySQLConn.h"
+#include "CMEGateWay.h"
+#include "CMESessionClient.h"
+std::string getGlobalLogName(){
+    std::stringstream ss;
+    std::time_t result = std::time(nullptr);
+    std::string str = std::string(std::ctime(&result));
+    ss << "FalconLog " << str.substr(0, str.size()-1) << ".log";
+
+    return ss.str();
+};
+
 int main() {
 
     using namespace FIX8;
+    using namespace falcon;
+    using namespace falcon::cme;
 
-    CMEFIX::CMEFIX_Router router;
-    CMEFIX::Logon logon;
+    std::string logName = getGlobalLogName();
 
-    Logger::LogFlags flag;
-    Logger::Levels level;
+    GlobalLogger::set_global_filename(logName);
 
-
-    FileLogger fileLogger("./fix8log", flag, level );
-
-
-    glout << "test";
-
-    glout_error << "error";
-    glout_fatal << "fatal error " << 999;
+    glout_error << "Falcon Starting...";
+    glout_fatal << "test fatal error " << 999;
     glout_info << "fyi " << 0;
 
-    falcon::db::DBConnection* dbConnection = new falcon::db::MySQLConn("127.0.0.1", 3306, "root", "Goodyear");
+    ReliableCMESessionClient cmeSessionClient(FIX8::CMEFIX::ctx(), "session.xml", "DLD1" );
+    glout_info << "Session name is " << cmeSessionClient._session_name;
 
-    dbConnection->connect();
+    cmeSessionClient.start(true);
 
-    falcon::base::INIParser parser;
+    CMEGateWay cmeGateWay;
 
-    falcon::network::MultiCastConnMgr multicast_rec("127.0.0.1", "239.255.0.1", 30001);
+    cmeGateWay.setCMESessionClient(&cmeSessionClient);
 
-    std::cout << "Multicast receiver's connection status: " <<  multicast_rec.isConncted() << std::endl;
-    LOG("Starting the application..");
-    LOG_ERR("error");
-    LOG_WARN("WARN");
+//    falcon::db::DBConnection* dbConnection = new falcon::db::MySQLConn("127.0.0.1", 3306, "root", "Goodyear");
 
-    for( short i = 0 ; i < 3 ; i++ )
-    {
-        LOG("The value of 'i' is ", i , ". " , 3 - i - 1 , " more iterations left ");
-    }
-    LOG_WARN("Loop over");
-    LOG_ERR("All good things come to an end.. :(");
 
+    /////////////////////////////////
+    /*  New CMEGateway
+     *  New Connection
+     *  New DBConn
+     *  New OrderRequestMgr and Add CMEGateway
+     *  New ActiveOrderMgr and register it to CMEGateway
+     *  start CME session connection
+     *
+     *
+     *
+     * shutdown
+     *
+     */
     return 0;
 }

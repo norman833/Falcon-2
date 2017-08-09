@@ -1,15 +1,13 @@
 #ifndef FALCON_DBCONNECTION_H
 #define FALCON_DBCONNECTION_H
 
+
 namespace falcon {
     namespace db {
         class DBConnection {
         public:
-            DBConnection(){};
-            virtual ~DBConnection(){};
-
-        private:
-
+            virtual bool connect() = 0;
+            virtual bool disconnect() = 0;
         };
     }// namespace db
 }// namespace falcon
