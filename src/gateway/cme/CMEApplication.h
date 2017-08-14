@@ -8,7 +8,7 @@ namespace falcon {
     namespace cme {
         using namespace FIX;
 
-        class CMEQFClient : public Application {
+        class CMEApplication : public Application {
         public:
             virtual void onCreate( const SessionID& );
             virtual void onLogon( const SessionID& );

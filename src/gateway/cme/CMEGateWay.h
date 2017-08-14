@@ -13,7 +13,7 @@ namespace falcon {
 
     namespace cme{
 
-        class CMEQFClient;
+        class CMESession;
 
         ///CME Gateway implementation which encapsulates a FIX-based Session Manager
         class CMEGateWay : public gw::GateWay {
@@ -28,10 +28,10 @@ namespace falcon {
             virtual bool registerOrderMgr(ma::ActiveOrderMgr* orderMgr);
             virtual bool unregisterOrderMgr(ma::ActiveOrderMgr* orderMgr);
 
-            virtual bool setCMESessionClient(CMEQFClient* cmeSessionClient);
+            virtual bool setCMESessionClient(CMESession* cmeSessionClient);
 
         private:
-            CMEQFClient* sessionClient_{nullptr};
+            CMESession* sessionClient_{nullptr};
 
             std::vector<ma::ActiveOrderMgr*> activeOrderMgrs_;
         };

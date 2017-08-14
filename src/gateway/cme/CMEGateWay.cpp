@@ -1,7 +1,7 @@
 #include <algorithm>
 
 #include "CMEGateWay.h"
-#include "CMEQFClient.h"
+#include "CMESession.h"
 #include "../../marketaccess/OrderRequest.h"
 #include "../../marketaccess/ActiveOrderMgr.h"
 
@@ -16,25 +16,22 @@ namespace falcon {
 
         };
 
-        bool CMEGateWay::setCMESessionClient(CMEQFClient *cmeqfClient) {
+        bool CMEGateWay::setCMESessionClient(CMESession *cmeSession) {
             if(this->sessionClient_){
                 return false;
             }
             else{
-                this->sessionClient_ = cmeqfClient;
+                this->sessionClient_ = cmeSession;
                 return true;
             }
         }
 
         int32_t CMEGateWay::start() {
-
-
-            return 0;
+            return this->sessionClient_->start();
         };
 
         int32_t CMEGateWay::stop() {
-
-            return 0;
+            return this->sessionClient_->stop();
         };
 
         int32_t CMEGateWay::handleOrderRequest(const ma::OrderRequest &request) {
