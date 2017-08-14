@@ -44,18 +44,25 @@ set(SOURCE_FILES src/main.cpp)
 add_executable(Falcon ${SOURCE_FILES})
 
 find_package(Boost 1.64 REQUIRED COMPONENTS system)
-find_package(Poco REQUIRED Foundation Util Net)
-find_library(FIX8_LIB fix8)
 find_library(MySQLConn_LIB mysqlcppconn)
 
+find_library(QuickFIX_LIB quickfix)
+
+
+find_library(PThread pthread)
+find_library(XML2 xml2)
+find_library(ZDev z)
 
 message(STATUS "Boost libs are " ${Boost_LIBRARIES})
-message(STATUS "FIX8 lib is " ${FIX8_LIB})
-message(STATUS "POCO lib is " ${Poco_LIBRARIES})
+
+message(STATUS "QuickFix lib is " ${QuickFIX_LIB})
+
 message(STATUS "MySQL Connector lib is " ${MySQLConn_LIB})
+message(STATUS "PThread lib is " ${PThread})
+message(STATUS "ZDev lib is " ${ZDev})
 
 
-target_link_libraries(Falcon database base network marketdata marketaccess cme ${Poco_LIBRARIES} ${FIX8_LIB} ${MySQLConn_LIB} ${Boost_LIBRARIES} )
+target_link_libraries(Falcon database base network marketdata marketaccess cme ${MySQLConn_LIB} ${Boost_LIBRARIES} )
 
 # Testing
 enable_testing()

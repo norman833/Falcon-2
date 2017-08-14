@@ -2,9 +2,23 @@
 #ifndef FALCON_LOGGER_H
 #define FALCON_LOGGER_H
 
-#include "Log.h"
+#include <string>
+#include <sstream>
+#include <ctime>
 
-static falcon::base::logger< falcon::base::file_log_policy > log_inst( "execution.log" );
+#include "Log.h"
+namespace log{
+    std::string getGlobalLogName(){
+        std::stringstream ss;
+        std::time_t result = std::time(nullptr);
+        std::string str = std::string(std::ctime(&result));
+        ss << "FalconLog " << str.substr(0, str.size()-1) << ".log";
+
+        return ss.str();
+    };
+}
+
+static falcon::base::logger< falcon::base::file_log_policy > log_inst( log::getGlobalLogName() );
 
 #ifdef LOGGING_LEVEL_1
 #define LOG log_inst.print< falcon::base::severity_type::debug >

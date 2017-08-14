@@ -1,1 +1,1 @@
-add_library(cme  CMEFIX_classes.cpp CMEFIX_traits.cpp CMEFIX_types.cpp CMEMsgRouter.cpp CMESessionClient.cpp CMEGateWay.cpp)
+add_library(cme CMEGateWay.cpp CMEQFClient.cpp)
