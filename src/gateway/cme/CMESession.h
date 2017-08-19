@@ -17,7 +17,8 @@ namespace falcon {
         public:
             CMESession(Application& application, std::string settingFile);
             virtual bool start();
-            virtual  bool stop(bool force = false);
+            virtual bool stop(bool force = false);
+            virtual bool sendLogon();
         private:
             SessionSettings settings_;
             FileStoreFactory storeFactory_;

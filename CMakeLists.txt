@@ -43,26 +43,26 @@ set(SOURCE_FILES src/main.cpp)
 
 add_executable(Falcon ${SOURCE_FILES})
 
-find_package(Boost 1.64 REQUIRED COMPONENTS system)
+#find_package(Boost 1.64 REQUIRED COMPONENTS system)
 find_library(MySQLConn_LIB mysqlcppconn)
 
 find_library(QuickFIX_LIB quickfix)
 
 
-find_library(PThread pthread)
-find_library(XML2 xml2)
-find_library(ZDev z)
+find_library(PThread_LIB pthread)
+find_library(XML2_LIB xml2)
+find_library(ZDev_LIB z)
 
-message(STATUS "Boost libs are " ${Boost_LIBRARIES})
+#message(STATUS "Boost libs are " ${Boost_LIBRARIES})
 
 message(STATUS "QuickFix lib is " ${QuickFIX_LIB})
-
+message(STATUS "XML2 lib is " ${XML2_LIB})
 message(STATUS "MySQL Connector lib is " ${MySQLConn_LIB})
-message(STATUS "PThread lib is " ${PThread})
-message(STATUS "ZDev lib is " ${ZDev})
+message(STATUS "PThread lib is " ${PThread_LIB})
+message(STATUS "ZDev lib is " ${ZDev_LIB})
 
 
-target_link_libraries(Falcon database base network marketdata marketaccess cme ${MySQLConn_LIB} ${Boost_LIBRARIES} )
+target_link_libraries(Falcon database base network marketdata marketaccess cme ${MySQLConn_LIB} ${QuickFIX_LIB} ${XML2_LIB} ${PThread_LIB} ${ZDev_LIB} )
 
 # Testing
 enable_testing()

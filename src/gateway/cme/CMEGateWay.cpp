@@ -27,11 +27,11 @@ namespace falcon {
         }
 
         int32_t CMEGateWay::start() {
-            return this->sessionClient_->start();
+            return this->sessionClient_ && this->sessionClient_->start();
         };
 
         int32_t CMEGateWay::stop() {
-            return this->sessionClient_->stop();
+            return this->sessionClient_ && this->sessionClient_->stop();
         };
 
         int32_t CMEGateWay::handleOrderRequest(const ma::OrderRequest &request) {

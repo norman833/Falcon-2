@@ -1,9 +1,11 @@
 #include <string>
 #include <ctime>
 #include <sstream>
+#include <exception>
 
 #include "CMEGateWay.h"
-#include "CMEQFClient.h"
+#include "CMESession.h"
+#include "CMEApplication.h"
 #include "Logger.h"
 
 int main() {
@@ -12,8 +14,24 @@ int main() {
     using namespace falcon::cme;
 
     LOG("Starting the main server...");
+    try {
+        CMEApplication cmeApplication;
+        CMESession cmeSession(cmeApplication, "../config/CMEiLink.ini");
+        cmeSession.start();
 
-    CMEQFClient cmeqfClient;
+        sleep(1);
+        cmeSession.sendLogon();
+
+        sleep(1);
+
+        cmeSession.stop();
+    }
+    catch (ConfigError& e){
+        std::cout << e.what() << std::endl;
+    }
+    catch(std::exception& e){
+        std::cout << e.what() << std::endl;
+    }
 
 //    falcon::db::DBConnection* dbConnection = new falcon::db::MySQLConn("127.0.0.1", 3306, "root", "Goodyear");
 

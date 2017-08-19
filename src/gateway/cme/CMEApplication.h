@@ -3,12 +3,13 @@
 
 #include "quickfix/Application.h"
 #include "quickfix/SessionID.h"
+#include "quickfix/MessageCracker.h"
 
 namespace falcon {
     namespace cme {
         using namespace FIX;
 
-        class CMEApplication : public Application {
+        class CMEApplication : public Application, MessageCracker {
         public:
             virtual void onCreate( const SessionID& );
             virtual void onLogon( const SessionID& );
@@ -19,6 +20,8 @@ namespace falcon {
                 throw( FieldNotFound, IncorrectDataFormat, IncorrectTagValue, RejectLogon );
             virtual void fromApp( const Message&, const SessionID& )
                 throw( FieldNotFound, IncorrectDataFormat, IncorrectTagValue, UnsupportedMessageType );
+
+            virtual void onMessage( const FIX42::NewOrderSingle&, const FIX::SessionID& );
         private:
         };
     } //namespace cme
