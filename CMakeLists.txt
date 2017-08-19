@@ -10,6 +10,16 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 
 message(STATUS "This is BINARY dir " ${CMAKE_BINARY_DIR})
 message(STATUS "This is SOURCE dir " ${CMAKE_SOURCE_DIR})
+message(STATUS "This is CMAKE_LIBRARY_PATH " ${CMAKE_LIBRARY_PATH})
+
+set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH}
+        /lib
+        /usr/lib
+        /usr/lib64
+        /usr/local/lib
+        /usr/local/lib64
+        /usr/lib/x86_64-linux-gnu)
+message(STATUS "This is CMAKE_LIBRARY_PATH " ${CMAKE_LIBRARY_PATH})
 
 add_definitions(-DLOGGING_LEVEL_1)
 
@@ -44,7 +54,7 @@ set(SOURCE_FILES src/main.cpp)
 add_executable(Falcon ${SOURCE_FILES})
 
 #find_package(Boost 1.64 REQUIRED COMPONENTS system)
-find_library(MySQLConn_LIB mysqlcppconn)
+#find_library(MySQLConn_LIB mysqlcppconn)
 
 find_library(QuickFIX_LIB quickfix)
 
@@ -57,12 +67,12 @@ find_library(ZDev_LIB z)
 
 message(STATUS "QuickFix lib is " ${QuickFIX_LIB})
 message(STATUS "XML2 lib is " ${XML2_LIB})
-message(STATUS "MySQL Connector lib is " ${MySQLConn_LIB})
+#message(STATUS "MySQL Connector lib is " ${MySQLConn_LIB})
 message(STATUS "PThread lib is " ${PThread_LIB})
 message(STATUS "ZDev lib is " ${ZDev_LIB})
 
 
-target_link_libraries(Falcon database base network marketdata marketaccess cme ${MySQLConn_LIB} ${QuickFIX_LIB} ${XML2_LIB} ${PThread_LIB} ${ZDev_LIB} )
+target_link_libraries(Falcon database base network marketdata marketaccess cme ${QuickFIX_LIB} ${XML2_LIB} ${PThread_LIB} ${ZDev_LIB} )
 
 # Testing
 enable_testing()
