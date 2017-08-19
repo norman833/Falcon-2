@@ -2,7 +2,7 @@
 #define FALCON_MYSQLCONN_H
 
 #include <DBConnection.h>
-
+/*
 #include "mysql_connection.h"
 #include "mysql_driver.h"
 #include <cppconn/driver.h>
@@ -10,6 +10,7 @@
 #include <cppconn/resultset.h>
 #include <cppconn/statement.h>
 #include <cppconn/prepared_statement.h>
+*/
 
 #include <string>
 #include <cstdint>
@@ -30,9 +31,10 @@ namespace falcon {
             std::string user_;
             std::string password_;
             bool        connected_{false};
-
+            /*
             sql::mysql::MySQL_Driver* driver_;
             sql::Connection* con_;
+             */
         };
     }// namespace db
 }// namespace falcon
