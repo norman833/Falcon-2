@@ -8,7 +8,7 @@
 
 #include "Log.h"
 namespace log{
-    std::string getGlobalLogName(){
+    static std::string getGlobalLogName(){
         std::stringstream ss;
         std::time_t result = std::time(nullptr);
         std::string str = std::string(std::ctime(&result));

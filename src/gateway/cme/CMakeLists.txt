@@ -1,1 +1,1 @@
-add_library(cme CMEGateWay.cpp CMEApplication.cpp CMESession.cpp CMESession.h)
+add_library(cme CMEGateWay.cpp CMEApplication.cpp)

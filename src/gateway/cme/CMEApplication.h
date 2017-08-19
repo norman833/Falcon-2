@@ -1,9 +1,17 @@
 #ifndef FALCON_CMEQFCLIENT_H
 #define FALCON_CMEQFCLIENT_H
 
+#include <cstdint>
+
 #include "quickfix/Application.h"
 #include "quickfix/SessionID.h"
 #include "quickfix/MessageCracker.h"
+#include "quickfix/FileStore.h"
+#include "quickfix/FileLog.h"
+#include "quickfix/Session.h"
+#include "quickfix/SessionSettings.h"
+#include "quickfix/SocketInitiator.h"
+#include "quickfix/Message.h"
 
 namespace falcon {
     namespace cme {
@@ -11,6 +19,10 @@ namespace falcon {
 
         class CMEApplication : public Application, MessageCracker {
         public:
+            CMEApplication(std::string settingFile);
+            virtual bool start();
+            virtual bool stop(bool force);
+
             virtual void onCreate( const SessionID& );
             virtual void onLogon( const SessionID& );
             virtual void onLogout( const SessionID& );
@@ -21,8 +33,16 @@ namespace falcon {
             virtual void fromApp( const Message&, const SessionID& )
                 throw( FieldNotFound, IncorrectDataFormat, IncorrectTagValue, UnsupportedMessageType );
 
-            virtual void onMessage( const FIX42::NewOrderSingle&, const FIX::SessionID& );
+            virtual void onMessage(const FIX42::NewOrderSingle&, const SessionID&);
+            virtual void onMessage(const FIX42::TestRequest&, const SessionID&);
         private:
+            virtual void setCMEHeader(Message&, const SessionID&);
+            virtual void setLogon(Message&, const SessionID&);
+            virtual void setLogout(Message&, const SessionID&);
+            SessionSettings settings_;
+            FileStoreFactory storeFactory_;
+            FileLogFactory logFactory_;
+            SocketInitiator socketInitiator_;
         };
     } //namespace cme
 } //namespace falcon

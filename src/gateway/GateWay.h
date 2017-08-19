@@ -16,8 +16,8 @@ namespace falcon {
         /// A virtual base class for Gateway. Specific exchange gateways should inherit this class
         class GateWay {
         public:
-            virtual int32_t start() = 0;
-            virtual int32_t stop() = 0;
+            virtual bool start() = 0;
+            virtual bool stop() = 0;
             virtual int32_t handleOrderRequest(const ma::OrderRequest& request) = 0;
             virtual int32_t processOrderUpdate() = 0;
             virtual bool registerOrderMgr(ma::ActiveOrderMgr* orderMgr) = 0;

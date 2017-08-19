@@ -4,7 +4,6 @@
 #include <exception>
 
 #include "CMEGateWay.h"
-#include "CMESession.h"
 #include "CMEApplication.h"
 #include "Logger.h"
 
@@ -15,16 +14,16 @@ int main() {
 
     LOG("Starting the main server...");
     try {
-        CMEApplication cmeApplication;
-        CMESession cmeSession(cmeApplication, "../config/CMEiLink.ini");
-        cmeSession.start();
+        CMEApplication cmeApplication("../config/CMEiLink.ini");
+        CMEGateWay cmeGateWay;
 
-        sleep(1);
-        cmeSession.sendLogon();
+        cmeGateWay.setCMESessionClient(&cmeApplication);
 
-        sleep(1);
+        cmeGateWay.start();
 
-        cmeSession.stop();
+        sleep(21);
+
+        cmeGateWay.stop();
     }
     catch (ConfigError& e){
         std::cout << e.what() << std::endl;
