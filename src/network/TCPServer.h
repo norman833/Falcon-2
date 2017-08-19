@@ -4,7 +4,9 @@
 namespace falcon {
     namespace network {
         class TCPServer {
-
+        public:
+            TCPServer();
+            virtual ~TCPServer();
         };
     } //namespace network
 } //namespace falcon
