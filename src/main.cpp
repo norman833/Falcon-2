@@ -21,7 +21,7 @@ int main() {
 
         cmeGateWay.start();
 
-        sleep(24);
+        sleep(26);
 
         cmeGateWay.stop();
     }
