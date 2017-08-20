@@ -1,4 +1,5 @@
 #include "CMEApplication.h"
+#include "Logger.h"
 
 #include "quickfix/fix42/NewOrderSingle.h"
 #include "quickfix/fix42/TestRequest.h"
@@ -10,6 +11,7 @@ namespace falcon {
         CMEApplication::CMEApplication(std::string settingFile) :
                 settings_(settingFile), storeFactory_(settings_), logFactory_(settings_),
                 socketInitiator_(*this, storeFactory_, settings_, logFactory_){
+            LOG("creating CME session...");
         }
 
         bool CMEApplication::start() {
@@ -24,11 +26,11 @@ namespace falcon {
         };
 
         void CMEApplication::onLogon(const SessionID &sessionID) {
-            std::cout << "Logged on..." << std::endl;
+            std::cout << "Session " << sessionID.toString() << " Logged on..." << std::endl;
         };
 
         void CMEApplication::onLogout(const SessionID &sessionID) {
-            std::cout << "Logged out..." << std::endl;
+            std::cout << "Session " << sessionID.toString() << " Logged out..." << std::endl;
         };
 
         void CMEApplication::fromApp(const Message &message, const SessionID &sessionID)

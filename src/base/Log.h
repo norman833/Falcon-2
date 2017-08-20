@@ -93,6 +93,7 @@ namespace falcon {
             };
 
         public:
+
             logger(const std::string &name){
                 log_line_number = 0;
                 policy = new log_policy;
