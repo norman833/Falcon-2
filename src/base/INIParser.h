@@ -2,19 +2,14 @@
 #define FALCON_INIPARSER_H
 
 #include <iostream>
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/ini_parser.hpp>
+//#include <boost/property_tree/ptree.hpp>
+//#include <boost/property_tree/ini_parser.hpp>
 
 namespace falcon {
     namespace base {
         class INIParser {
         public:
-            INIParser(){
-                boost::property_tree::ptree pt;
-                boost::property_tree::ini_parser::read_ini("../config/MainConfig.ini", pt);
-                std::cout << pt.get<std::string>("Section1.Value1") << std::endl;
-                std::cout << pt.get<std::string>("Section1.Value2") << std::endl;
-            }
+            INIParser();
         };
     };// namespace base
 };// namespace falcon
