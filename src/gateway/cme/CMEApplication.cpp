@@ -61,7 +61,7 @@ namespace falcon {
             }
             else if(msgType == FIX::MsgType_Logout){
                 this->setLogout(message, sessionID);
-                std::cout << "Logon sent" << std::endl;
+                std::cout << "Logout sent" << std::endl;
             }
             else if(msgType == FIX::MsgType_Heartbeat){
                 std::cout << "Heartbeat sent " << std::endl;
