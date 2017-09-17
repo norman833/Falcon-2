@@ -1,3 +1,4 @@
+#include <sstream>
 #include "CMEApplication.h"
 #include "Logger.h"
 
@@ -45,31 +46,34 @@ namespace falcon {
         void CMEApplication::fromAdmin(const Message &message, const SessionID &sessionID)
             throw( FieldNotFound, IncorrectDataFormat, IncorrectTagValue, RejectLogon ) {
             auto msgType = message.getHeader().getField(FIX::FIELD::MsgType);
+            std::stringstream sstream;
 
             if(msgType == FIX::MsgType_Heartbeat) {
-                std::cout << "Heartbeat received from " << sessionID.toString() << std::endl;
+                sstream << "Heartbeat received from " << sessionID.toString() << std::endl;
             }
             else if(msgType == FIX::MsgType_ResendRequest){
-                std::cout << "Resend Request received from " << sessionID.toString() << std::endl;
+                sstream << "Resend Request received from " << sessionID.toString() << std::endl;
             }
             else if(msgType == FIX::MsgType_SequenceReset){
-                std::cout << "Sequence Resset received from " << sessionID.toString() << std::endl;
+                sstream << "Sequence Resset received from " << sessionID.toString() << std::endl;
             }
             else if(msgType == FIX::MsgType_Heartbeat) {
-                std::cout << "Heartbeat received from " << sessionID.toString() << std::endl;
+                sstream << "Heartbeat received from " << sessionID.toString() << std::endl;
             }
             else if(msgType == FIX::MsgType_TestRequest){
-                std::cout << "Test Request received from " << sessionID.toString() << std::endl;
+                sstream << "Test Request received from " << sessionID.toString() << std::endl;
             }
             else if(msgType == FIX::MsgType_Logon){
-                std::cout << "Logon ack received from " << sessionID.toString() << std::endl;
+                sstream << "Logon ack received from " << sessionID.toString() << std::endl;
             }
             else if(msgType == FIX::MsgType_Logout){
-                std::cout << "Logout ack received from " << sessionID.toString() << std::endl;
+                sstream << "Logout ack received from " << sessionID.toString() << std::endl;
             }
             else if(msgType == FIX::MsgType_Reject){
-                std::cout << "Session Level Reject received from " << sessionID.toString() << std::endl;
+                sstream << "Session Level Reject received from " << sessionID.toString() << std::endl;
             }
+
+            LOG(sstream.str());
         };
 
         void CMEApplication::toApp(Message &message, const SessionID &sessionID) throw( DoNotSend ) {
@@ -98,9 +102,36 @@ namespace falcon {
 
 
         }
+        void CMEApplication::onMessage(const FIX42::OrderCancelReject &, const SessionID &) {
+
+        }
 
         void CMEApplication::onMessage(const FIX42::ExecutionReport &executionReport, const SessionID &sessionID) {
+            auto execType = executionReport.getField(FIX::FIELD::ExecType);
 
+            if(execType == 'I') {////Order Status Request Acknowledgment
+
+            }
+            else if(execType == '0' || execType == '4' || execType == '5'){ //Order Creation Cancel Modification
+
+            }
+            else if(execType == '1' || execType == '2'){//Order Fill
+
+            }
+            else if(execType == 'C'){//Order Elimination
+
+            }
+            else if(execType == '8'){//Reject
+
+            }
+            else if(execType == 'H'){//Trade Cancel
+
+            }
+            else{
+                std::stringstream sstream;
+                sstream << "Unexpected execution report with execType " << execType << "\n";
+                LOG_ERR(sstream.str());
+            }
         }
 
         void CMEApplication::onMessage(const FIX42::TestRequest &message, const SessionID &sessionID) {
@@ -154,6 +185,7 @@ namespace falcon {
 
             FIX42::OrderCancelRequest orderCancelRequest;
 
+
             //orderCancelRequest.
 
             return true;
@@ -165,6 +197,28 @@ namespace falcon {
             }
 
             FIX42::NewOrderSingle newOrderSingle;
+            //account
+            //client order id
+            newOrderSingle.setField(FIX::HandlInst('1'));
+            newOrderSingle.isSetField(FIX::CustOrderHandlingInst("Y"));
+            //OrderQty
+            //OrderType
+            //Price
+            //Side
+            //Symbol
+            //TimeInforce
+            //TransactTime
+            //ManualOrderIndicator
+            //FIX::ManualOrderIndicator(true);
+            return true;
+        }
+
+        bool CMEApplication::sendOrderCancelReplaceRequest(const SessionID &sessionID) {
+
+            return true;
+        }
+
+        bool CMEApplication::sendOrderStatusRequest(const SessionID &sessionID) {
 
             return true;
         }

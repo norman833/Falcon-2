@@ -240,6 +240,11 @@
    <field name='ClearingFirm' required='N' />
    <field name='ClearingAccount' required='N' />
    <field name='MultiLegReportingType' required='N' />
+   <field name='ManualOrderIndicator' required='N' />
+   <field name='CorrelationClOrdID' required='N' />
+   <field name='CustOrderHandlingInst' required='N' />
+   <field name='RequestTime' required='N' />
+
   </message>
   <message name='OrderCancelReject' msgcat='app' msgtype='9'>
    <field name='OrderID' required='Y' />
@@ -257,6 +262,9 @@
    <field name='Text' required='N' />
    <field name='EncodedTextLen' required='N' />
    <field name='EncodedText' required='N' />
+   <field name='ManualOrderIndicator' required='N' />
+   <field name='CorrelationClOrdID' required='N' />
+   <field name='RequestTime' required='N' />
   </message>
   <message name='Logon' msgcat='admin' msgtype='A'>
    <field name='EncryptMethod' required='Y' />
@@ -432,6 +440,7 @@
    <field name='DiscretionOffset' required='N' />
    <field name='ClearingFirm' required='N' />
    <field name='ClearingAccount' required='N' />
+   <field name ='CtiCode' required='Y' />
   </message>
   <message name='NewOrderList' msgcat='app' msgtype='E'>
    <field name='ListID' required='Y' />
@@ -563,6 +572,7 @@
    <field name='Text' required='N' />
    <field name='EncodedTextLen' required='N' />
    <field name='EncodedText' required='N' />
+   <field name='CorrelationClOrdID' required='N' />
   </message>
   <message name='OrderCancelReplaceRequest' msgcat='app' msgtype='G'>
    <field name='OrderID' required='N' />
@@ -640,6 +650,8 @@
    <field name='LocateReqd' required='N' />
    <field name='ClearingFirm' required='N' />
    <field name='ClearingAccount' required='N' />
+   <field name='CtiCode' required='Y' />
+   <field name='CorrelationClOrdID' required='N' />
   </message>
   <message name='OrderStatusRequest' msgcat='app' msgtype='H'>
    <field name='OrderID' required='N' />
@@ -667,6 +679,7 @@
    <field name='EncodedSecurityDescLen' required='N' />
    <field name='EncodedSecurityDesc' required='N' />
    <field name='Side' required='Y' />
+   <field name='CorrelationClOrdID' required='N' />
   </message>
   <message name='Allocation' msgcat='app' msgtype='J'>
    <field name='AllocID' required='Y' />
@@ -2750,11 +2763,17 @@
   <field number='444' name='ListStatusText' type='STRING' />
   <field number='445' name='EncodedListStatusTextLen' type='LENGTH' />
   <field number='446' name='EncodedListStatusText' type='DATA' />
+  <field number='527' name='SecondaryExecID' type='STRING' />
   <field number='789' name='NextExpectedMsgSeqNum' type='STRING' />
+  <field number='912' name='LastRptRequested' type='BOOLEAN' />
   <field number='1028' name='ManualOrderIndicator' type='BOOLEAN' />
   <field number='1031' name='CustOrderHandlingInst' type='STRING' />
   <field number='1603' name='ApplicationSystemName' type='STRING' />
   <field number='1604' name='TradingSystemVersion' type='STRING' />
   <field number='1605' name='ApplicationSystemVendor' type='STRING' />
+  <field number='5979' name='RequestTime' type='INT' />
+  <field number='7928' name='SelfMatchPreventionID' type='STRING' />
+  <field number='9702' name='CtiCode' type='CHAR' />
+  <field number='9717' name='CorrelationClOrdID' type='STRING' />
  </fields>
 </fix>
