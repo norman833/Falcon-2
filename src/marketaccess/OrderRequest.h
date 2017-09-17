@@ -14,6 +14,8 @@ namespace falcon {
 
         public:
             std::string REQUEST_ID_;
+            std::string LAST_REQUEST_ID;
+            std::string ORIGINAL_REQUEST_ID_;
             std::string REQUEST_TIME_;
             std::string REQUEST_TYPE_;
         };

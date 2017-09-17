@@ -33,8 +33,13 @@ namespace falcon {
             virtual void fromApp( const Message&, const SessionID& )
                 throw( FieldNotFound, IncorrectDataFormat, IncorrectTagValue, UnsupportedMessageType );
 
-            virtual void onMessage(const FIX42::NewOrderSingle&, const SessionID&);
             virtual void onMessage(const FIX42::TestRequest&, const SessionID&);
+            virtual void onMessage(const FIX42::BusinessMessageReject&, const SessionID&);
+            virtual void onMessage(const FIX42::ExecutionReport&, const SessionID&);
+
+            virtual bool sendOrderCancelRequest(const SessionID&);
+            virtual bool sendNewOrderSingle(const SessionID&);
+
         private:
             virtual void setCMEHeader(Message&, const SessionID&);
             virtual void setLogon(Message&, const SessionID&);

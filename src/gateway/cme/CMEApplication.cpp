@@ -4,6 +4,10 @@
 #include "quickfix/fix42/NewOrderSingle.h"
 #include "quickfix/fix42/TestRequest.h"
 #include "quickfix/fix42/Heartbeat.h"
+#include "quickfix/fix42/OrderCancelRequest.h"
+#include "quickfix/fix42/NewOrderSingle.h"
+#include "quickfix/fix42/ExecutionReport.h"
+
 namespace falcon {
     namespace cme {
         using  namespace FIX;
@@ -41,8 +45,30 @@ namespace falcon {
         void CMEApplication::fromAdmin(const Message &message, const SessionID &sessionID)
             throw( FieldNotFound, IncorrectDataFormat, IncorrectTagValue, RejectLogon ) {
             auto msgType = message.getHeader().getField(FIX::FIELD::MsgType);
+
             if(msgType == FIX::MsgType_Heartbeat) {
-                std::cout << "Heartbeat sent " << std::endl;
+                std::cout << "Heartbeat received from " << sessionID.toString() << std::endl;
+            }
+            else if(msgType == FIX::MsgType_ResendRequest){
+                std::cout << "Resend Request received from " << sessionID.toString() << std::endl;
+            }
+            else if(msgType == FIX::MsgType_SequenceReset){
+                std::cout << "Sequence Resset received from " << sessionID.toString() << std::endl;
+            }
+            else if(msgType == FIX::MsgType_Heartbeat) {
+                std::cout << "Heartbeat received from " << sessionID.toString() << std::endl;
+            }
+            else if(msgType == FIX::MsgType_TestRequest){
+                std::cout << "Test Request received from " << sessionID.toString() << std::endl;
+            }
+            else if(msgType == FIX::MsgType_Logon){
+                std::cout << "Logon ack received from " << sessionID.toString() << std::endl;
+            }
+            else if(msgType == FIX::MsgType_Logout){
+                std::cout << "Logout ack received from " << sessionID.toString() << std::endl;
+            }
+            else if(msgType == FIX::MsgType_Reject){
+                std::cout << "Session Level Reject received from " << sessionID.toString() << std::endl;
             }
         };
 
@@ -68,7 +94,13 @@ namespace falcon {
             }
         }
 
-        void CMEApplication::onMessage(const FIX42::NewOrderSingle &message, const FIX::SessionID &sessionID) {
+        void CMEApplication::onMessage(const FIX42::BusinessMessageReject &message, const SessionID &sessionID) {
+
+
+        }
+
+        void CMEApplication::onMessage(const FIX42::ExecutionReport &executionReport, const SessionID &sessionID) {
+
         }
 
         void CMEApplication::onMessage(const FIX42::TestRequest &message, const SessionID &sessionID) {
@@ -78,7 +110,6 @@ namespace falcon {
             FIX42::Heartbeat heartbeat;
             heartbeat.setField(testReqID);
             Session::sendToTarget(heartbeat, sessionID);
-
         }
 
         void CMEApplication::setCMEHeader(Message &message, const SessionID &sessionID) {
@@ -113,6 +144,29 @@ namespace falcon {
             message.getHeader().getField(msgSeqNum);
 
             message.setField(789, msgSeqNum.getString());//NextExpectedMsgSeqNum
+        }
+
+        bool CMEApplication::sendOrderCancelRequest(const SessionID &sessionID) {
+
+            if(!this->socketInitiator_.getSession(sessionID)->isLoggedOn()){
+                return false;
+            }
+
+            FIX42::OrderCancelRequest orderCancelRequest;
+
+            //orderCancelRequest.
+
+            return true;
+        }
+
+        bool CMEApplication::sendNewOrderSingle(const SessionID &sessionID) {
+            if(!this->socketInitiator_.getSession(sessionID)->isLoggedOn()){
+                return false;
+            }
+
+            FIX42::NewOrderSingle newOrderSingle;
+
+            return true;
         }
     } //namespace cme
 } //namespace falcon
