@@ -22,6 +22,7 @@ namespace falcon {
             CMEApplication(std::string settingFile);
             virtual bool start();
             virtual bool stop(bool force);
+            virtual SessionID getSessionIDbyTargetCompID(const std::string);
 
             virtual void onCreate( const SessionID& );
             virtual void onLogon( const SessionID& );
@@ -38,6 +39,7 @@ namespace falcon {
             virtual void onMessage(const FIX42::ExecutionReport&, const SessionID&);
             virtual void onMessage(const FIX42::OrderCancelReject&, const SessionID&);
 
+            virtual bool sendTestRequest(const SessionID&, const std::string);
             virtual bool sendOrderCancelRequest(const SessionID&);
             virtual bool sendOrderCancelReplaceRequest(const SessionID&);
             virtual bool sendNewOrderSingle(const SessionID&);

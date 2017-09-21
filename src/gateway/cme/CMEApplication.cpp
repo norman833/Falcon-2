@@ -23,10 +23,24 @@ namespace falcon {
             this->socketInitiator_.start();
             return true;
         };
+
         bool CMEApplication::stop(bool force) {
             this->socketInitiator_.stop(force);
             return true;
-        }
+        };
+
+        SessionID CMEApplication::getSessionIDbyTargetCompID(const std::string targetCompID) {
+            auto sessionSet = this->settings_.getSessions();
+
+            SessionID res;
+            for(auto rit = sessionSet.begin(); rit != sessionSet.end(); ++ rit ){
+                if(rit->getSenderCompID() == targetCompID){
+                    res = *rit;
+                }
+            }
+            return res;
+        };
+
         void CMEApplication::onCreate(const SessionID &sessionID) {
         };
 
@@ -177,6 +191,17 @@ namespace falcon {
             message.setField(789, msgSeqNum.getString());//NextExpectedMsgSeqNum
         }
 
+        bool CMEApplication::sendTestRequest(const SessionID &sessionID, const std::string testRequestID) {
+            if(!this->socketInitiator_.getSession(sessionID)->isLoggedOn()){
+                return false;
+            }
+
+            FIX42::TestRequest testRequest;
+            testRequest.setField(FIX::TestReqID(testRequestID));
+            Session::sendToTarget(testRequest, sessionID);
+
+            return  true;
+        }
         bool CMEApplication::sendOrderCancelRequest(const SessionID &sessionID) {
 
             if(!this->socketInitiator_.getSession(sessionID)->isLoggedOn()){
