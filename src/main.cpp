@@ -15,28 +15,33 @@ void sendTestRequest(CMEApplication& cmeApplication){
     auto sessionID = cmeApplication.getSessionIDbyTargetCompID("CME");
     std::cout << "Session ID is " << sessionID.toString() << std::endl;
     cmeApplication.sendTestRequest(sessionID, "Test01");
+    std::cout << "Test Request sent" << std::endl;
 }
 
 void printMenu(){
     std::cout << "Welcome to Falcon!"<< std::endl;
     std::cout << "Please select the action(Input Q to quit): " << std::endl;
     std::cout << "A: Send Test Request" << std::endl;
+    std::cout << "C: Clear screen" << std::endl;
 }
 
-void getMenu(){
+void getMenu(CMEApplication& cmeApplication){
+    std::cout << "\033c";
+    printMenu();
     while(1){
-        std::cout << "\033c";
-        printMenu();
-
         auto c = getchar();
-        if(c == 'Q'){
+        if(c == 'Q') {
             std::cout << "Quiting..." << std::endl;
             break;
         }
-        else if(c == 'A'){
-
+        else if(c == 'C'){
+            std::cout << "\033c";
+            printMenu();
         }
-        else{
+        else if(c == 'A'){
+           sendTestRequest(cmeApplication);
+        }
+        else if(c != '\n'){
             std::cout << "Invalid command, please try again!" << std::endl;
         }
     }
@@ -53,7 +58,7 @@ int main() {
         std::cout << "init" << std::endl;
         cmeGateWay.start();
 
-        getMenu();
+        getMenu(cmeApplication);
 
         sleep(60);
 

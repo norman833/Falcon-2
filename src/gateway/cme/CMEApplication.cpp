@@ -34,7 +34,7 @@ namespace falcon {
 
             SessionID res;
             for(auto rit = sessionSet.begin(); rit != sessionSet.end(); ++ rit ){
-                if(rit->getSenderCompID() == targetCompID){
+                if(rit->getTargetCompID() == targetCompID){
                     res = *rit;
                 }
             }
