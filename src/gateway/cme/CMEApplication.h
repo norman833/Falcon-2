@@ -40,15 +40,48 @@ namespace falcon {
             virtual void onMessage(const FIX42::OrderCancelReject&, const SessionID&);
 
             virtual bool sendTestRequest(const SessionID&, const std::string);
-            virtual bool sendOrderCancelRequest(const SessionID&);
+            virtual bool sendOrderCancelRequest(const SessionID& sessionID,
+                                                const std::string account,
+                                                const std::string clOrdID,
+                                                const std::string orderID,
+                                                const std::string origClOrdID,
+                                                const char side,
+                                                const std::string securityDesc,
+                                                const std::string securityType,
+                                                const std::string correlationClOrdID
+            );
             virtual bool sendOrderCancelReplaceRequest(const SessionID&);
-            virtual bool sendNewOrderSingle(const SessionID&);
-            virtual bool sendOrderStatusRequest(const SessionID&);
+            virtual bool sendNewOrderSingle(const SessionID& sessionID,
+                                            const std::string account,
+                                            const std::string clOrdID,
+                                            const std::string custOrderHandlingInst,
+                                            const int32_t orderQty,
+                                            const char ordType,
+                                            const double price,
+                                            const char side,
+                                            //const std::string symbol,
+                                            const char timeInForce,
+                                            const double stopPx,
+                                            const std::string securityDesc,
+                                            const int32_t minQty,
+                                            const std::string securityType,
+                                            const int32_t customerOrFirm,
+                                            const int32_t maxShow,
+                                            const std::string expireDate);
+            virtual bool sendOrderStatusRequest(const SessionID& sessionID,
+                                                const std::string clOrdID,
+                                                const std::string orderID,
+                                                const char side,
+                                                const std::string securityDesc,
+                                                const std::string securityType,
+                                                const std::string correlationClOrdID
+            );
 
         private:
             virtual void setCMEHeader(Message&, const SessionID&);
             virtual void setLogon(Message&, const SessionID&);
             virtual void setLogout(Message&, const SessionID&);
+            virtual bool isSessionLoggedOn(const SessionID&);
             SessionSettings settings_;
             FileStoreFactory storeFactory_;
             FileLogFactory logFactory_;

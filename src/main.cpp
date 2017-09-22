@@ -18,10 +18,15 @@ void sendTestRequest(CMEApplication& cmeApplication){
     std::cout << "Test Request sent" << std::endl;
 }
 
+void placeNewOrder(CMEApplication& cmeApplication){
+
+}
+
 void printMenu(){
     std::cout << "Welcome to Falcon!"<< std::endl;
     std::cout << "Please select the action(Input Q to quit): " << std::endl;
     std::cout << "A: Send Test Request" << std::endl;
+    std::cout << "B: Place New Order" << std::endl;
     std::cout << "C: Clear screen" << std::endl;
 }
 
@@ -41,6 +46,9 @@ void getMenu(CMEApplication& cmeApplication){
         else if(c == 'A'){
            sendTestRequest(cmeApplication);
         }
+        else if(c == 'B'){
+            placeNewOrder(cmeApplication);
+        }
         else if(c != '\n'){
             std::cout << "Invalid command, please try again!" << std::endl;
         }
@@ -55,7 +63,7 @@ int main() {
         CMEGateWay cmeGateWay;
 
         cmeGateWay.setCMESessionClient(&cmeApplication);
-        std::cout << "init" << std::endl;
+        //std::cout << "init" << std::endl;
         cmeGateWay.start();
 
         getMenu(cmeApplication);

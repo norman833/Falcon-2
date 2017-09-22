@@ -8,6 +8,7 @@
 #include "quickfix/fix42/OrderCancelRequest.h"
 #include "quickfix/fix42/NewOrderSingle.h"
 #include "quickfix/fix42/ExecutionReport.h"
+#include "quickfix/fix42/OrderStatusRequest.h"
 
 namespace falcon {
     namespace cme {
@@ -191,8 +192,12 @@ namespace falcon {
             message.setField(789, msgSeqNum.getString());//NextExpectedMsgSeqNum
         }
 
+        bool CMEApplication::isSessionLoggedOn(const SessionID &sessionID) {
+            return(this->socketInitiator_.getSession(sessionID)->isLoggedOn());
+        }
+
         bool CMEApplication::sendTestRequest(const SessionID &sessionID, const std::string testRequestID) {
-            if(!this->socketInitiator_.getSession(sessionID)->isLoggedOn()){
+            if(!this->isSessionLoggedOn(sessionID)){
                 return false;
             }
 
@@ -202,39 +207,85 @@ namespace falcon {
 
             return  true;
         }
-        bool CMEApplication::sendOrderCancelRequest(const SessionID &sessionID) {
+        bool CMEApplication::sendOrderCancelRequest(const SessionID &sessionID,
+                                                    const std::string account,
+                                                    const std::string clOrdID,
+                                                    const std::string orderID,
+                                                    const std::string origClOrdID,
+                                                    const char side,
+                                                    const std::string securityDesc,
+                                                    const std::string securityType,
+                                                    const std::string correlationClOrdID) {
 
-            if(!this->socketInitiator_.getSession(sessionID)->isLoggedOn()){
+            if(!this->isSessionLoggedOn(sessionID)){
                 return false;
             }
 
             FIX42::OrderCancelRequest orderCancelRequest;
+            orderCancelRequest.setField(FIX::Account(account));
+            orderCancelRequest.setField(FIX::ClOrdID(clOrdID));
+            orderCancelRequest.setField(FIX::OrderID(orderID));
+            orderCancelRequest.setField(FIX::OrigClOrdID(origClOrdID));
+            orderCancelRequest.setField(FIX::Side(side));
+            orderCancelRequest.setField(FIX::TransactTime());
+            orderCancelRequest.setField(FIX::ManualOrderIndicator(true));
+            orderCancelRequest.setField(FIX::SecurityDesc(securityDesc));
+            orderCancelRequest.setField(FIX::SecurityType(securityType));
+            orderCancelRequest.setField(9717, correlationClOrdID); //CorrelationClOrdID
 
-
-            //orderCancelRequest.
+            Session::sendToTarget(orderCancelRequest, sessionID);
 
             return true;
         }
 
-        bool CMEApplication::sendNewOrderSingle(const SessionID &sessionID) {
-            if(!this->socketInitiator_.getSession(sessionID)->isLoggedOn()){
+        bool CMEApplication::sendNewOrderSingle(const SessionID &sessionID,
+                                                const std::string account,
+                                                const std::string clOrdID,
+                                                const std::string custOrderHandlingInst,
+                                                const int32_t orderQty,
+                                                const char ordType,
+                                                const double price,
+                                                const char side,
+                                                //const std::string symbol,
+                                                const char timeInForce,
+                                                const double stopPx,
+                                                const std::string securityDesc,
+                                                const int32_t minQty,
+                                                const std::string securityType,
+                                                const int32_t customerOrFirm,
+                                                const int32_t maxShow,
+                                                const std::string expireDate
+        ) {
+            if(!this->isSessionLoggedOn(sessionID)){
                 return false;
             }
 
             FIX42::NewOrderSingle newOrderSingle;
-            //account
-            //client order id
+            newOrderSingle.setField(FIX::Account(account));
+            newOrderSingle.setField(FIX::ClOrdID(clOrdID));
             newOrderSingle.setField(FIX::HandlInst('1'));
-            newOrderSingle.isSetField(FIX::CustOrderHandlingInst("Y"));
-            //OrderQty
-            //OrderType
-            //Price
-            //Side
+            newOrderSingle.setField(FIX::CustOrderHandlingInst(custOrderHandlingInst));
+            newOrderSingle.setField(FIX::OrderQty(orderQty));
+            newOrderSingle.setField(FIX::OrdType(ordType));
+            if(ordType == FIX::OrdType_LIMIT || ordType == FIX::OrdType_STOP_LIMIT)
+                newOrderSingle.setField(FIX::Price(price));
+            newOrderSingle.setField(FIX::Side(side));
             //Symbol
-            //TimeInforce
-            //TransactTime
-            //ManualOrderIndicator
-            //FIX::ManualOrderIndicator(true);
+            newOrderSingle.setField(FIX::TimeInForce(timeInForce));
+            newOrderSingle.setField(FIX::TransactTime());
+            newOrderSingle.setField(FIX::ManualOrderIndicator(true));
+            if(ordType == FIX::OrdType_STOP || ordType == FIX::OrdType_STOP_LIMIT)
+                newOrderSingle.setField(FIX::StopPx(stopPx));
+            newOrderSingle.setField(FIX::SecurityDesc(securityDesc));
+            if(timeInForce == FIX::TimeInForce_IMMEDIATE_OR_CANCEL) //FAK
+                newOrderSingle.setField(FIX::MinQty(minQty));
+            newOrderSingle.setField(FIX::SecurityType(securityType));
+            newOrderSingle.setField(FIX::CustomerOrFirm(customerOrFirm));
+            newOrderSingle.setField(FIX::MaxShow(maxShow));
+            newOrderSingle.setField(FIX::ExpireDate(expireDate));
+            //CTI
+            Session::sendToTarget(newOrderSingle, sessionID);
+
             return true;
         }
 
@@ -243,7 +294,28 @@ namespace falcon {
             return true;
         }
 
-        bool CMEApplication::sendOrderStatusRequest(const SessionID &sessionID) {
+        bool CMEApplication::sendOrderStatusRequest(const SessionID &sessionID,
+                                                    const std::string clOrdID,
+                                                    const std::string orderID,
+                                                    const char side,
+                                                    const std::string securityDesc,
+                                                    const std::string securityType,
+                                                    const std::string correlationClOrdID) {
+            if(!this->isSessionLoggedOn(sessionID)){
+                return false;
+            }
+
+            FIX42::OrderStatusRequest orderStatusRequest;
+            orderStatusRequest.setField(FIX::ClOrdID(clOrdID));
+            orderStatusRequest.setField(FIX::OrderID(orderID));
+            orderStatusRequest.setField(FIX::Side(side));
+            orderStatusRequest.setField(FIX::ManualOrderIndicator(true));
+            orderStatusRequest.setField(FIX::TransactTime());
+            orderStatusRequest.setField(FIX::SecurityDesc(securityDesc));
+            orderStatusRequest.setField(FIX::SecurityType(securityType));
+            orderStatusRequest.setField(9717, correlationClOrdID); //CorrelationClOrdID
+
+            Session::sendToTarget(orderStatusRequest, sessionID);
 
             return true;
         }
