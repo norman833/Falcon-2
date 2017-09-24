@@ -244,7 +244,6 @@
    <field name='CorrelationClOrdID' required='N' />
    <field name='CustOrderHandlingInst' required='N' />
    <field name='RequestTime' required='N' />
-
   </message>
   <message name='OrderCancelReject' msgcat='app' msgtype='9'>
    <field name='OrderID' required='Y' />
@@ -440,7 +439,8 @@
    <field name='DiscretionOffset' required='N' />
    <field name='ClearingFirm' required='N' />
    <field name='ClearingAccount' required='N' />
-   <field name ='CtiCode' required='Y' />
+   <field name='CtiCode' required='Y' />
+   <field name='CorrelationClOrdID' required='N' />
   </message>
   <message name='NewOrderList' msgcat='app' msgtype='E'>
    <field name='ListID' required='Y' />
@@ -652,6 +652,7 @@
    <field name='ClearingAccount' required='N' />
    <field name='CtiCode' required='Y' />
    <field name='CorrelationClOrdID' required='N' />
+   <field name='CustOrderHandlingInst' required='N' />
   </message>
   <message name='OrderStatusRequest' msgcat='app' msgtype='H'>
    <field name='OrderID' required='N' />
@@ -2771,6 +2772,7 @@
   <field number='1603' name='ApplicationSystemName' type='STRING' />
   <field number='1604' name='TradingSystemVersion' type='STRING' />
   <field number='1605' name='ApplicationSystemVendor' type='STRING' />
+  <field number='5000' name='OrdStatusReqType' type='INT' />
   <field number='5979' name='RequestTime' type='INT' />
   <field number='7928' name='SelfMatchPreventionID' type='STRING' />
   <field number='9702' name='CtiCode' type='CHAR' />

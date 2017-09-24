@@ -48,9 +48,30 @@ namespace falcon {
                                                 const char side,
                                                 const std::string securityDesc,
                                                 const std::string securityType,
-                                                const std::string correlationClOrdID
+                                                const std::string correlationClOrdID,
+                                                const bool manualOrderIndicator
             );
-            virtual bool sendOrderCancelReplaceRequest(const SessionID&);
+            virtual bool sendOrderCancelReplaceRequest(const SessionID& sessionID,
+                                                       const std::string account,
+                                                       const std::string clOrdID,
+                                                       const std::string orderID,
+                                                       const int32_t orderQty,
+                                                       const std::string custOrderHandlingInst,
+                                                       const char ordType,
+                                                       const std::string origClOrdID,
+                                                       const double price,
+                                                       const char side,
+                                                       const char timeInForce,
+                                                       const bool manualOrderIndicator,
+                                                       const double stopPx,
+                                                       const std::string securityDesc,
+                                                       const int32_t minQty,
+                                                       const std::string securityType,
+                                                       const int32_t customerOrFirm,
+                                                       const int32_t maxShow,
+                                                       const std::string expireDate,
+                                                       const std::string correlationClOrdID
+            );
             virtual bool sendNewOrderSingle(const SessionID& sessionID,
                                             const std::string account,
                                             const std::string clOrdID,
@@ -67,14 +88,29 @@ namespace falcon {
                                             const std::string securityType,
                                             const int32_t customerOrFirm,
                                             const int32_t maxShow,
-                                            const std::string expireDate);
+                                            const std::string expireDate,
+                                            const bool manualOrderIndicator
+            );
             virtual bool sendOrderStatusRequest(const SessionID& sessionID,
                                                 const std::string clOrdID,
                                                 const std::string orderID,
                                                 const char side,
                                                 const std::string securityDesc,
                                                 const std::string securityType,
-                                                const std::string correlationClOrdID
+                                                const std::string correlationClOrdID,
+                                                const bool manualOrderIndicator
+            );
+
+            virtual bool sendOrderMassStatusReport(const SessionID& sessionID,
+                                                   const std::string massStatusReqID,
+                                                   const int32_t massStatusReqType,
+                                                   const int32_t marketSegmentID,
+                                                   const int32_t ordStatusReqType,
+                                                   const std::string account,
+                                                   const std::string symbol,
+                                                   const std::string securityDesc,
+                                                   const char timeInForce,
+                                                   const bool manualOrderIndicator
             );
 
         private:

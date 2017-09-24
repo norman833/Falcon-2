@@ -26,8 +26,11 @@ void printMenu(){
     std::cout << "Welcome to Falcon!"<< std::endl;
     std::cout << "Please select the action(Input Q to quit): " << std::endl;
     std::cout << "A: Send Test Request" << std::endl;
-    std::cout << "B: Place New Order" << std::endl;
     std::cout << "C: Clear screen" << std::endl;
+    std::cout << "D: Place New Order" << std::endl;
+    std::cout << "E: Cancel Order" << std::endl;
+    std::cout << "F: Amend Order" << std::endl;
+    std::cout << "Q: Log out" << std::endl;
 }
 
 void getMenu(CMEApplication& cmeApplication){
@@ -36,7 +39,10 @@ void getMenu(CMEApplication& cmeApplication){
     while(1){
         auto c = getchar();
         if(c == 'Q') {
-            std::cout << "Quiting..." << std::endl;
+            std::cout << "Quiting and Logout..." << std::endl;
+            cmeApplication.stop(true);
+
+            sleep(3);
             break;
         }
         else if(c == 'C'){
@@ -46,8 +52,14 @@ void getMenu(CMEApplication& cmeApplication){
         else if(c == 'A'){
            sendTestRequest(cmeApplication);
         }
-        else if(c == 'B'){
+        else if(c == 'D'){
             placeNewOrder(cmeApplication);
+        }
+        else if(c == 'E'){
+
+        }
+        else if(c == 'F'){
+
         }
         else if(c != '\n'){
             std::cout << "Invalid command, please try again!" << std::endl;
@@ -67,10 +79,7 @@ int main() {
         cmeGateWay.start();
 
         getMenu(cmeApplication);
-
-        sleep(60);
-
-        cmeGateWay.stop();
+        //cmeGateWay.stop();
     }
     catch (ConfigError& e){
         std::cout << e.what() << std::endl;
