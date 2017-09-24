@@ -9,6 +9,7 @@
 #include "quickfix/fix42/ExecutionReport.h"
 #include "quickfix/fix42/OrderStatusRequest.h"
 #include "quickfix/fix42/OrderCancelReplaceRequest.h"
+#include "quickfix/fix42/QuoteRequest.h"
 
 namespace falcon {
     namespace cme {
@@ -118,6 +119,10 @@ namespace falcon {
 
         }
         void CMEApplication::onMessage(const FIX42::OrderCancelReject &, const SessionID &) {
+
+        }
+
+        void CMEApplication::onMessage(const FIX42::QuoteAcknowledgement &quoteAcknowledgement) {
 
         }
 
@@ -391,6 +396,38 @@ namespace falcon {
                 return false;
             }
             // TODO
+            return true;
+        }
+
+        bool CMEApplication::sendQuoteRequest(const SessionID &sessionID,
+                                              const std::string quoteReqID,
+                                              const std::string symbol,
+                                              const int32_t orderQty,
+                                              const char side,
+                                              const std::string securityDesc,
+                                              const std::string securityType,
+                                              const std::string custOrderHandlingInst,
+                                              const bool manualOrderIndicator) {
+            if(!this->isSessionLoggedOn(sessionID)){
+                return false;
+            }
+
+            FIX42::QuoteRequest quoteRequest;
+
+            quoteRequest.setField(FIX::QuoteReqID(quoteReqID));
+            quoteRequest.setField(FIX::NoRelatedSym(1));
+            quoteRequest.setField(FIX::Symbol(symbol));
+            if(side == '1' || side == '2') //buy or sell
+                quoteRequest.setField(FIX::OrderQty(orderQty));
+            quoteRequest.setField(FIX::Side(side));
+            quoteRequest.setField(FIX::TransactTime());
+            quoteRequest.setField(FIX::SecurityDesc(securityDesc));
+            quoteRequest.setField(FIX::QuoteType(1));
+            quoteRequest.setField(FIX::ManualOrderIndicator(manualOrderIndicator));
+            quoteRequest.setField(FIX::CustOrderHandlingInst(custOrderHandlingInst));
+
+            Session::sendToTarget(quoteRequest, sessionID);
+
             return true;
         }
     } //namespace cme

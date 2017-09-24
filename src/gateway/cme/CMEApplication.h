@@ -38,6 +38,7 @@ namespace falcon {
             virtual void onMessage(const FIX42::BusinessMessageReject&, const SessionID&);
             virtual void onMessage(const FIX42::ExecutionReport&, const SessionID&);
             virtual void onMessage(const FIX42::OrderCancelReject&, const SessionID&);
+            virtual void onMessage(const FIX42::QuoteAcknowledgement&);
 
             virtual bool sendTestRequest(const SessionID&, const std::string);
             virtual bool sendOrderCancelRequest(const SessionID& sessionID,
@@ -111,6 +112,17 @@ namespace falcon {
                                                    const std::string securityDesc,
                                                    const char timeInForce,
                                                    const bool manualOrderIndicator
+            );
+
+            virtual bool sendQuoteRequest(const SessionID& sessionID,
+                                          const std::string quoteReqID,
+                                          const std::string symbol,
+                                          const int32_t orderQty,
+                                          const char side,
+                                          const std::string securityDesc,
+                                          const std::string securityType,
+                                          const std::string custOrderHandlingInst,
+                                          const bool manualOrderIndicator
             );
 
         private:
