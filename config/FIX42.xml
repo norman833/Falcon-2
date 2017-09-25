@@ -441,6 +441,8 @@
    <field name='ClearingAccount' required='N' />
    <field name='CtiCode' required='Y' />
    <field name='CorrelationClOrdID' required='N' />
+   <field name='CustOrderHandlingInst' required='N' />
+   <field name='ManualOrderIndicator' required='N' />
   </message>
   <message name='NewOrderList' msgcat='app' msgtype='E'>
    <field name='ListID' required='Y' />
@@ -573,6 +575,7 @@
    <field name='EncodedTextLen' required='N' />
    <field name='EncodedText' required='N' />
    <field name='CorrelationClOrdID' required='N' />
+   <field name='ManualOrderIndicator' required='N' />
   </message>
   <message name='OrderCancelReplaceRequest' msgcat='app' msgtype='G'>
    <field name='OrderID' required='N' />

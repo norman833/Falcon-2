@@ -18,13 +18,143 @@ void sendTestRequest(CMEApplication& cmeApplication){
     std::cout << "Test Request sent" << std::endl;
 }
 
-void placeNewOrder(CMEApplication& cmeApplication){
+void cancelOrder(CMEApplication& cmeApplication){
+    std::string account;
+    std::string clOrdID;
+    std::string orderID;
+    std::string origClOrdID;
+    char side;
+    std::string securityDesc;
+    std::string securityType;
+    std::string correlationClOrdID;
+    bool manualOrderIndicator;
 
+    std::cout << "Input Account(string)" << std::endl;
+    std::cin >> account;
+    std::cout << "Input ClOrdID(string)" << std::endl;
+    std::cin >> clOrdID;
+    std::cout << "Input OrderID(string)" << std::endl;
+    std::cin >> orderID;
+    std::cout << "Input OrigClOrdID(string)" << std::endl;
+    std::cin >> origClOrdID;
+    std::cout << "Input Side(char)" << std::endl;
+    std::cin >> side;
+    std::cout << "Input SecurityDesc(string)" << std::endl;
+    std::cin >> securityDesc;
+    std::cout << "Input SecurityType(string)" << std::endl;
+    std::cin >> securityType;
+    std::cout << "Input CorrelationClOrdID(string)" << std::endl;
+    std::cin >> correlationClOrdID;
+    std::cout << "Input ManualOrderIndicator(bool)" << std::endl;
+    std::cin >> manualOrderIndicator;
+
+    std::cout << "Confirm? (Y/N):";
+    char yesNo;
+    std::cin >>yesNo;
+    if(yesNo != 'Y')
+        return;
+
+    auto res = cmeApplication.sendOrderCancelRequest(cmeApplication.getSessionIDbyTargetCompID("CME"),
+                                                account,
+                                                clOrdID,
+                                                orderID,
+                                                origClOrdID,
+                                                side,
+                                                securityDesc,
+                                                securityType,
+                                                correlationClOrdID,
+                                                manualOrderIndicator);
+    if(res)
+        std::cout << "order " << clOrdID << " sent" << std::endl;
+    else
+        std::cout << "order " << clOrdID << " not sent" << std::endl;
+}
+
+void placeNewOrder(CMEApplication& cmeApplication){
+    std::string account;
+    std::string clOrdID;
+    std::string custOrderHandlingInst;
+    int32_t orderQty;
+    char ordType;
+    double price;
+    char side;
+    char timeInForce;
+    double stopPx;
+    std::string securityDesc;
+    int32_t minQty;
+    std::string securityType;
+    int32_t customerOrFirm;
+    int32_t maxShow;
+    std::string expireDate;
+    bool manualOrderIndicator;
+
+    std::cout << "Input Account(string)" << std::endl;
+    std::cin >> account;
+    std::cout << "Input ClOrdID(string)" << std::endl;
+    std::cin >> clOrdID;
+    std::cout << "Input custOrderHandlingInst(string)" << std::endl;
+    std::cin >> custOrderHandlingInst;
+    std::cout << "Input OrderQty(int)" << std::endl;
+    std::cin >> orderQty;
+    std::cout << "Input OrdType(char)" << std::endl;
+    std::cin >> ordType;
+    std::cout << "Input Price(double, used in limit orders only)" << std::endl;
+    std::cin >> price;
+    std::cout << "Input Side(char)" << std::endl;
+    std::cin >> side;
+    std::cout << "Input TimeInForce(char)" << std::endl;
+    std::cin >> timeInForce;
+    std::cout << "Input StopPx(double/0 if N/A)" << std::endl;
+    std::cin >> stopPx;
+    std::cout << "Input SecurityDesc(string)" << std::endl;
+    std::cin >> securityDesc;
+    std::cout << "Input MinQty(int/0 if N/A)" << std::endl;
+    std::cin >> minQty;
+    std::cout << "Input SecurityType(string)" << std::endl;
+    std::cin >> securityType;
+    std::cout <<"Input CustomerOrFirm(int/0/1)" << std::endl;
+    std::cin >> customerOrFirm;
+    std::cout << "Input MaxShow(int/OrdQty if N/A)" << std::endl;
+    std::cin >> maxShow;
+    std::cout << "Input ExpireDate(string/YYYYMMDD, used in GTD only)" << std::endl;
+    std::cin >> expireDate;
+    std::cout << "Input ManualOrderIndicator(bool)" << std::endl;
+    std::cin >> manualOrderIndicator;
+
+    std::cout << "Confirm? (Y/N):";
+    char yesNo;
+    std::cin >>yesNo;
+    if(yesNo != 'Y')
+        return;
+
+   auto res = cmeApplication.sendNewOrderSingle(cmeApplication.getSessionIDbyTargetCompID("CME"),
+                                      account,
+                                      clOrdID,
+                                      custOrderHandlingInst,
+                                      orderQty,
+                                      ordType,
+                                      price,
+                                      side,
+                                      timeInForce,
+                                      stopPx,
+                                      securityDesc,
+                                      minQty,
+                                      securityType,
+                                      customerOrFirm,
+                                      maxShow,
+                                      expireDate,
+                                      manualOrderIndicator
+    );
+
+    if(res)
+        std::cout << "order " << clOrdID << " sent" << std::endl;
+    else
+        std::cout << "order " << clOrdID << " not sent" << std::endl;
 }
 
 void printMenu(){
     std::cout << "Welcome to Falcon!"<< std::endl;
-    std::cout << "Please select the action(Input Q to quit): " << std::endl;
+    std::cout << "Please select the action(Input Q to quit and C to clear and print menu): " << std::endl;
     std::cout << "A: Send Test Request" << std::endl;
     std::cout << "C: Clear screen" << std::endl;
     std::cout << "D: Place New Order" << std::endl;
