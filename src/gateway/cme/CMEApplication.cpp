@@ -110,7 +110,7 @@ namespace falcon {
                 std::cout << "Logout sent" << std::endl;
             }
             else if(msgType == FIX::MsgType_Heartbeat){
-                std::cout << "Heartbeat sent " << std::endl;
+                LOG("Heartbeat sent\n");
             }
         }
 
@@ -288,7 +288,8 @@ namespace falcon {
                 newOrderSingle.setField(FIX::MinQty(minQty));
             newOrderSingle.setField(FIX::SecurityType(securityType));
             newOrderSingle.setField(FIX::CustomerOrFirm(customerOrFirm));
-            newOrderSingle.setField(FIX::MaxShow(maxShow));
+            if(timeInForce != FIX::TimeInForce_IMMEDIATE_OR_CANCEL) //FAK
+                newOrderSingle.setField(FIX::MaxShow(maxShow));
             if(timeInForce == FIX::TimeInForce_GOOD_TILL_DATE)
                 newOrderSingle.setField(FIX::ExpireDate(expireDate));
             newOrderSingle.setField(9702, "1");//CTiCode
@@ -344,7 +345,8 @@ namespace falcon {
                 orderCancelReplaceRequest.setField(FIX::MinQty(minQty));
             orderCancelReplaceRequest.setField(FIX::SecurityType(securityType));
             orderCancelReplaceRequest.setField(FIX::CustomerOrFirm(customerOrFirm));
-            orderCancelReplaceRequest.setField(FIX::MaxShow(maxShow));
+            if(timeInForce != FIX::TimeInForce_IMMEDIATE_OR_CANCEL)//FAK
+                orderCancelReplaceRequest.setField(FIX::MaxShow(maxShow));
             if(timeInForce == FIX::TimeInForce_GOOD_TILL_DATE)
                 orderCancelReplaceRequest.setField(FIX::ExpireDate(expireDate));
             orderCancelReplaceRequest.setField(9702, "1");//CTiCode

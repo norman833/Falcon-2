@@ -172,7 +172,7 @@ void getMenu(CMEApplication& cmeApplication){
             std::cout << "Quiting and Logout..." << std::endl;
             cmeApplication.stop(true);
 
-            sleep(3);
+            sleep(6);
             break;
         }
         else if(c == 'C'){
