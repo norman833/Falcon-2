@@ -186,7 +186,7 @@ void getMenu(CMEApplication& cmeApplication){
             placeNewOrder(cmeApplication);
         }
         else if(c == 'E'){
-
+            cancelOrder(cmeApplication);
         }
         else if(c == 'F'){
 
