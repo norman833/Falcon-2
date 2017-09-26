@@ -249,6 +249,8 @@
    <field name='SecondaryExecID' required='N' />
    <field name='CrossID' required='N' />
    <field name='CrossType' required='N' />
+   <field name='ContraTrader' required='N' />
+   <field name='ContraBroker' required='N' />
   </message>
   <message name='OrderCancelReject' msgcat='app' msgtype='9'>
    <field name='OrderID' required='Y' />
