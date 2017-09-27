@@ -96,13 +96,13 @@ void placeNewOrder(CMEApplication& cmeApplication){
     std::cin >> custOrderHandlingInst;
     std::cout << "Input OrderQty(int)" << std::endl;
     std::cin >> orderQty;
-    std::cout << "Input OrdType(char)" << std::endl;
+    std::cout << "Input OrdType(char  1=Market 2=Limit 3=Stop 4=Stop-limit K=Market-Limit" << std::endl;
     std::cin >> ordType;
     std::cout << "Input Price(double, used in limit orders only)" << std::endl;
     std::cin >> price;
-    std::cout << "Input Side(char)" << std::endl;
+    std::cout << "Input Side(char 1buy 2sell)" << std::endl;
     std::cin >> side;
-    std::cout << "Input TimeInForce(char)" << std::endl;
+    std::cout << "Input TimeInForce(char 0=Day 1=GTC 3=FAK 6=GTD" << std::endl;
     std::cin >> timeInForce;
     std::cout << "Input StopPx(double/0 if N/A)" << std::endl;
     std::cin >> stopPx;
@@ -152,6 +152,101 @@ void placeNewOrder(CMEApplication& cmeApplication){
         std::cout << "order " << clOrdID << " not sent" << std::endl;
 }
 
+void amendOrder(CMEApplication& cmeApplication)
+{
+    std::string account;
+    std::string clOrdID;
+    std::string orderID;
+    int32_t orderQty;
+    std::string custOrderHandlingInst;
+    char ordType;
+    std::string origClOrdID;
+    double price;
+    char side;
+    char timeInForce;
+    bool manualOrderIndicator;
+    double stopPx;
+    std::string securityDesc;
+    int32_t minQty;
+    std::string securityType;
+    int32_t customerOrFirm;
+    int32_t maxShow;
+    std::string expireDate;
+    std::string correlationClOrdID;
+
+    std::cout << "Input Account(string)" << std::endl;
+    std::cin >> account;
+    std::cout << "Input ClOrdID(string)" << std::endl;
+    std::cin >> clOrdID;
+    std::cout << "Input OrderID(string)" << std::endl;
+    std::cin >> orderID;
+    std::cout << "Input OrigClOrdID(string)" << std::endl;
+    std::cin >> origClOrdID;
+    std::cout << "Input CorrelationClOrdID(string)" << std::endl;
+    std::cin >> correlationClOrdID;
+
+    std::cout << "Input custOrderHandlingInst(string)" << std::endl;
+    std::cin >> custOrderHandlingInst;
+    std::cout << "Input OrderQty(int)" << std::endl;
+    std::cin >> orderQty;
+    std::cout << "Input OrdType(char  1=Market 2=Limit 3=Stop 4=Stop-limit K=Market-Limit" << std::endl;
+    std::cin >> ordType;
+    std::cout << "Input Price(double, used in limit orders only)" << std::endl;
+    std::cin >> price;
+    std::cout << "Input Side(char 1buy 2sell)" << std::endl;
+    std::cin >> side;
+    std::cout << "Input TimeInForce(char 0=Day 1=GTC 3=FAK 6=GTD" << std::endl;
+    std::cin >> timeInForce;
+    std::cout << "Input StopPx(double/0 if N/A)" << std::endl;
+    std::cin >> stopPx;
+    std::cout << "Input SecurityDesc(string)" << std::endl;
+    std::cin >> securityDesc;
+    std::cout << "Input MinQty(int/0 if N/A)" << std::endl;
+    std::cin >> minQty;
+    std::cout << "Input SecurityType(string)" << std::endl;
+    std::cin >> securityType;
+    std::cout <<"Input CustomerOrFirm(int/0/1)" << std::endl;
+    std::cin >> customerOrFirm;
+    std::cout << "Input MaxShow(int/OrdQty if N/A)" << std::endl;
+    std::cin >> maxShow;
+    std::cout << "Input ExpireDate(string/YYYYMMDD, used in GTD only)" << std::endl;
+    std::cin >> expireDate;
+    std::cout << "Input ManualOrderIndicator(bool)" << std::endl;
+    std::cin >> manualOrderIndicator;
+
+    std::cout << "Confirm? (Y/N):";
+    char yesNo;
+    std::cin >>yesNo;
+    if(yesNo != 'Y')
+        return;
+
+    auto res = cmeApplication.sendOrderCancelReplaceRequest(cmeApplication.getSessionIDbyTargetCompID("CME"),
+                                                       account,
+                                                       clOrdID,
+                                                       orderID,
+                                                       orderQty,
+                                                       custOrderHandlingInst,
+                                                       ordType,
+                                                       origClOrdID,
+                                                       price,
+                                                       side,
+                                                       timeInForce,
+                                                       manualOrderIndicator,
+                                                       stopPx,
+                                                       securityDesc,
+                                                       minQty,
+                                                       securityType,
+                                                       customerOrFirm,
+                                                       maxShow,
+                                                       expireDate,
+                                                       correlationClOrdID
+    );
+    if(res)
+        std::cout << "order " << clOrdID << " sent" << std::endl;
+    else
+        std::cout << "order " << clOrdID << " not sent" << std::endl;
+}
+
 void printMenu(){
     std::cout << "Welcome to Falcon!"<< std::endl;
     std::cout << "Please select the action(Input Q to quit and C to clear and print menu): " << std::endl;
@@ -170,7 +265,7 @@ void getMenu(CMEApplication& cmeApplication){
         auto c = getchar();
         if(c == 'Q') {
             std::cout << "Quiting and Logout..." << std::endl;
-            cmeApplication.stop(true);
+            cmeApplication.stop(false);
 
             sleep(6);
             break;
@@ -189,7 +284,7 @@ void getMenu(CMEApplication& cmeApplication){
             cancelOrder(cmeApplication);
         }
         else if(c == 'F'){
-
+            amendOrder(cmeApplication);
         }
         else if(c != '\n'){
             std::cout << "Invalid command, please try again!" << std::endl;

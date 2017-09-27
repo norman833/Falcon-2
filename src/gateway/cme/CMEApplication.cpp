@@ -10,7 +10,8 @@
 #include "quickfix/fix42/OrderStatusRequest.h"
 #include "quickfix/fix42/OrderCancelReplaceRequest.h"
 #include "quickfix/fix42/QuoteRequest.h"
-
+#include "quickfix/fix42/SecurityDefinitionRequest.h"
+#include "quickfix/fix42/QuoteCancel.h"
 namespace falcon {
     namespace cme {
         using  namespace FIX;
@@ -430,6 +431,16 @@ namespace falcon {
 
             Session::sendToTarget(quoteRequest, sessionID);
 
+            return true;
+        }
+
+        bool CMEApplication::sendQuoteCancel(const SessionID &sessionID,
+                                             FIX42::QuoteCancel &quoteCancel) {
+            if(!this->isSessionLoggedOn(sessionID)){
+                return false;
+            }
+
+            Session::sendToTarget(quoteCancel, sessionID);
             return true;
         }
     } //namespace cme

@@ -124,7 +124,17 @@ namespace falcon {
                                           const std::string custOrderHandlingInst,
                                           const bool manualOrderIndicator
             );
+            /*
+            virtual bool sendSecurityDefinitionRequest(const SessionID& sessionID,
+                                                       const bool manualOrderIndicator,
+                                                       const std::string securityReqID,
+                                                       const std::string securitySubType,
 
+            );*/
+
+
+            virtual bool sendQuoteCancel(const SessionID& sessionID,
+                                         FIX42::QuoteCancel& quoteCancel);
         private:
             virtual void setCMEHeader(Message&, const SessionID&);
             virtual void setLogon(Message&, const SessionID&);
