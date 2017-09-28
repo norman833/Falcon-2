@@ -40,7 +40,7 @@ void cancelOrder(CMEApplication& cmeApplication){
     std::cout << "Input Side(char)" << std::endl;
     std::cin >> side;
     std::cout << "Input SecurityDesc(string)" << std::endl;
-    std::cin >> securityDesc;
+    std::getline(std::cin, securityDesc);
     std::cout << "Input SecurityType(string)" << std::endl;
     std::cin >> securityType;
     std::cout << "Input CorrelationClOrdID(string)" << std::endl;
@@ -107,7 +107,7 @@ void placeNewOrder(CMEApplication& cmeApplication){
     std::cout << "Input StopPx(double/0 if N/A)" << std::endl;
     std::cin >> stopPx;
     std::cout << "Input SecurityDesc(string)" << std::endl;
-    std::cin >> securityDesc;
+    std::getline(std::cin, securityDesc);
     std::cout << "Input MinQty(int/0 if N/A)" << std::endl;
     std::cin >> minQty;
     std::cout << "Input SecurityType(string)" << std::endl;
@@ -200,7 +200,7 @@ void amendOrder(CMEApplication& cmeApplication)
     std::cout << "Input StopPx(double/0 if N/A)" << std::endl;
     std::cin >> stopPx;
     std::cout << "Input SecurityDesc(string)" << std::endl;
-    std::cin >> securityDesc;
+    std::getline(std::cin, securityDesc);
     std::cout << "Input MinQty(int/0 if N/A)" << std::endl;
     std::cin >> minQty;
     std::cout << "Input SecurityType(string)" << std::endl;
@@ -293,7 +293,6 @@ void getMenu(CMEApplication& cmeApplication){
 }
 
 int main() {
-
     LOG("Starting the main server...");
     try {
         CMEApplication cmeApplication("../config/CMEiLink.ini");
