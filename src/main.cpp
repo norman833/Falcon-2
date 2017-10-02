@@ -173,6 +173,7 @@ void amendOrder(CMEApplication& cmeApplication)
     int32_t maxShow;
     std::string expireDate;
     std::string correlationClOrdID;
+    char IFMFlag = 'N';
 
     std::cout << "Input Account(string)" << std::endl;
     std::cin >> account;
@@ -213,6 +214,8 @@ void amendOrder(CMEApplication& cmeApplication)
     std::cin >> expireDate;
     std::cout << "Input ManualOrderIndicator(bool)" << std::endl;
     std::cin >> manualOrderIndicator;
+    std::cout << "Enable IFM(Y/N)" << std::endl;
+    std::cin >> IFMFlag;
 
     std::cout << "Confirm? (Y/N):";
     char yesNo;
@@ -239,7 +242,8 @@ void amendOrder(CMEApplication& cmeApplication)
                                                        customerOrFirm,
                                                        maxShow,
                                                        expireDate,
-                                                       correlationClOrdID
+                                                       correlationClOrdID,
+                                                       IFMFlag
     );
     if(res)
         std::cout << "order " << clOrdID << " sent" << std::endl;
@@ -299,7 +303,7 @@ int main() {
         CMEGateWay cmeGateWay;
 
         cmeGateWay.setCMESessionClient(&cmeApplication);
-        //std::cout << "init" << std::endl;
+
         cmeGateWay.start();
 
         getMenu(cmeApplication);

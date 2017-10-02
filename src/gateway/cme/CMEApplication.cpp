@@ -57,6 +57,8 @@ namespace falcon {
 
         void CMEApplication::fromApp(const Message &message, const SessionID &sessionID)
             throw( FieldNotFound, IncorrectDataFormat, IncorrectTagValue, UnsupportedMessageType ) {
+                auto msgSeqNum = message.getHeader().getField(FIX::FIELD::MsgSeqNum);
+
                 this->crack(message, sessionID);
         };
 
@@ -113,6 +115,9 @@ namespace falcon {
             else if(msgType == FIX::MsgType_Heartbeat){
                 LOG("Heartbeat sent\n");
             }
+            else if(msgType == FIX::MsgType_ResendRequest){
+                //this->socketInitiator_.getSession(sessionID)
+            }
         }
 
         void CMEApplication::onMessage(const FIX42::BusinessMessageReject &message, const SessionID &sessionID) {
@@ -123,7 +128,7 @@ namespace falcon {
 
         }
 
-        void CMEApplication::onMessage(const FIX42::QuoteAcknowledgement &quoteAcknowledgement) {
+        void CMEApplication::onMessage(const FIX42::QuoteAcknowledgement &quoteAcknowledgement, const SessionID& sessionID) {
 
         }
 
@@ -320,7 +325,8 @@ namespace falcon {
                                                            const int32_t customerOrFirm,
                                                            const int32_t maxShow,
                                                            const std::string expireDate,
-                                                           const std::string correlationClOrdID) {
+                                                           const std::string correlationClOrdID,
+                                                           const char IFMFlag) {
             if(!this->isSessionLoggedOn(sessionID)){
                 return false;
             }
@@ -353,6 +359,8 @@ namespace falcon {
             orderCancelReplaceRequest.setField(9702, "1");//CTiCode
             orderCancelReplaceRequest.setField(9717, clOrdID);//CorrelationClOrdID
 
+            if(IFMFlag == 'Y')
+                orderCancelReplaceRequest.setField(9768, std::string(1, IFMFlag));
             Session::sendToTarget(orderCancelReplaceRequest, sessionID);
 
             return true;

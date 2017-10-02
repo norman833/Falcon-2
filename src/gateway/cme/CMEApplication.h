@@ -38,7 +38,7 @@ namespace falcon {
             virtual void onMessage(const FIX42::BusinessMessageReject&, const SessionID&);
             virtual void onMessage(const FIX42::ExecutionReport&, const SessionID&);
             virtual void onMessage(const FIX42::OrderCancelReject&, const SessionID&);
-            virtual void onMessage(const FIX42::QuoteAcknowledgement&);
+            virtual void onMessage(const FIX42::QuoteAcknowledgement&, const SessionID&);
 
             virtual bool sendTestRequest(const SessionID&, const std::string);
             virtual bool sendOrderCancelRequest(const SessionID& sessionID,
@@ -71,7 +71,8 @@ namespace falcon {
                                                        const int32_t customerOrFirm,
                                                        const int32_t maxShow,
                                                        const std::string expireDate,
-                                                       const std::string correlationClOrdID
+                                                       const std::string correlationClOrdID,
+                                                       const char IFMFlag = 'N'
             );
             virtual bool sendNewOrderSingle(const SessionID& sessionID,
                                             const std::string account,
