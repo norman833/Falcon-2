@@ -40,6 +40,7 @@ void cancelOrder(CMEApplication& cmeApplication){
     std::cout << "Input Side(char)" << std::endl;
     std::cin >> side;
     std::cout << "Input SecurityDesc(string)" << std::endl;
+    std::cin.ignore(1024, '\n');
     std::getline(std::cin, securityDesc);
     std::cout << "Input SecurityType(string)" << std::endl;
     std::cin >> securityType;
@@ -96,17 +97,18 @@ void placeNewOrder(CMEApplication& cmeApplication){
     std::cin >> custOrderHandlingInst;
     std::cout << "Input OrderQty(int)" << std::endl;
     std::cin >> orderQty;
-    std::cout << "Input OrdType(char  1=Market 2=Limit 3=Stop 4=Stop-limit K=Market-Limit" << std::endl;
+    std::cout << "Input OrdType(char  1=Market 2=Limit 3=Stop 4=Stop-limit K=Market-Limit)" << std::endl;
     std::cin >> ordType;
     std::cout << "Input Price(double, used in limit orders only)" << std::endl;
     std::cin >> price;
-    std::cout << "Input Side(char 1buy 2sell)" << std::endl;
+    std::cout << "Input Side(char 1=buy 2=sell)" << std::endl;
     std::cin >> side;
-    std::cout << "Input TimeInForce(char 0=Day 1=GTC 3=FAK 6=GTD" << std::endl;
+    std::cout << "Input TimeInForce(char 0=Day 1=GTC 3=FAK 6=GTD)" << std::endl;
     std::cin >> timeInForce;
     std::cout << "Input StopPx(double/0 if N/A)" << std::endl;
     std::cin >> stopPx;
     std::cout << "Input SecurityDesc(string)" << std::endl;
+    std::cin.ignore(1024,'\n');
     std::getline(std::cin, securityDesc);
     std::cout << "Input MinQty(int/0 if N/A)" << std::endl;
     std::cin >> minQty;
@@ -186,7 +188,7 @@ void amendOrder(CMEApplication& cmeApplication)
     std::cout << "Input CorrelationClOrdID(string)" << std::endl;
     std::cin >> correlationClOrdID;
 
-    std::cout << "Input custOrderHandlingInst(string)" << std::endl;
+    std::cout << "Input custOrderHandlingInst(string, e.g. F)" << std::endl;
     std::cin >> custOrderHandlingInst;
     std::cout << "Input OrderQty(int)" << std::endl;
     std::cin >> orderQty;
@@ -194,13 +196,14 @@ void amendOrder(CMEApplication& cmeApplication)
     std::cin >> ordType;
     std::cout << "Input Price(double, used in limit orders only)" << std::endl;
     std::cin >> price;
-    std::cout << "Input Side(char 1buy 2sell)" << std::endl;
+    std::cout << "Input Side(char 1=buy 2=sell)" << std::endl;
     std::cin >> side;
-    std::cout << "Input TimeInForce(char 0=Day 1=GTC 3=FAK 6=GTD" << std::endl;
+    std::cout << "Input TimeInForce(char 0=Day 1=GTC 3=FAK 6=GTD)" << std::endl;
     std::cin >> timeInForce;
     std::cout << "Input StopPx(double/0 if N/A)" << std::endl;
     std::cin >> stopPx;
     std::cout << "Input SecurityDesc(string)" << std::endl;
+    std::cin.ignore(1024, '\n');
     std::getline(std::cin, securityDesc);
     std::cout << "Input MinQty(int/0 if N/A)" << std::endl;
     std::cin >> minQty;
@@ -298,6 +301,7 @@ void getMenu(CMEApplication& cmeApplication){
 
 int main() {
     LOG("Starting the main server...");
+
     try {
         CMEApplication cmeApplication("../config/CMEiLink.ini");
         CMEGateWay cmeGateWay;
