@@ -12,6 +12,7 @@
 #include "quickfix/fix42/QuoteRequest.h"
 #include "quickfix/fix42/SecurityDefinitionRequest.h"
 #include "quickfix/fix42/QuoteCancel.h"
+#include "quickfix/fix50/OrderMassStatusRequest.h"
 namespace falcon {
     namespace cme {
         using  namespace FIX;
@@ -57,9 +58,11 @@ namespace falcon {
 
         void CMEApplication::fromApp(const Message &message, const SessionID &sessionID)
             throw( FieldNotFound, IncorrectDataFormat, IncorrectTagValue, UnsupportedMessageType ) {
-                auto msgSeqNum = message.getHeader().getField(FIX::FIELD::MsgSeqNum);
+            auto msgSeqNum = message.getHeader().getField(FIX::FIELD::MsgSeqNum);
+            std::lock_guard<std::mutex> guard(this->latestSeqNO_mutex);
+            this->latestSeqNo = atol(msgSeqNum.c_str());
 
-                this->crack(message, sessionID);
+            this->crack(message, sessionID);
         };
 
         void CMEApplication::fromAdmin(const Message &message, const SessionID &sessionID)
@@ -93,6 +96,10 @@ namespace falcon {
             }
 
             LOG(sstream.str());
+
+            auto msgSeqNum = message.getHeader().getField(FIX::FIELD::MsgSeqNum);
+            std::lock_guard<std::mutex> guard(this->latestSeqNO_mutex);
+            this->latestSeqNo = atol(msgSeqNum.c_str());
         };
 
         void CMEApplication::toApp(Message &message, const SessionID &sessionID) throw( DoNotSend ) {
@@ -116,7 +123,10 @@ namespace falcon {
                 LOG("Heartbeat sent\n");
             }
             else if(msgType == FIX::MsgType_ResendRequest){
-                //this->socketInitiator_.getSession(sessionID)
+                auto beginSeqNoStr = message.getField(FIX::FIELD::BeginSeqNo);
+                auto beginSeqNo = atol(beginSeqNoStr.c_str());
+                if(this->latestSeqNo - beginSeqNo >= 2500)
+                message.setField(FIX::EndSeqNo(beginSeqNo + 2499));
             }
         }
 

@@ -2,6 +2,7 @@
 #define FALCON_CMEQFCLIENT_H
 
 #include <cstdint>
+#include <mutex>
 
 #include "quickfix/Application.h"
 #include "quickfix/SessionID.h"
@@ -145,6 +146,9 @@ namespace falcon {
             FileStoreFactory storeFactory_;
             FileLogFactory logFactory_;
             SocketInitiator socketInitiator_;
+
+            long latestSeqNo = 0;
+            std::mutex latestSeqNO_mutex;
         };
     } //namespace cme
 } //namespace falcon
