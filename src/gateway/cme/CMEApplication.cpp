@@ -12,7 +12,9 @@
 #include "quickfix/fix42/QuoteRequest.h"
 #include "quickfix/fix42/SecurityDefinitionRequest.h"
 #include "quickfix/fix42/QuoteCancel.h"
-#include "quickfix/fix50/OrderMassStatusRequest.h"
+#include "quickfix/fix44/OrderMassStatusRequest.h"
+#include "quickfix/fix50sp2/OrderMassActionRequest.h"
+
 namespace falcon {
     namespace cme {
         using  namespace FIX;
@@ -416,7 +418,29 @@ namespace falcon {
             if(!this->isSessionLoggedOn(sessionID)){
                 return false;
             }
-            // TODO
+
+            FIX44::OrderMassStatusRequest orderMassStatusRequest;
+            orderMassStatusRequest.setField(FIX::MassStatusReqID(massStatusReqID));
+            orderMassStatusRequest.setField(FIX::MassStatusReqType(massStatusReqType));
+            if(massStatusReqType == 100)
+                orderMassStatusRequest.setField(FIX::MarketSegmentID(std::to_string(marketSegmentID)));
+            if(ordStatusReqType == 100 || ordStatusReqType == 101)
+                orderMassStatusRequest.setField(5000, std::to_string(ordStatusReqType)); //OrdStatusReqType
+            if(ordStatusReqType == 101)
+                orderMassStatusRequest.setField(FIX::Account(account));
+            if(massStatusReqType == 3)
+                orderMassStatusRequest.setField(FIX::Symbol(symbol));
+            else if(massStatusReqType == 1)
+                orderMassStatusRequest.setField(FIX::SecurityDesc(securityDesc));
+
+            if(timeInForce != 'N')
+                orderMassStatusRequest.setField(FIX::TimeInForce(timeInForce));
+
+            orderMassStatusRequest.setField(FIX::TransactTime());
+            orderMassStatusRequest.setField(FIX::ManualOrderIndicator(manualOrderIndicator));
+
+            orderMassStatusRequest.getHeader().setField(FIX::BeginString("FIX.4.2"));
+            Session::sendToTarget(orderMassStatusRequest, sessionID);
             return true;
         }
 
@@ -438,7 +462,7 @@ namespace falcon {
             quoteRequest.setField(FIX::QuoteReqID(quoteReqID));
             quoteRequest.setField(FIX::NoRelatedSym(1));
             quoteRequest.setField(FIX::Symbol(symbol));
-            if(side == '1' || side == '2') //buy or sell
+            if(side == FIX::Side_BUY || side == FIX::Side_SELL)
                 quoteRequest.setField(FIX::OrderQty(orderQty));
             quoteRequest.setField(FIX::Side(side));
             quoteRequest.setField(FIX::TransactTime());
@@ -448,7 +472,6 @@ namespace falcon {
             quoteRequest.setField(FIX::CustOrderHandlingInst(custOrderHandlingInst));
 
             Session::sendToTarget(quoteRequest, sessionID);
-
             return true;
         }
 
@@ -461,5 +484,29 @@ namespace falcon {
             Session::sendToTarget(quoteCancel, sessionID);
             return true;
         }
+
+        bool CMEApplication::sendOrderMassActionRequest(const SessionID &sessionID,
+                                                        const std::string clOrdID,
+                                                        const int32_t massActionScope,
+                                                        const int32_t marketSegmentID,
+                                                        const std::string symbol,
+                                                        const std::string securityDesc,
+                                                        const int32_t massCancelRequestType,
+                                                        const std::string account,
+                                                        const char side,
+                                                        const char ordType,
+                                                        const char timeInForce,
+                                                        const bool manualOrderIndicator) {
+            if(!this->isSessionLoggedOn(sessionID)){
+                return false;
+            }
+
+            FIX50SP2::OrderMassActionRequest orderMassActionRequest;
+
+            orderMassActionRequest.getHeader().setField(FIX::BeginString("FIX.4.2"));
+            Session::sendToTarget(orderMassActionRequest, sessionID);
+            return true;
+        }
+
     } //namespace cme
 } //namespace falcon

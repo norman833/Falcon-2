@@ -20,7 +20,7 @@ namespace falcon {
 
         class CMEApplication : public Application, MessageCracker {
         public:
-            CMEApplication(std::string settingFile);
+            explicit CMEApplication(std::string settingFile);
             virtual bool start();
             virtual bool stop(bool force);
             virtual SessionID getSessionIDbyTargetCompID(const std::string);
@@ -134,6 +134,19 @@ namespace falcon {
 
             );*/
 
+            virtual bool sendOrderMassActionRequest(const SessionID& sessionID,
+                                                    const std::string clOrdID,
+                                                    const int32_t massActionScope,
+                                                    const int32_t marketSegmentID,
+                                                    const std::string symbol,
+                                                    const std::string securityDesc,
+                                                    const int32_t massCancelRequestType,
+                                                    const std::string account,
+                                                    const char side,
+                                                    const char ordType,
+                                                    const char timeInForce,
+                                                    const bool manualOrderIndicator
+            );
 
             virtual bool sendQuoteCancel(const SessionID& sessionID,
                                          FIX42::QuoteCancel& quoteCancel);

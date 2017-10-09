@@ -1,7 +1,6 @@
 #include <string>
 #include <ctime>
 #include <sstream>
-#include <exception>
 
 #include "CMEGateWay.h"
 #include "CMEApplication.h"
@@ -254,6 +253,122 @@ void amendOrder(CMEApplication& cmeApplication)
         std::cout << "order " << clOrdID << " not sent" << std::endl;
 }
 
+void sendOrderMassActionRequest(CMEApplication& cmeApplication){
+    std::string clOrdID;
+    int32_t massActionScope;
+    int32_t marketSegmentID;
+    std::string symbol;
+    std::string securityDesc;
+    int32_t massCancelRequestType;
+    std::string account;
+    char side;
+    char ordType;
+    char timeInForce;
+    bool manualOrderIndicator;
+
+    std::cout << "Input ClOrdID(string)" << std::endl;
+    std::cin >> clOrdID;
+    std::cout << "Input MassActionScope(1=Instrument 9=MarketSegmentID 10=Instrument Group)" << std::endl;
+    std::cin >> massActionScope;
+    std::cout << "Input MarketSegmentID(0 if N/A)" << std::endl;
+    std::cin >> marketSegmentID;
+    std::cout << "Input Symbol(empty if N/A)" << std::endl;
+    std::cin >> symbol;
+    std::cout << "Input SecurityDesc(empty if N/A)" << std::endl;
+    std::cin.ignore(1024, '\n');
+    std::getline(std::cin, securityDesc);
+    std::cout << "Input massCancelRequestType(100=SenderSubID 101=Account, 0 if N/A)" << std::endl;
+    std::cin >> massCancelRequestType;
+    std::cout << "Input Account(empty if N/A" << std::endl;
+    std::cin >> account;
+    std::cout << "Input Side(char 1=buy 2=sell, 0 if N/A)" << std::endl;
+    std::cin >> side;
+    std::cout << "Input OrdType(char 2=Limit 4=Stop-limit 0 if N/A" << std::endl;
+    std::cin >> ordType;
+    std::cout << "Input TimeInForce(char 0=Day 1=GTC 6=GTD, N if N/A)" << std::endl;
+    std::cin >> timeInForce;
+    std::cout << "Input ManualOrderIndicator(bool)" << std::endl;
+    std::cin >> manualOrderIndicator;
+
+    std::cout << "Confirm? (Y/N):";
+    char yesNo;
+    std::cin >>yesNo;
+    if(yesNo != 'Y')
+        return;
+
+    auto res = cmeApplication.sendOrderMassActionRequest(cmeApplication.getSessionIDbyTargetCompID("CME"),
+                                                           clOrdID,
+                                                           massActionScope,
+                                                           marketSegmentID,
+                                                           symbol,
+                                                           securityDesc,
+                                                           massCancelRequestType,
+                                                           account,
+                                                           side,
+                                                           ordType,
+                                                           timeInForce,
+                                                           manualOrderIndicator
+    );
+    if(res)
+        std::cout << "order " << clOrdID << " sent" << std::endl;
+    else
+        std::cout << "order " << clOrdID << " not sent" << std::endl;
+}
+
+void sendOrderMassStatusReport(CMEApplication& cmeApplication){
+    std::string massStatusReqID;
+    int32_t massStatusReqType;
+    int32_t marketSegmentID;
+    int32_t ordStatusReqType;
+    std::string account;
+    std::string symbol;
+    std::string securityDesc;
+    char timeInForce;
+    bool manualOrderIndicator;
+
+    std::cout << "Input massStatusReqID(string)" << std::endl;
+    std::cin >> massStatusReqID;
+    std::cout << "Input MassStatusreqType(1=Instrument 3=Instrument Group 7=All Orders 100=Market Segment" << std::endl;
+    std::cin >> massStatusReqType;
+    std::cout << "Input MarketSegmentID(0 if N/A)" << std::endl;
+    std::cin >> marketSegmentID;
+    std::cout << "Input ordStatusReqType(100=SenderSubID 101=Account, 0 if N/A)" << std::endl;
+    std::cin >> ordStatusReqType;
+    std::cout << "Input Account(empty if N/A" << std::endl;
+    std::cin >> account;
+    std::cout << "Input Symbol(empty if N/A)" << std::endl;
+    std::cin >> symbol;
+    std::cout << "Input SecurityDesc(empty if N/A)" << std::endl;
+    std::cin.ignore(1024, '\n');
+    std::getline(std::cin, securityDesc);
+    std::cout << "Input TimeInForce(char 0=Day 1=GTC 6=GTD, N if N/A)" << std::endl;
+    std::cin >> timeInForce;
+    std::cout << "Input ManualOrderIndicator(bool)" << std::endl;
+    std::cin >> manualOrderIndicator;
+
+    std::cout << "Confirm? (Y/N):";
+    char yesNo;
+    std::cin >>yesNo;
+    if(yesNo != 'Y')
+        return;
+
+    auto res = cmeApplication.sendOrderMassStatusReport(cmeApplication.getSessionIDbyTargetCompID("CME"),
+                                                        massStatusReqID,
+                                                        massStatusReqType,
+                                                        marketSegmentID,
+                                                        ordStatusReqType,
+                                                        account,
+                                                        symbol,
+                                                        securityDesc,
+                                                        timeInForce,
+                                                        manualOrderIndicator
+    );
+    if(res)
+        std::cout << "massStatusReqID " << massStatusReqID << " sent" << std::endl;
+    else
+        std::cout << "massStatusReqID " << massStatusReqID << " not sent" << std::endl;
+}
+
 void printMenu(){
     std::cout << "Welcome to Falcon!"<< std::endl;
     std::cout << "Please select the action(Input Q to quit and C to clear and print menu): " << std::endl;
@@ -262,13 +377,15 @@ void printMenu(){
     std::cout << "D: Place New Order" << std::endl;
     std::cout << "E: Cancel Order" << std::endl;
     std::cout << "F: Amend Order" << std::endl;
+    std::cout << "G: Send Mass Action Request" << std::endl;
+    std::cout << "H: Send OrderMassStatusReport" << std::endl;
     std::cout << "Q: Log out" << std::endl;
 }
 
 void getMenu(CMEApplication& cmeApplication){
     std::cout << "\033c";
     printMenu();
-    while(1){
+    while(true){
         auto c = getchar();
         if(c == 'Q') {
             std::cout << "Quiting and Logout..." << std::endl;
@@ -292,6 +409,12 @@ void getMenu(CMEApplication& cmeApplication){
         }
         else if(c == 'F'){
             amendOrder(cmeApplication);
+        }
+        else if(c == 'G'){
+            sendOrderMassActionRequest(cmeApplication);
+        }
+        else if(c == 'H'){
+            sendOrderMassStatusReport(cmeApplication);
         }
         else if(c != '\n'){
             std::cout << "Invalid command, please try again!" << std::endl;
