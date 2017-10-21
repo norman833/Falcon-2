@@ -68,133 +68,133 @@ namespace falcon {
             explicit CMEApplication(std::string settingFile);
             virtual bool start();
             virtual bool stop(bool force);
-            virtual SessionID getSessionIDbyTargetCompID(const std::string);
+            virtual SessionID getSessionIDbyTargetCompID(std::string targetCompID);
 
-            virtual void onCreate( const SessionID& );
-            virtual void onLogon( const SessionID& );
-            virtual void onLogout( const SessionID& );
-            virtual void toAdmin( Message&, const SessionID& );
-            virtual void toApp( Message&, const SessionID& ) throw( DoNotSend );
-            virtual void fromAdmin( const Message&, const SessionID& )
+            virtual void onCreate( const SessionID& sessionID);
+            virtual void onLogon( const SessionID& sessionID);
+            virtual void onLogout( const SessionID& sessionID);
+            virtual void toAdmin( Message& message, const SessionID& sessionID);
+            virtual void toApp( Message& message, const SessionID& sessionID) throw( DoNotSend );
+            virtual void fromAdmin( const Message& message, const SessionID& sessionID)
                 throw( FieldNotFound, IncorrectDataFormat, IncorrectTagValue, RejectLogon );
-            virtual void fromApp( const Message&, const SessionID& )
+            virtual void fromApp( const Message&message, const SessionID& sessionID)
                 throw( FieldNotFound, IncorrectDataFormat, IncorrectTagValue, UnsupportedMessageType );
 
-            virtual void onMessage(const FIX42::TestRequest&, const SessionID&);
-            virtual void onMessage(const FIX42::BusinessMessageReject&, const SessionID&);
-            virtual void onMessage(const FIX42::ExecutionReport&, const SessionID&);
-            virtual void onMessage(const FIX42::OrderCancelReject&, const SessionID&);
-            virtual void onMessage(const FIX42::QuoteAcknowledgement&, const SessionID&);
+            virtual void onMessage(const FIX42::TestRequest& testRequest, const SessionID& sessionID);
+            virtual void onMessage(const FIX42::BusinessMessageReject& businessMessageReject, const SessionID& sessionID);
+            virtual void onMessage(const FIX42::ExecutionReport& executionReport, const SessionID& sessionID);
+            virtual void onMessage(const FIX42::OrderCancelReject& orderCancelReject, const SessionID& sessionID);
+            virtual void onMessage(const FIX42::QuoteAcknowledgement& quoteAcknowledgement, const SessionID& sessionID);
 
-            virtual bool sendTestRequest(const SessionID&, const std::string);
+            virtual bool sendTestRequest(const SessionID& sessionID, std::string msg);
             virtual bool sendOrderCancelRequest(const SessionID& sessionID,
-                                                const std::string account,
-                                                const std::string clOrdID,
-                                                const std::string orderID,
-                                                const std::string origClOrdID,
-                                                const char side,
-                                                const std::string securityDesc,
-                                                const std::string securityType,
-                                                const std::string correlationClOrdID,
-                                                const bool manualOrderIndicator
+                                                std::string account,
+                                                std::string clOrdID,
+                                                std::string orderID,
+                                                std::string origClOrdID,
+                                                char side,
+                                                std::string securityDesc,
+                                                std::string securityType,
+                                                std::string correlationClOrdID,
+                                                bool manualOrderIndicator
             );
             virtual bool sendOrderCancelReplaceRequest(const SessionID& sessionID,
-                                                       const std::string account,
-                                                       const std::string clOrdID,
-                                                       const std::string orderID,
-                                                       const int32_t orderQty,
-                                                       const std::string custOrderHandlingInst,
-                                                       const char ordType,
-                                                       const std::string origClOrdID,
-                                                       const double price,
-                                                       const char side,
-                                                       const char timeInForce,
-                                                       const bool manualOrderIndicator,
-                                                       const double stopPx,
-                                                       const std::string securityDesc,
-                                                       const int32_t minQty,
-                                                       const std::string securityType,
-                                                       const int32_t customerOrFirm,
-                                                       const int32_t maxShow,
-                                                       const std::string expireDate,
-                                                       const std::string correlationClOrdID,
-                                                       const char IFMFlag
+                                                       std::string account,
+                                                       std::string clOrdID,
+                                                       std::string orderID,
+                                                       int32_t orderQty,
+                                                       std::string custOrderHandlingInst,
+                                                       char ordType,
+                                                       std::string origClOrdID,
+                                                       double price,
+                                                       char side,
+                                                       char timeInForce,
+                                                       bool manualOrderIndicator,
+                                                       double stopPx,
+                                                       std::string securityDesc,
+                                                       int32_t minQty,
+                                                       std::string securityType,
+                                                       int32_t customerOrFirm,
+                                                       int32_t maxShow,
+                                                       std::string expireDate,
+                                                       std::string correlationClOrdID,
+                                                       char IFMFlag
             );
             virtual bool sendNewOrderSingle(const SessionID& sessionID,
-                                            const std::string account,
-                                            const std::string clOrdID,
-                                            const std::string custOrderHandlingInst,
-                                            const int32_t orderQty,
-                                            const char ordType,
-                                            const double price,
-                                            const char side,
-                                            //const std::string symbol,
-                                            const char timeInForce,
-                                            const double stopPx,
-                                            const std::string securityDesc,
-                                            const int32_t minQty,
-                                            const std::string securityType,
-                                            const int32_t customerOrFirm,
-                                            const int32_t maxShow,
-                                            const std::string expireDate,
-                                            const bool manualOrderIndicator
+                                            std::string account,
+                                            std::string clOrdID,
+                                            std::string custOrderHandlingInst,
+                                            int32_t orderQty,
+                                            char ordType,
+                                            double price,
+                                            char side,
+                                            // std::string symbol,
+                                            char timeInForce,
+                                            double stopPx,
+                                            std::string securityDesc,
+                                            int32_t minQty,
+                                            std::string securityType,
+                                            int32_t customerOrFirm,
+                                            int32_t maxShow,
+                                            std::string expireDate,
+                                            bool manualOrderIndicator
             );
             virtual bool sendOrderStatusRequest(const SessionID& sessionID,
-                                                const std::string clOrdID,
-                                                const std::string orderID,
-                                                const char side,
-                                                const std::string securityDesc,
-                                                const std::string securityType,
-                                                const std::string correlationClOrdID,
-                                                const bool manualOrderIndicator
+                                                std::string clOrdID,
+                                                std::string orderID,
+                                                char side,
+                                                std::string securityDesc,
+                                                std::string securityType,
+                                                std::string correlationClOrdID,
+                                                bool manualOrderIndicator
             );
 
             virtual bool sendOrderMassStatusReport(const SessionID& sessionID,
-                                                   const std::string massStatusReqID,
-                                                   const int32_t massStatusReqType,
-                                                   const int32_t marketSegmentID,
-                                                   const int32_t ordStatusReqType,
-                                                   const std::string account,
-                                                   const std::string symbol,
-                                                   const std::string securityDesc,
-                                                   const char timeInForce,
-                                                   const bool manualOrderIndicator
+                                                   std::string massStatusReqID,
+                                                   int32_t massStatusReqType,
+                                                   int32_t marketSegmentID,
+                                                   int32_t ordStatusReqType,
+                                                   std::string account,
+                                                   std::string symbol,
+                                                   std::string securityDesc,
+                                                   char timeInForce,
+                                                   bool manualOrderIndicator
             );
 
             virtual bool sendQuoteRequest(const SessionID& sessionID,
-                                          const std::string quoteReqID,
-                                          const std::string symbol,
-                                          const int32_t orderQty,
-                                          const char side,
-                                          const std::string securityDesc,
-                                          const std::string securityType,
-                                          const std::string custOrderHandlingInst,
-                                          const bool manualOrderIndicator
+                                          std::string quoteReqID,
+                                          std::string symbol,
+                                          int32_t orderQty,
+                                          char side,
+                                          std::string securityDesc,
+                                          std::string securityType,
+                                          std::string custOrderHandlingInst,
+                                          bool manualOrderIndicator
             );
 
             virtual bool sendSecurityDefinitionRequest(const SessionID& sessionID,
-                                                       const bool manualOrderIndicator,
-                                                       const std::string securityReqID,
-                                                       const std::string securitySubType,
-                                                       const int32_t noLegs,
-                                                       const int32_t legOptionSize,
-                                                       const LegOption *legOption,
-                                                       const int32_t legFutureSize,
-                                                       const LegFuture *legFuture
+                                                       bool manualOrderIndicator,
+                                                       std::string securityReqID,
+                                                       std::string securitySubType,
+                                                       int32_t noLegs,
+                                                       int32_t legOptionSize,
+                                                       const LegOption* legOption,
+                                                       int32_t legFutureSize,
+                                                       const LegFuture* legFuture
             );
 
             virtual bool sendOrderMassActionRequest(const SessionID& sessionID,
-                                                    const std::string clOrdID,
-                                                    const int32_t massActionScope,
-                                                    const int32_t marketSegmentID,
-                                                    const std::string symbol,
-                                                    const std::string securityDesc,
-                                                    const int32_t massCancelRequestType,
-                                                    const std::string account,
-                                                    const char side,
-                                                    const char ordType,
-                                                    const char timeInForce,
-                                                    const bool manualOrderIndicator
+                                                    std::string clOrdID,
+                                                    int32_t massActionScope,
+                                                    int32_t marketSegmentID,
+                                                    std::string symbol,
+                                                    std::string securityDesc,
+                                                    int32_t massCancelRequestType,
+                                                    std::string account,
+                                                    char side,
+                                                    char ordType,
+                                                    char timeInForce,
+                                                    bool manualOrderIndicator
             );
 
             virtual bool sendMassQuote(const SessionID& sessionID,

@@ -265,7 +265,7 @@ namespace falcon {
             return(this->socketInitiator_.getSession(sessionID)->isLoggedOn());
         }
 
-        bool CMEApplication::sendTestRequest(const SessionID &sessionID, const std::string testRequestID) {
+        bool CMEApplication::sendTestRequest(const SessionID &sessionID, std::string testRequestID) {
             if(!this->isSessionLoggedOn(sessionID)){
                 return false;
             }
@@ -278,15 +278,15 @@ namespace falcon {
         }
 
         bool CMEApplication::sendOrderCancelRequest(const SessionID &sessionID,
-                                                    const std::string account,
-                                                    const std::string clOrdID,
-                                                    const std::string orderID,
-                                                    const std::string origClOrdID,
-                                                    const char side,
-                                                    const std::string securityDesc,
-                                                    const std::string securityType,
-                                                    const std::string correlationClOrdID,
-                                                    const bool manualOrderIndicator) {
+                                                    std::string account,
+                                                    std::string clOrdID,
+                                                    std::string orderID,
+                                                    std::string origClOrdID,
+                                                    char side,
+                                                    std::string securityDesc,
+                                                    std::string securityType,
+                                                    std::string correlationClOrdID,
+                                                    bool manualOrderIndicator) {
 
             if(!this->isSessionLoggedOn(sessionID)){
                 return false;
@@ -310,23 +310,23 @@ namespace falcon {
         }
 
         bool CMEApplication::sendNewOrderSingle(const SessionID &sessionID,
-                                                const std::string account,
-                                                const std::string clOrdID,
-                                                const std::string custOrderHandlingInst,
-                                                const int32_t orderQty,
-                                                const char ordType,
-                                                const double price,
-                                                const char side,
-                                                //const std::string symbol,
-                                                const char timeInForce,
-                                                const double stopPx,
-                                                const std::string securityDesc,
-                                                const int32_t minQty,
-                                                const std::string securityType,
-                                                const int32_t customerOrFirm,
-                                                const int32_t maxShow,
-                                                const std::string expireDate,
-                                                const bool manualOrderIndicator) {
+                                                std::string account,
+                                                std::string clOrdID,
+                                                std::string custOrderHandlingInst,
+                                                int32_t orderQty,
+                                                char ordType,
+                                                double price,
+                                                char side,
+                                                // std::string symbol,
+                                                char timeInForce,
+                                                double stopPx,
+                                                std::string securityDesc,
+                                                int32_t minQty,
+                                                std::string securityType,
+                                                int32_t customerOrFirm,
+                                                int32_t maxShow,
+                                                std::string expireDate,
+                                                bool manualOrderIndicator) {
             if(!this->isSessionLoggedOn(sessionID)){
                 return false;
             }
@@ -365,26 +365,26 @@ namespace falcon {
         }
 
         bool CMEApplication::sendOrderCancelReplaceRequest(const SessionID &sessionID,
-                                                           const std::string account,
-                                                           const std::string clOrdID,
-                                                           const std::string orderID,
-                                                           const int32_t orderQty,
-                                                           const std::string custOrderHandlingInst,
-                                                           const char ordType,
-                                                           const std::string origClOrdID,
-                                                           const double price,
-                                                           const char side,
-                                                           const char timeInForce,
-                                                           const bool manualOrderIndicator,
-                                                           const double stopPx,
-                                                           const std::string securityDesc,
-                                                           const int32_t minQty,
-                                                           const std::string securityType,
-                                                           const int32_t customerOrFirm,
-                                                           const int32_t maxShow,
-                                                           const std::string expireDate,
-                                                           const std::string correlationClOrdID,
-                                                           const char IFMFlag) {
+                                                           std::string account,
+                                                           std::string clOrdID,
+                                                           std::string orderID,
+                                                           int32_t orderQty,
+                                                           std::string custOrderHandlingInst,
+                                                           char ordType,
+                                                           std::string origClOrdID,
+                                                           double price,
+                                                           char side,
+                                                           char timeInForce,
+                                                           bool manualOrderIndicator,
+                                                           double stopPx,
+                                                           std::string securityDesc,
+                                                           int32_t minQty,
+                                                           std::string securityType,
+                                                           int32_t customerOrFirm,
+                                                           int32_t maxShow,
+                                                           std::string expireDate,
+                                                           std::string correlationClOrdID,
+                                                           char IFMFlag) {
             if(!this->isSessionLoggedOn(sessionID)){
                 return false;
             }
@@ -425,13 +425,13 @@ namespace falcon {
         }
 
         bool CMEApplication::sendOrderStatusRequest(const SessionID &sessionID,
-                                                    const std::string clOrdID,
-                                                    const std::string orderID,
-                                                    const char side,
-                                                    const std::string securityDesc,
-                                                    const std::string securityType,
-                                                    const std::string correlationClOrdID,
-                                                    const bool manualOrderIndicator) {
+                                                    std::string clOrdID,
+                                                    std::string orderID,
+                                                    char side,
+                                                    std::string securityDesc,
+                                                    std::string securityType,
+                                                    std::string correlationClOrdID,
+                                                    bool manualOrderIndicator) {
             if(!this->isSessionLoggedOn(sessionID)){
                 return false;
             }
@@ -452,15 +452,15 @@ namespace falcon {
         }
 
         bool CMEApplication::sendOrderMassStatusReport(const SessionID &sessionID,
-                                                       const std::string massStatusReqID,
-                                                       const int32_t massStatusReqType,
-                                                       const int32_t marketSegmentID,
-                                                       const int32_t ordStatusReqType,
-                                                       const std::string account,
-                                                       const std::string symbol,
-                                                       const std::string securityDesc,
-                                                       const char timeInForce,
-                                                       const bool manualOrderIndicator) {
+                                                       std::string massStatusReqID,
+                                                       int32_t massStatusReqType,
+                                                       int32_t marketSegmentID,
+                                                       int32_t ordStatusReqType,
+                                                       std::string account,
+                                                       std::string symbol,
+                                                       std::string securityDesc,
+                                                       char timeInForce,
+                                                       bool manualOrderIndicator) {
             if(!this->isSessionLoggedOn(sessionID)){
                 return false;
             }
@@ -491,14 +491,14 @@ namespace falcon {
         }
 
         bool CMEApplication::sendQuoteRequest(const SessionID &sessionID,
-                                              const std::string quoteReqID,
-                                              const std::string symbol,
-                                              const int32_t orderQty,
-                                              const char side,
-                                              const std::string securityDesc,
-                                              const std::string securityType,
-                                              const std::string custOrderHandlingInst,
-                                              const bool manualOrderIndicator) {
+                                              std::string quoteReqID,
+                                              std::string symbol,
+                                              int32_t orderQty,
+                                              char side,
+                                              std::string securityDesc,
+                                              std::string securityType,
+                                              std::string custOrderHandlingInst,
+                                              bool manualOrderIndicator) {
             if(!this->isSessionLoggedOn(sessionID)){
                 return false;
             }
@@ -523,13 +523,13 @@ namespace falcon {
 
         //Norman UDS
         bool CMEApplication::sendSecurityDefinitionRequest(const SessionID& sessionID,
-                                                           const bool manualOrderIndicator,
-                                                           const std::string securityReqID,
-                                                           const std::string securitySubType,
-                                                           const int32_t noLegs,
-                                                           const int32_t legOptionSize,
+                                                           bool manualOrderIndicator,
+                                                           std::string securityReqID,
+                                                           std::string securitySubType,
+                                                           int32_t noLegs,
+                                                           int32_t legOptionSize,
                                                            const LegOption *legOption,
-                                                           const int32_t legFutureSize,
+                                                           int32_t legFutureSize,
                                                            const LegFuture *legFuture
                                                            ){
             if(!this->isSessionLoggedOn(sessionID)){
@@ -587,27 +587,53 @@ namespace falcon {
         }
 
         bool CMEApplication::sendOrderMassActionRequest(const SessionID &sessionID,
-                                                        const std::string clOrdID,
-                                                        const int32_t massActionScope,
-                                                        const int32_t marketSegmentID,
-                                                        const std::string symbol,
-                                                        const std::string securityDesc,
-                                                        const int32_t massCancelRequestType,
-                                                        const std::string account,
-                                                        const char side,
-                                                        const char ordType,
-                                                        const char timeInForce,
-                                                        const bool manualOrderIndicator) {
+                                                        std::string clOrdID,
+                                                        int32_t massActionScope,
+                                                        int32_t marketSegmentID,
+                                                        std::string symbol,
+                                                        std::string securityDesc,
+                                                        int32_t massCancelRequestType,
+                                                        std::string account,
+                                                        char side,
+                                                        char ordType,
+                                                        char timeInForce,
+                                                        bool manualOrderIndicator) {
             if(!this->isSessionLoggedOn(sessionID)){
                 return false;
             }
 
             FIX50SP2::OrderMassActionRequest orderMassActionRequest;
 
+            orderMassActionRequest.setField(FIX::ClOrdID(clOrdID));
+            orderMassActionRequest.setField(FIX::MassActionType(3));//cancel
+            orderMassActionRequest.setField(FIX::MassActionScope(massActionScope));
+            if(massActionScope == FIX::MassActionScope_ALL_ORDERS_FOR_A_MARKET_SEGMENT){
+                orderMassActionRequest.setField(FIX::MarketSegmentID(std::to_string(marketSegmentID)));
+            }
+            else if(massActionScope == FIX::MassActionScope_ALL_ORDERS_FOR_A_SECURITY_GROUP) {
+                orderMassActionRequest.setField(FIX::Symbol(symbol));
+            }
+            else if(massActionScope == FIX::MassActionScope_ALL_ORDERS_FOR_A_SECURITY){
+                orderMassActionRequest.setField(FIX::SecurityDesc(securityDesc));
+            }
+            if(massCancelRequestType == 100 || massCancelRequestType == 101)
+                orderMassActionRequest.setField(6115, std::to_string(massCancelRequestType)); //MassCancelRequestType
+            if(massCancelRequestType == 101)
+                orderMassActionRequest.setField(FIX::Account(account));
+
+            if(side == FIX::Side_SELL || side == FIX::Side_BUY)
+                orderMassActionRequest.setField(FIX::Side(side));
+            if(ordType == FIX::OrdType_LIMIT || ordType == FIX::OrdType_STOP_LIMIT)
+                orderMassActionRequest.setField(FIX::OrdType(ordType));
+
+            if(timeInForce != 'N')
+                orderMassActionRequest.setField(FIX::TimeInForce(timeInForce));
+            orderMassActionRequest.setField(FIX::TransactTime());
+            orderMassActionRequest.setField(FIX::ManualOrderIndicator(manualOrderIndicator));
+
             orderMassActionRequest.getHeader().setField(FIX::BeginString("FIX.4.2"));
             Session::sendToTarget(orderMassActionRequest, sessionID);
             return true;
         }
-
     } //namespace cme
 } //namespace falcon
