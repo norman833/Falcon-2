@@ -19,6 +19,51 @@ namespace falcon {
     namespace cme {
         using  namespace FIX;
 
+        //Norman:LegFuture Definition
+        LegFuture::LegFuture(std::string legSymbol, std::string legSecurityDesc, char legSide,
+                             double legPrice, double legOptionRatio){
+            this->legSymbol = legSymbol;
+            this->legSecurityDesc = legSecurityDesc;
+            this->legSide = legSide;
+            this->legPrice = legPrice;
+            this->legOptionRatio = legOptionRatio;
+        }
+        LegFuture::~LegFuture() {
+
+        };
+        std::string LegFuture::getLegSymbol() const {return this->legSymbol;}
+        std::string LegFuture::getLegSecurityDesc() const {return this->legSecurityDesc;}
+        char LegFuture::getLegSide() const {return this->legSide;}
+        double LegFuture::getLegPrice() const {return this->legPrice;}
+        double LegFuture::getLegOptionRatio() const {return this->legOptionRatio;}
+        void LegFuture::setLegSymbol(std::string legSymbol) {this->legSymbol=legSymbol;}
+        void LegFuture::setLegSecurityDesc(std::string legSecurityDesc) {this->legSecurityDesc=legSecurityDesc;}
+        void LegFuture::setLegSide(char legSide) {this->legSide=legSide;}
+        void LegFuture::setLegPrice(double legPrice) {this->legPrice=legPrice;}
+        void LegFuture::setLegOptionRatio(double legOptionRatio) {this->legOptionRatio=legOptionRatio;}
+        //
+
+        //Norman:LegOption Definition
+        LegOption::LegOption(std::string legSymbol, std::string legSecurityDesc, char legSide,
+                             int32_t legRatioQty){
+            this->legSymbol = legSymbol;
+            this->legSecurityDesc = legSecurityDesc;
+            this->legSide = legSide;
+            this->legRatioQty = legRatioQty;
+        }
+        LegOption::~LegOption() {
+
+        };
+        std::string LegOption::getLegSymbol() const {return this->legSymbol;}
+        std::string LegOption::getLegSecurityDesc() const {return this->legSecurityDesc;}
+        char LegOption::getLegSide() const {return this->legSide;}
+        int32_t LegOption::getLegRatioQty() const {return this->legRatioQty;}
+        void LegOption::setLegSymbol(std::string legSymbol) {this->legSymbol=legSymbol;}
+        void LegOption::setLegSecurityDesc(std::string legSecurityDesc) {this->legSecurityDesc=legSecurityDesc;}
+        void LegOption::setLegSide(char legSide) {this->legSide=legSide;}
+        void LegOption::setLegRatioQty(int32_t legRatioQty) {this->legRatioQty=legRatioQty;}
+        //
+
         CMEApplication::CMEApplication(std::string settingFile) :
                 settings_(settingFile), storeFactory_(settings_), logFactory_(settings_),
                 socketInitiator_(*this, storeFactory_, settings_, logFactory_){
@@ -472,6 +517,52 @@ namespace falcon {
             quoteRequest.setField(FIX::CustOrderHandlingInst(custOrderHandlingInst));
 
             Session::sendToTarget(quoteRequest, sessionID);
+            return true;
+        }
+
+        //Norman UDS
+        bool CMEApplication::sendSecurityDefinitionRequest(const SessionID& sessionID,
+                                                           const bool manualOrderIndicator,
+                                                           const std::string securityReqID,
+                                                           const std::string securitySubType,
+                                                           const int32_t noLegs,
+                                                           const int32_t legOptionSize,
+                                                           const LegOption *legOption,
+                                                           const int32_t legFutureSize,
+                                                           const LegFuture *legFuture
+                                                           ){
+            if(!this->isSessionLoggedOn(sessionID)){
+                return false;
+            }
+
+            FIX42::SecurityDefinitionRequest securityDefinitionRequest;
+
+            securityDefinitionRequest.setField(FIX::ManualOrderIndicator(manualOrderIndicator));
+            securityDefinitionRequest.setField(FIX::SecurityReqID(securityReqID));
+            securityDefinitionRequest.setField(FIX::SecuritySubType(securitySubType));
+            securityDefinitionRequest.setField(FIX::NoLegs(noLegs));
+            securityDefinitionRequest.setField(FIX::SecurityRequestType(1));
+
+            FIX42::SecurityDefinitionRequest::NoRelatedSym group;
+            //Add the fields for option group
+            for (int i=0; i<legOptionSize; i++){
+                group.setField(FIX::LegSymbol(legOption[i].getLegSymbol()));
+                group.setField(FIX::LegSecurityDesc(legOption[i].getLegSecurityDesc()));
+                group.setField(FIX::LegRatioQty(legOption[i].getLegRatioQty()));
+                group.setField(FIX::LegSide(legOption[i].getLegSide()));
+                securityDefinitionRequest.addGroup(group);
+            }
+            //Add the fields for Future group
+            for (int i=0; i<legFutureSize; i++){
+                group.setField(FIX::LegSymbol(legFuture[i].getLegSymbol()));
+                group.setField(FIX::LegSecurityDesc(legFuture[i].getLegSecurityDesc()));
+                group.setField(FIX::LegPrice(legFuture[i].getLegPrice()));
+                group.setField(FIX::LegOptionRatio(legFuture[i].getLegOptionRatio()));
+                group.setField(FIX::LegSide(legFuture[i].getLegSide()));
+                securityDefinitionRequest.addGroup(group);
+            }
+
+            Session::sendToTarget(securityDefinitionRequest, sessionID);
             return true;
         }
 
