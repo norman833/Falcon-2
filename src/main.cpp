@@ -369,6 +369,61 @@ void sendOrderMassStatusReport(CMEApplication& cmeApplication){
         std::cout << "massStatusReqID " << massStatusReqID << " not sent" << std::endl;
 }
 
+void sendQuoteRequest(CMEApplication& cmeApplication){
+    std::string quoteReqID;
+    std::string symbol;
+    int32_t orderQty;
+    char side;
+    std::string securityDesc;
+    std::string securityType;
+    std::string custOrderHandlingInst;
+    bool manualOrderIndicator;
+
+    std::cout << "Input quoteReqID(string)" << std::endl;
+    std::cin >> quoteReqID;
+    std::cout << "Input Symbol(empty if N/A)" << std::endl;
+    std::cin >> symbol;
+    std::cout << "Input OrderQty(int)" << std::endl;
+    std::cin >> orderQty;
+    std::cout << "Input Side(char 1=buy 2=sell)" << std::endl;
+    std::cin >> side;
+    std::cout << "Input SecurityDesc(string)" << std::endl;
+    std::cin.ignore(1024, '\n');
+    std::getline(std::cin, securityDesc);
+    std::cout << "Input SecurityType(string)" << std::endl;
+    std::cin >> securityType;
+    std::cout << "Input custOrderHandlingInst(string, e.g. F)" << std::endl;
+    std::cin >> custOrderHandlingInst;
+    std::cout << "Input ManualOrderIndicator(bool)" << std::endl;
+    std::cin >> manualOrderIndicator;
+
+    std::cout << "Confirm? (Y/N):";
+    char yesNo;
+    std::cin >>yesNo;
+    if(yesNo != 'Y')
+        return;
+
+    auto res = cmeApplication.sendQuoteRequest(cmeApplication.getSessionIDbyTargetCompID("CME"),
+                                               quoteReqID,
+                                               symbol,
+                                               orderQty,
+                                               side,
+                                               securityDesc,
+                                               securityType,
+                                               custOrderHandlingInst,
+                                               manualOrderIndicator
+    );
+
+    if(res)
+        std::cout << "quoteReqID " << quoteReqID << " sent" << std::endl;
+    else
+        std::cout << "quoteReqID " << quoteReqID << " not sent" << std::endl;
+}
+
+void sendQuoteCancel(CMEApplication& cmeApplication){
+
+}
+
 void printMenu(){
     std::cout << "Welcome to Falcon!"<< std::endl;
     std::cout << "Please select the action(Input Q to quit and C to clear and print menu): " << std::endl;
@@ -378,7 +433,9 @@ void printMenu(){
     std::cout << "E: Cancel Order" << std::endl;
     std::cout << "F: Amend Order" << std::endl;
     std::cout << "G: Send Mass Action Request" << std::endl;
-    std::cout << "H: Send OrderMassStatusReport" << std::endl;
+    std::cout << "H: Send Order Mass Status Report" << std::endl;
+    std::cout << "I: Send Quote Request" << std::endl;
+    std::cout << "J: Send Quote Cancel" << std::endl;
     std::cout << "Q: Log out" << std::endl;
 }
 
@@ -415,6 +472,12 @@ void getMenu(CMEApplication& cmeApplication){
         }
         else if(c == 'H'){
             sendOrderMassStatusReport(cmeApplication);
+        }
+        else if(c == 'I'){
+            sendQuoteRequest(cmeApplication);
+        }
+        else if(c == 'J'){
+            sendQuoteCancel(cmeApplication);
         }
         else if(c != '\n'){
             std::cout << "Invalid command, please try again!" << std::endl;
