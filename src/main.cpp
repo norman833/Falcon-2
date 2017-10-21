@@ -420,6 +420,10 @@ void sendQuoteRequest(CMEApplication& cmeApplication){
         std::cout << "quoteReqID " << quoteReqID << " not sent" << std::endl;
 }
 
+void sendQuoteCancel(CMEApplication& cmeApplication){
+
+}
+
 void printMenu(){
     std::cout << "Welcome to Falcon!"<< std::endl;
     std::cout << "Please select the action(Input Q to quit and C to clear and print menu): " << std::endl;
@@ -431,6 +435,7 @@ void printMenu(){
     std::cout << "G: Send Mass Action Request" << std::endl;
     std::cout << "H: Send Order Mass Status Report" << std::endl;
     std::cout << "I: Send Quote Request" << std::endl;
+    std::cout << "J: Send Quote Cancel" << std::endl;
     std::cout << "Q: Log out" << std::endl;
 }
 
@@ -467,6 +472,12 @@ void getMenu(CMEApplication& cmeApplication){
         }
         else if(c == 'H'){
             sendOrderMassStatusReport(cmeApplication);
+        }
+        else if(c == 'I'){
+            sendQuoteRequest(cmeApplication);
+        }
+        else if(c == 'J'){
+            sendQuoteCancel(cmeApplication);
         }
         else if(c != '\n'){
             std::cout << "Invalid command, please try again!" << std::endl;
