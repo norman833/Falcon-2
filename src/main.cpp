@@ -5,6 +5,7 @@
 #include "CMEGateWay.h"
 #include "CMEApplication.h"
 #include "Logger.h"
+#include "quickfix/fix42/QuoteCancel.h"
 
 using namespace std;
 using namespace falcon;

@@ -148,8 +148,13 @@ namespace falcon {
                                                     const bool manualOrderIndicator
             );
 
+            virtual bool sendMassQuote(const SessionID& sessionID,
+                                       FIX42::MassQuote& massQuote
+            );
+
             virtual bool sendQuoteCancel(const SessionID& sessionID,
-                                         FIX42::QuoteCancel& quoteCancel);
+                                         FIX42::QuoteCancel& quoteCancel
+            );
         private:
             virtual void setCMEHeader(Message&, const SessionID&);
             virtual void setLogon(Message&, const SessionID&);
