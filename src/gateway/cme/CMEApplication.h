@@ -17,6 +17,51 @@
 namespace falcon {
     namespace cme {
         using namespace FIX;
+        // Norman:Leg Future Definition
+        class LegFuture{
+            LegFuture(std::string legSymbol, std::string legSecurityDesc, char legSide,
+                               double legPrice, double legOptionRatio);
+            ~LegFuture();
+        public:
+            std::string getLegSymbol() const;
+            void setLegSymbol(std::string legSymbol);
+            std::string getLegSecurityDesc() const;
+            void setLegSecurityDesc(std::string legSecurityDesc);
+            char getLegSide() const;
+            void setLegSide(char legSide);
+            double getLegPrice() const;
+            void setLegPrice(double legPrice);
+            double getLegOptionRatio() const;
+            void setLegOptionRatio(double legOptionRatio);
+        private:
+            std::string legSymbol;
+            std::string legSecurityDesc;
+            char legSide;
+            double legPrice;
+            double legOptionRatio;
+        };
+        //
+        // Norman:Leg Option Definition
+        class LegOption{
+            LegOption(std::string legSymbol, std::string legSecurityDesc, char legSide,
+                      int32_t legRatioQty);
+            ~LegOption();
+        public:
+            std::string getLegSymbol() const;
+            void setLegSymbol(std::string legSymbol);
+            std::string getLegSecurityDesc() const;
+            void setLegSecurityDesc(std::string legSecurityDesc);
+            char getLegSide() const;
+            void setLegSide(char legSide);
+            int32_t getLegRatioQty() const;
+            void setLegRatioQty(int32_t legRatioQty);
+        private:
+            std::string legSymbol;
+            std::string legSecurityDesc;
+            char legSide;
+            int32_t legRatioQty;
+        };
+        //
 
         class CMEApplication : public Application, MessageCracker {
         public:
@@ -126,13 +171,17 @@ namespace falcon {
                                           const std::string custOrderHandlingInst,
                                           const bool manualOrderIndicator
             );
-            /*
+
             virtual bool sendSecurityDefinitionRequest(const SessionID& sessionID,
                                                        const bool manualOrderIndicator,
                                                        const std::string securityReqID,
                                                        const std::string securitySubType,
-
-            );*/
+                                                       const int32_t noLegs,
+                                                       const int32_t legOptionSize,
+                                                       const LegOption *legOption,
+                                                       const int32_t legFutureSize,
+                                                       const LegFuture *legFuture
+            );
 
             virtual bool sendOrderMassActionRequest(const SessionID& sessionID,
                                                     const std::string clOrdID,
