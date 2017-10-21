@@ -118,7 +118,7 @@ namespace falcon {
                                                        const int32_t maxShow,
                                                        const std::string expireDate,
                                                        const std::string correlationClOrdID,
-                                                       const char IFMFlag = 'N'
+                                                       const char IFMFlag
             );
             virtual bool sendNewOrderSingle(const SessionID& sessionID,
                                             const std::string account,

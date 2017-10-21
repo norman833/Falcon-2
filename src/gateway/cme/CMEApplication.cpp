@@ -12,6 +12,7 @@
 #include "quickfix/fix42/QuoteRequest.h"
 #include "quickfix/fix42/SecurityDefinitionRequest.h"
 #include "quickfix/fix42/QuoteCancel.h"
+#include "quickfix/fix42/MassQuote.h"
 #include "quickfix/fix44/OrderMassStatusRequest.h"
 #include "quickfix/fix50sp2/OrderMassActionRequest.h"
 
@@ -573,6 +574,15 @@ namespace falcon {
             }
 
             Session::sendToTarget(quoteCancel, sessionID);
+            return true;
+        }
+
+        bool CMEApplication::sendMassQuote(const SessionID &sessionID, FIX42::MassQuote &massQuote) {
+            if(!this->isSessionLoggedOn(sessionID)){
+                return false;
+            }
+
+            Session::sendToTarget(massQuote, sessionID);
             return true;
         }
 
