@@ -422,6 +422,49 @@ void sendQuoteRequest(CMEApplication& cmeApplication){
 }
 
 void sendQuoteCancel(CMEApplication& cmeApplication){
+    std::string quoteID;
+    int32_t quoteCancelType;
+    bool manualOrderIndicator;
+    int32_t noQuoteEntries;
+    std::vector<QuoteCancelEntry> quoteCancelEntries;
+
+    std::cout << "Input quoteID(string)" << std::endl;
+    std::cin >> quoteID;
+    std::cout << "Input QuoteCancelType(1/3/4/100)" << std::endl;
+    std::cin >> quoteCancelType;
+    std::cout << "Input ManualOrderIndicator(bool)" << std::endl;
+    std::cin >> manualOrderIndicator;
+    std::cout << "Input NoQuoteEntries(int)" << std::endl;
+    std::cin >> noQuoteEntries;
+    for(int32_t i = 0; i < noQuoteEntries; ++i){
+        falcon::cme::QuoteCancelEntry quoteCancelEntry;
+
+        std::cout << "Input Symbol for entry " << i << std::endl;
+        std::cin >> quoteCancelEntry.symbol_;
+        std::cout << "Input SecurityDesc for entry " << i << std::endl;
+        std::cin >> quoteCancelEntry.securityDesc_;
+        std::cout << "Input QuoteSetID for entry " << i << std::endl;
+        std::cin >> quoteCancelEntry.quoteSetID_;
+
+        quoteCancelEntries.push_back(quoteCancelEntry);
+    }
+
+    auto res = cmeApplication.sendQuoteCancel(cmeApplication.getSessionIDbyTargetCompID("CME"),
+                                              quoteID,
+                                              quoteCancelType,
+                                              manualOrderIndicator,
+                                              noQuoteEntries,
+                                              quoteCancelEntries
+    );
+
+    if(res)
+        std::cout << "quoteID " << quoteID << " sent" << std::endl;
+    else
+        std::cout << "quoteID " << quoteID << " not sent" << std::endl;
+
+}
+
+void sendMassQuote(CMEApplication& cmeApplication){
 
 }
 
@@ -437,6 +480,7 @@ void printMenu(){
     std::cout << "H: Send Order Mass Status Report" << std::endl;
     std::cout << "I: Send Quote Request" << std::endl;
     std::cout << "J: Send Quote Cancel" << std::endl;
+    std::cout << "K: Send Mass Quote" << std::endl;
     std::cout << "Q: Log out" << std::endl;
 }
 
@@ -479,6 +523,9 @@ void getMenu(CMEApplication& cmeApplication){
         }
         else if(c == 'J'){
             sendQuoteCancel(cmeApplication);
+        }
+        else if(c == 'K'){
+            sendMassQuote(cmeApplication);
         }
         else if(c != '\n'){
             std::cout << "Invalid command, please try again!" << std::endl;
