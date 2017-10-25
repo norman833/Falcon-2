@@ -568,18 +568,98 @@ namespace falcon {
         }
 
         bool CMEApplication::sendQuoteCancel(const SessionID &sessionID,
-                                             FIX42::QuoteCancel &quoteCancel) {
+                                             std::string quoteID,
+                                             int32_t quoteCancelType,
+                                             bool manualOrderIndicator,
+                                             int32_t noQuoteEntries,
+                                             const std::vector<QuoteCancelEntry> &quoteCancelEntries) {
             if(!this->isSessionLoggedOn(sessionID)){
                 return false;
+            }
+            FIX42::QuoteCancel quoteCancel;
+
+            quoteCancel.setField(FIX::QuoteID(quoteID));
+            quoteCancel.setField(FIX::QuoteCancelType(quoteCancelType));
+            quoteCancel.setField(FIX::ManualOrderIndicator(manualOrderIndicator));
+            quoteCancel.setField(FIX::NoQuoteEntries(noQuoteEntries));
+
+            for(int32_t i = 0; i < noQuoteEntries; ++i) {
+                FIX42::QuoteCancel::NoQuoteEntries group;
+                if (quoteCancelType == FIX::QuoteCancelType_CANCEL_ALL_QUOTES) {
+                    group.setField(FIX::Symbol("N/A"));
+                } else {
+                    group.setField(FIX::Symbol(quoteCancelEntries[i].symbol_));
+                };
+
+                if (quoteCancelType == FIX::QuoteCancelType_CANCEL_FOR_SYMBOL) {
+                    group.setField(FIX::SecurityDesc(quoteCancelEntries[i].securityDesc_));
+                }
+
+                if (quoteCancelType == 100){//Cancel per quote set
+                    group.setField(FIX::QuoteSetID(quoteCancelEntries[i].quoteSetID_));
+                };
+                quoteCancel.addGroup(group);
             }
 
             Session::sendToTarget(quoteCancel, sessionID);
             return true;
         }
-
-        bool CMEApplication::sendMassQuote(const SessionID &sessionID, FIX42::MassQuote &massQuote) {
+        bool CMEApplication::sendMassQuote(const SessionID &sessionID,
+                                           std::string quoteReqID,
+                                           std::string quoteID,
+                                           std::string MMAccount,
+                                           bool manualOrderIndicator,
+                                           std::string custOrderHandlingInst,
+                                           int32_t customerOrFirm,
+                                           int32_t NoQuoteSets,
+                                           const std::vector<QuoteSet> quoteSet) {
             if(!this->isSessionLoggedOn(sessionID)){
                 return false;
+            }
+            FIX42::MassQuote massQuote;
+
+            if(!quoteReqID.empty())
+                massQuote.setField(FIX::QuoteReqID(quoteReqID));
+
+            massQuote.setField(FIX::QuoteID(quoteID));
+            massQuote.setField(9771, MMAccount);//MMAccount
+            massQuote.setField(FIX::ManualOrderIndicator(manualOrderIndicator));
+            massQuote.setField(FIX::CustOrderHandlingInst(custOrderHandlingInst));
+            massQuote.setField(FIX::CustomerOrFirm(customerOrFirm));
+            massQuote.setField(9702, "1");//CTiCode
+            massQuote.setField(FIX::NoQuoteSets(NoQuoteSets));
+
+            for(int32_t i = 0; i < NoQuoteSets; ++i){
+                FIX42::MassQuote::NoQuoteSets group;
+
+                group.setField(FIX::QuoteSetID(quoteSet[i].quoteSetID_));
+                if(!quoteSet[i].underlyingSecurityDesc_.empty())
+                    group.setField(FIX::UnderlyingSecurityDesc(quoteSet[i].underlyingSecurityDesc_));
+
+                group.setField(FIX::TotQuoteEntries(quoteSet[i].NoQuoteEntries_));//same as NoQuoteEntries
+                group.setField(FIX::NoQuoteEntries(quoteSet[i].NoQuoteEntries_));
+
+                for(int32_t j = 0; j < quoteSet[i].NoQuoteEntries_; ++j){
+                    FIX42::MassQuote::NoQuoteSets::NoQuoteEntries entrygroup;
+                    entrygroup.setField(FIX::QuoteEntryID(quoteSet[i].quoteEntries_[j].quoteEntryID_));
+                    entrygroup.setField(FIX::Symbol(quoteSet[i].quoteEntries_[j].symbol_));
+                    entrygroup.setField(FIX::SecurityType(quoteSet[i].quoteEntries_[j].securityType_));
+                    if(!quoteSet[i].quoteEntries_[j].securityID_){
+                        entrygroup.setField(FIX::SecurityID(std::to_string(quoteSet[i].quoteEntries_[j].securityID_)));
+                        entrygroup.setField(FIX::SecurityIDSource("8")); //Exchange symbol
+                    }
+                    entrygroup.setField(FIX::TransactTime());
+                    if(!quoteSet[i].quoteEntries_[j].bidPx_){
+                        entrygroup.setField(FIX::BidPx(quoteSet[i].quoteEntries_[j].bidPx_));
+                        entrygroup.setField(FIX::BidSize(quoteSet[i].quoteEntries_[j].bidSize_));
+                    }
+                    if(!quoteSet[i].quoteEntries_[j].offerPx_){
+                        entrygroup.setField(FIX::OfferPx(quoteSet[i].quoteEntries_[j].offerPx_));
+                        entrygroup.setField(FIX::OfferSize(quoteSet[i].quoteEntries_[j].offerSize_));
+                    }
+                    group.addGroup(entrygroup);
+                }
+                massQuote.addGroup(group);
             }
 
             Session::sendToTarget(massQuote, sessionID);

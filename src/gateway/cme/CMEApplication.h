@@ -61,7 +61,35 @@ namespace falcon {
             char legSide;
             int32_t legRatioQty;
         };
-        //
+
+
+        struct QuoteCancelEntry{
+            std::string symbol_;
+            std::string securityDesc_;
+            std::string quoteSetID_;
+            int32_t bidSize_;
+            int32_t offerSize_;
+        };
+
+        struct QuoteEntry{
+            std::string quoteEntryID_;
+            std::string symbol_;
+            std::string securityDesc_;
+            std::string securityType_;
+            int32_t securityID_;
+            char SecurityIDSource_ = '8';
+            double bidPx_;
+            int32_t bidSize_;
+            double offerPx_;
+            int32_t offerSize_;
+        };
+
+        struct QuoteSet{
+            std::string quoteSetID_;
+            std::string underlyingSecurityDesc_;
+            int32_t NoQuoteEntries_;//same as TotQuoteEntries
+            std::vector<QuoteEntry> quoteEntries_;
+        };
 
         class CMEApplication : public Application, MessageCracker {
         public:
@@ -198,11 +226,22 @@ namespace falcon {
             );
 
             virtual bool sendMassQuote(const SessionID& sessionID,
-                                       FIX42::MassQuote& massQuote
+                                       std::string quoteReqID,
+                                       std::string quoteID,
+                                       std::string MMAccount,
+                                       bool manualOrderIndicator,
+                                       std::string custOrderHandlingInst,
+                                       int32_t customerOrFirm,
+                                       int32_t NoQuoteSets,
+                                       const std::vector<QuoteSet> quoteSet
             );
 
             virtual bool sendQuoteCancel(const SessionID& sessionID,
-                                         FIX42::QuoteCancel& quoteCancel
+                                         std::string quoteID,
+                                         int32_t quoteCancelType,
+                                         bool manualOrderIndicator,
+                                         int32_t noQuoteEntries,
+                                         const std::vector<QuoteCancelEntry>& quoteCancelEntries
             );
         private:
             virtual void setCMEHeader(Message&, const SessionID&);
