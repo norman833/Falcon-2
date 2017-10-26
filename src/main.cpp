@@ -88,6 +88,9 @@ void placeNewOrder(CMEApplication& cmeApplication){
     int32_t maxShow;
     std::string expireDate;
     bool manualOrderIndicator;
+    std::string giveUpFirm;
+    std::string cmtaGiveupCD;
+    std::string allocAccount;
 
     std::cout << "Input Account(string)" << std::endl;
     std::cin >> account;
@@ -122,6 +125,12 @@ void placeNewOrder(CMEApplication& cmeApplication){
     std::cin >> expireDate;
     std::cout << "Input ManualOrderIndicator(bool)" << std::endl;
     std::cin >> manualOrderIndicator;
+    std::cout <<"Input GiveUpFirm(str(3), empty if N/A" << std::endl;
+    std::cin >> giveUpFirm;
+    std::cout << "Input CmtaGiveupCD(GU/SX, empty if N/A " << std::endl;
+    std::cin >> cmtaGiveupCD;
+    std::cout << "Input allocAccount, empty if N/A" << std::endl;
+    std::cin >> allocAccount;
 
     std::cout << "Confirm? (Y/N):";
     char yesNo;
@@ -145,7 +154,10 @@ void placeNewOrder(CMEApplication& cmeApplication){
                                       customerOrFirm,
                                       maxShow,
                                       expireDate,
-                                      manualOrderIndicator
+                                      manualOrderIndicator,
+                                      giveUpFirm,
+                                      cmtaGiveupCD,
+                                      allocAccount
     );
 
     if(res)
@@ -176,6 +188,9 @@ void amendOrder(CMEApplication& cmeApplication)
     std::string expireDate;
     std::string correlationClOrdID;
     char IFMFlag = 'N';
+    std::string giveUpFirm;
+    std::string cmtaGiveupCD;
+    std::string allocAccount;
 
     std::cout << "Input Account(string)" << std::endl;
     std::cin >> account;
@@ -219,6 +234,12 @@ void amendOrder(CMEApplication& cmeApplication)
     std::cin >> manualOrderIndicator;
     std::cout << "Enable IFM(Y/N)" << std::endl;
     std::cin >> IFMFlag;
+    std::cout <<"Input GiveUpFirm(str(3), empty if N/A" << std::endl;
+    std::cin >> giveUpFirm;
+    std::cout << "Input CmtaGiveupCD(GU/SX, empty if N/A " << std::endl;
+    std::cin >> cmtaGiveupCD;
+    std::cout << "Input allocAccount, empty if N/A" << std::endl;
+    std::cin >> allocAccount;
 
     std::cout << "Confirm? (Y/N):";
     char yesNo;
@@ -246,7 +267,10 @@ void amendOrder(CMEApplication& cmeApplication)
                                                        maxShow,
                                                        expireDate,
                                                        correlationClOrdID,
-                                                       IFMFlag
+                                                       IFMFlag,
+                                                       giveUpFirm,
+                                                       cmtaGiveupCD,
+                                                       allocAccount
     );
     if(res)
         std::cout << "order " << clOrdID << " sent" << std::endl;

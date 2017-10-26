@@ -326,7 +326,10 @@ namespace falcon {
                                                 int32_t customerOrFirm,
                                                 int32_t maxShow,
                                                 std::string expireDate,
-                                                bool manualOrderIndicator) {
+                                                bool manualOrderIndicator,
+                                                std::string giveUpFirm,
+                                                std::string cmtaGiveupCD,
+                                                std::string allocAccount) {
             if(!this->isSessionLoggedOn(sessionID)){
                 return false;
             }
@@ -359,6 +362,13 @@ namespace falcon {
             newOrderSingle.setField(9702, "1");//CTiCode
             newOrderSingle.setField(9717, clOrdID);//CorrelationClOrdID
 
+            if(cmtaGiveupCD == "GU" || cmtaGiveupCD == "SX"){//give up
+                newOrderSingle.setField(FIX::NoAllocs(1));
+                newOrderSingle.setField(FIX::AllocAccount(allocAccount));
+                newOrderSingle.setField(9708, cmtaGiveupCD);
+                newOrderSingle.setField(9707, giveUpFirm);
+            }
+
             Session::sendToTarget(newOrderSingle, sessionID);
 
             return true;
@@ -384,7 +394,10 @@ namespace falcon {
                                                            int32_t maxShow,
                                                            std::string expireDate,
                                                            std::string correlationClOrdID,
-                                                           char IFMFlag) {
+                                                           char IFMFlag,
+                                                           std::string giveUpFirm,
+                                                           std::string cmtaGiveupCD,
+                                                           std::string allocAccount) {
             if(!this->isSessionLoggedOn(sessionID)){
                 return false;
             }
@@ -419,6 +432,13 @@ namespace falcon {
 
             if(IFMFlag == 'Y')
                 orderCancelReplaceRequest.setField(9768, std::string(1, IFMFlag));
+
+            if(cmtaGiveupCD == "GU" || cmtaGiveupCD == "SX"){//give up
+                orderCancelReplaceRequest.setField(FIX::NoAllocs(1));
+                orderCancelReplaceRequest.setField(FIX::AllocAccount(allocAccount));
+                orderCancelReplaceRequest.setField(9708, cmtaGiveupCD);
+                orderCancelReplaceRequest.setField(9707, giveUpFirm);
+            }
             Session::sendToTarget(orderCancelReplaceRequest, sessionID);
 
             return true;

@@ -146,7 +146,10 @@ namespace falcon {
                                                        int32_t maxShow,
                                                        std::string expireDate,
                                                        std::string correlationClOrdID,
-                                                       char IFMFlag
+                                                       char IFMFlag,
+                                                       std::string giveUpFirm,
+                                                       std::string cmtaGiveupCD,
+                                                       std::string allocAccount
             );
             virtual bool sendNewOrderSingle(const SessionID& sessionID,
                                             std::string account,
@@ -165,7 +168,10 @@ namespace falcon {
                                             int32_t customerOrFirm,
                                             int32_t maxShow,
                                             std::string expireDate,
-                                            bool manualOrderIndicator
+                                            bool manualOrderIndicator,
+                                            std::string giveUpFirm,
+                                            std::string cmtaGiveupCD,
+                                            std::string allocAccount
             );
             virtual bool sendOrderStatusRequest(const SessionID& sessionID,
                                                 std::string clOrdID,
