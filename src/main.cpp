@@ -5,7 +5,6 @@
 #include "CMEGateWay.h"
 #include "CMEApplication.h"
 #include "Logger.h"
-#include "quickfix/fix42/QuoteCancel.h"
 
 using namespace std;
 using namespace falcon;
@@ -473,6 +472,12 @@ void sendQuoteCancel(CMEApplication& cmeApplication){
         quoteCancelEntries.push_back(quoteCancelEntry);
     }
 
+    std::cout << "Confirm? (Y/N):";
+    char yesNo;
+    std::cin >>yesNo;
+    if(yesNo != 'Y')
+        return;
+
     auto res = cmeApplication.sendQuoteCancel(cmeApplication.getSessionIDbyTargetCompID("CME"),
                                               quoteID,
                                               quoteCancelType,
@@ -489,6 +494,84 @@ void sendQuoteCancel(CMEApplication& cmeApplication){
 }
 
 void sendMassQuote(CMEApplication& cmeApplication){
+    std::string quoteReqID;
+    std::string quoteID;
+    std::string MMAccount;
+    bool manualOrderIndicator;
+    std::string custOrderHandlingInst;
+    int32_t customerOrFirm;
+    int32_t NoQuoteSets;
+    std::vector<QuoteSet> quoteSets;
+
+    std::cout << "Input quoteReqID(string), empty if N/A" << std::endl;
+    std::cin >> quoteReqID;
+    std::cout << "Input quoteID(string)" << std::endl;
+    std::cin >> quoteID;
+    std::cout << "Input MMAccount(string)" << std::endl;
+    std::cin >> MMAccount;
+    std::cout << "Input ManualOrderIndicator(bool)" << std::endl;
+    std::cin >> manualOrderIndicator;
+    std::cout << "Input custOrderHandlingInst(string)" << std::endl;
+    std::cin >> custOrderHandlingInst;
+    std::cout <<"Input CustomerOrFirm(int/0/1)" << std::endl;
+    std::cin >> customerOrFirm;
+    std::cout <<"Input NoQuoteSets(int)" << std::endl;
+    std::cin >> NoQuoteSets;
+
+    for(int32_t i = 0; i < NoQuoteSets; ++i){
+        falcon::cme::QuoteSet myQuoteSet;
+        std::cout << "Input QuoteSetID for set " << i << std::endl;
+        std::cin >> myQuoteSet.quoteSetID_;
+        std::cout << "Input UnderlyingSecurityDesc for set " << i << std::endl;
+        std::cin >> myQuoteSet.underlyingSecurityDesc_;
+        std::cout << "Input NoQuoteEntries for set " << i << std::endl;
+        std::cin >> myQuoteSet.NoQuoteEntries_;
+        for(int32_t j = 0; j < myQuoteSet.NoQuoteEntries_; ++j){
+            falcon::cme::QuoteEntry quoteEntry;
+            std::cout << "Input QuoteEntryID for entry " << j << std::endl;
+            std::cin >> quoteEntry.quoteEntryID_;
+            std::cout << "Input SecurityDesc for entry " << j << std::endl;
+            std::cin >> quoteEntry.securityDesc_;
+            std::cout << "Input SecurityType for entry " << j << std::endl;
+            std::cin >> quoteEntry.securityType_;
+            std::cout << "Input SecurityID(0 if NA) for entry" << j << std::endl;
+            std::cin >> quoteEntry.securityID_;
+            std::cout << "Input BidPx for entry " << j << std::endl;
+            std::cin >> quoteEntry.bidPx_;
+            std::cout << "Input BidSize for entry " << j << std::endl;
+            std::cin >> quoteEntry.bidSize_;
+            std::cout << "Input OfferPx for entry " << j << std::endl;
+            std::cin >> quoteEntry.offerPx_;
+            std::cout << "Input OfferSize for entry " << j << std::endl;
+            std::cin >> quoteEntry.offerSize_;
+
+            myQuoteSet.quoteEntries_.push_back(quoteEntry);
+        }
+
+        quoteSets.push_back(myQuoteSet);
+    }
+
+    std::cout << "Confirm? (Y/N):";
+    char yesNo;
+    std::cin >>yesNo;
+    if(yesNo != 'Y')
+        return;
+
+    auto res = cmeApplication.sendMassQuote(cmeApplication.getSessionIDbyTargetCompID("CME"),
+                                       quoteReqID,
+                                       quoteID,
+                                       MMAccount,
+                                       manualOrderIndicator,
+                                       custOrderHandlingInst,
+                                       customerOrFirm,
+                                       NoQuoteSets,
+                                       quoteSets
+    );
+
+    if(res)
+        std::cout << "quoteID " << quoteID << " sent" << std::endl;
+    else
+        std::cout << "quoteID " << quoteID << " not sent" << std::endl;
 
 }
 
