@@ -29,6 +29,9 @@ namespace falcon {
             this->legPrice = legPrice;
             this->legOptionRatio = legOptionRatio;
         }
+        LegFuture::LegFuture() {
+
+        };
         LegFuture::~LegFuture() {
 
         };
@@ -52,6 +55,9 @@ namespace falcon {
             this->legSide = legSide;
             this->legRatioQty = legRatioQty;
         }
+        LegOption::LegOption() {
+
+        };
         LegOption::~LegOption() {
 
         };
@@ -548,9 +554,9 @@ namespace falcon {
                                                            std::string securitySubType,
                                                            int32_t noLegs,
                                                            int32_t legOptionSize,
-                                                           const LegOption *legOption,
+                                                           std::vector<LegOption> legOption,
                                                            int32_t legFutureSize,
-                                                           const LegFuture *legFuture
+                                                           std::vector<LegFuture> legFuture
                                                            ){
             if(!this->isSessionLoggedOn(sessionID)){
                 return false;

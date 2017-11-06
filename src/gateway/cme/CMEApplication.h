@@ -19,10 +19,12 @@ namespace falcon {
         using namespace FIX;
         // Norman:Leg Future Definition
         class LegFuture{
+        public:
             LegFuture(std::string legSymbol, std::string legSecurityDesc, char legSide,
                                double legPrice, double legOptionRatio);
+            LegFuture();
             ~LegFuture();
-        public:
+        //public:
             std::string getLegSymbol() const;
             void setLegSymbol(std::string legSymbol);
             std::string getLegSecurityDesc() const;
@@ -43,10 +45,12 @@ namespace falcon {
         //
         // Norman:Leg Option Definition
         class LegOption{
+        public:
             LegOption(std::string legSymbol, std::string legSecurityDesc, char legSide,
                       int32_t legRatioQty);
+            LegOption();
             ~LegOption();
-        public:
+        //public:
             std::string getLegSymbol() const;
             void setLegSymbol(std::string legSymbol);
             std::string getLegSecurityDesc() const;
@@ -212,9 +216,9 @@ namespace falcon {
                                                        std::string securitySubType,
                                                        int32_t noLegs,
                                                        int32_t legOptionSize,
-                                                       const LegOption* legOption,
+                                                       std::vector<LegOption> legOption,
                                                        int32_t legFutureSize,
-                                                       const LegFuture* legFuture
+                                                       std::vector<LegFuture> legFuture
             );
 
             virtual bool sendOrderMassActionRequest(const SessionID& sessionID,

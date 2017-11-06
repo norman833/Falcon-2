@@ -575,6 +575,98 @@ void sendMassQuote(CMEApplication& cmeApplication){
 
 }
 
+void sendUDSRequest(CMEApplication& cmeApplication){
+    std::string securityReqID;
+    bool manualOrderIndicator;
+    std::string securitySubType;
+    int32_t noLegs;
+    int32_t legOptionSize;
+    std::vector<LegOption> legOption;
+    int32_t legFutureSize;
+    std::vector<LegFuture> legFuture;
+    std::string legSymbol;
+    std::string legSecurityDesc;
+    char legSide;
+    int32_t legRatioQty;
+    double legOptionRatio;
+    double legPrice;
+
+    std::cout << "Input securityReqID(string), empty if N/A" << std::endl;
+    std::cin >> securityReqID;
+    std::cout << "Input securitySubType(string)" << std::endl;
+    std::cin >> securitySubType;
+    std::cout << "Input ManualOrderIndicator(bool)" << std::endl;
+    std::cin >> manualOrderIndicator;
+    std::cout <<"Input legOptionSize(int)" << std::endl;
+    std::cin >> legOptionSize;
+    std::cout <<"Input legFutureSize(int)" << std::endl;
+    std::cin >> legFutureSize;
+    noLegs = legOptionSize + legFutureSize;
+
+    std::cout << "Input for option leg set " << std::endl;
+    for(int32_t j = 0; j < legOptionSize; ++j){
+        falcon::cme::LegOption optionEntry;
+        std::cout << "Input LegSymbol for entry " << j << std::endl;
+        std::cin >> legSymbol;
+        optionEntry.setLegSymbol(legSymbol);
+        std::cout << "Input LegSecurityDesc for entry " << j << std::endl;
+        std::cin >> legSecurityDesc;
+        optionEntry.setLegSecurityDesc(legSecurityDesc);
+        std::cout << "Input LegRatioQty for entry " << j << std::endl;
+        std::cin >> legRatioQty;
+        optionEntry.setLegRatioQty(legRatioQty);
+        std::cout << " Input Side(char 1=buy 2=sell) for entry" << j << std::endl;
+        std::cin >> legSide;
+        optionEntry.setLegSide(legSide);
+
+        legOption.push_back(optionEntry);
+    }
+    std::cout << "Input for future leg set " << std::endl;
+    for(int32_t j = 0; j < legFutureSize; ++j){
+        falcon::cme::LegFuture futureEntry;
+        std::cout << "Input LegSymbol for entry " << j << std::endl;
+        std::cin >> legSymbol;
+        futureEntry.setLegSymbol(legSymbol);
+        std::cout << "Input LegSecurityDesc for entry " << j << std::endl;
+        std::cin >> legSecurityDesc;
+        futureEntry.setLegSecurityDesc(legSecurityDesc);
+        std::cout << "Input LegOptionRatio for entry " << j << std::endl;
+        std::cin >> legOptionRatio;
+        futureEntry.setLegOptionRatio(legOptionRatio);
+        std::cout << " Input Side(char 1=buy 2=sell) for entry" << j << std::endl;
+        std::cin >> legSide;
+        futureEntry.setLegSide(legSide);
+        std::cout << "Input LegPrice for entry " << j << std::endl;
+        std::cin >> legPrice;
+        futureEntry.setLegPrice(legPrice);
+
+        legFuture.push_back(futureEntry);
+    }
+
+    std::cout << "Confirm? (Y/N):";
+    char yesNo;
+    std::cin >>yesNo;
+    if(yesNo != 'Y')
+        return;
+
+    auto res = cmeApplication.sendSecurityDefinitionRequest(cmeApplication.getSessionIDbyTargetCompID("CME"),
+                                            manualOrderIndicator,
+                                            securityReqID,
+                                            securitySubType,
+                                            noLegs,
+                                            legOptionSize,
+                                            legOption,
+                                            legFutureSize,
+                                            legFuture
+    );
+
+    if(res)
+        std::cout << "securityReqID " << securityReqID << " sent" << std::endl;
+    else
+        std::cout << "securityReqID " << securityReqID << " not sent" << std::endl;
+
+}
+
 void printMenu(){
     std::cout << "Welcome to Falcon!"<< std::endl;
     std::cout << "Please select the action(Input Q to quit and C to clear and print menu): " << std::endl;
@@ -588,6 +680,7 @@ void printMenu(){
     std::cout << "I: Send Quote Request" << std::endl;
     std::cout << "J: Send Quote Cancel" << std::endl;
     std::cout << "K: Send Mass Quote" << std::endl;
+    std::cout << "L: Send UDS request" << std::endl;
     std::cout << "Q: Log out" << std::endl;
 }
 
@@ -633,6 +726,9 @@ void getMenu(CMEApplication& cmeApplication){
         }
         else if(c == 'K'){
             sendMassQuote(cmeApplication);
+        }
+        else if(c == 'L'){
+            sendUDSRequest(cmeApplication);
         }
         else if(c != '\n'){
             std::cout << "Invalid command, please try again!" << std::endl;
