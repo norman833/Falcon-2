@@ -15,6 +15,7 @@
 #include "quickfix/fix42/MassQuote.h"
 #include "quickfix/fix44/OrderMassStatusRequest.h"
 #include "quickfix/fix50sp2/OrderMassActionRequest.h"
+#include "quickfix/fix44/NewOrderCross.h"
 
 namespace falcon {
     namespace cme {
@@ -638,7 +639,7 @@ namespace falcon {
                                            std::string custOrderHandlingInst,
                                            int32_t customerOrFirm,
                                            int32_t NoQuoteSets,
-                                           const std::vector<QuoteSet> quoteSet) {
+                                           const std::vector<QuoteSet>& quoteSet) {
             if(!this->isSessionLoggedOn(sessionID)){
                 return false;
             }
@@ -739,6 +740,54 @@ namespace falcon {
 
             orderMassActionRequest.getHeader().setField(FIX::BeginString("FIX.4.2"));
             Session::sendToTarget(orderMassActionRequest, sessionID);
+            return true;
+        }
+
+        bool CMEApplication::sendNewOrderCross(const SessionID &sessionID,
+                                               double price,
+                                               std::string symbol,
+                                               bool manualOrderIndicator,
+                                               std::string securityDesc,
+                                               std::string securityType,
+                                               std::string crossID,
+                                               const std::vector<CrossEntry> &crossEntries) {
+            if(!this->isSessionLoggedOn(sessionID) || crossEntries.size() != 2){
+                return false;
+            }
+
+            FIX44::NewOrderCross newOrderCross;
+
+            newOrderCross.setField(FIX::HandlInst('1'));
+            newOrderCross.setField(FIX::SecurityIDSource("8"));
+            newOrderCross.setField(FIX::OrdType('2'));
+            newOrderCross.setField(FIX::Price(price));
+            newOrderCross.setField(FIX::Symbol(symbol));
+            newOrderCross.setField(FIX::TransactTime());
+            newOrderCross.setField(FIX::ManualOrderIndicator(manualOrderIndicator));
+            newOrderCross.setField(FIX::SecurityDesc(securityDesc));
+            newOrderCross.setField(FIX::SecurityType(securityType));
+            newOrderCross.setField(FIX::CrossID(crossID));
+            newOrderCross.setField(FIX::CrossType(3));
+            newOrderCross.setField(FIX::CrossPrioritization(0));
+            newOrderCross.setField(FIX::TransBkdTime());
+            newOrderCross.setField(FIX::NoSides(2));
+
+            for(int32_t i = 0; i < crossEntries.size(); ++i){
+                FIX44::NewOrderCross::NoSides side;
+
+                side.setField(FIX::Side(crossEntries[i].side_));
+                side.setField(FIX::Account(crossEntries[i].account_));
+                side.setField(FIX::ClOrdID(crossEntries[i].clOrdID_));
+                side.setField(FIX::CustOrderHandlingInst(crossEntries[i].custOrderHandlingInst_));
+                side.setField(FIX::OrderQty(crossEntries[i].orderQty_));
+                side.setField(FIX::SideTimeInForce(crossEntries[i].sideTimeInForce_));
+                side.setField(FIX::CustomerOrFirm(crossEntries[i].customerOrFirm_));
+                side.setField(9702, "1"); // CtiCode
+
+                newOrderCross.addGroup(side);
+            }
+            newOrderCross.getHeader().setField(FIX::BeginString("FIX.4.2"));
+
             return true;
         }
     } //namespace cme

@@ -165,8 +165,7 @@ void placeNewOrder(CMEApplication& cmeApplication){
         std::cout << "order " << clOrdID << " not sent" << std::endl;
 }
 
-void amendOrder(CMEApplication& cmeApplication)
-{
+void amendOrder(CMEApplication& cmeApplication) {
     std::string account;
     std::string clOrdID;
     std::string orderID;
@@ -667,6 +666,65 @@ void sendUDSRequest(CMEApplication& cmeApplication){
 
 }
 
+void sendNewOrderCross(CMEApplication& cmeApplication){
+    double price;
+    std::string symbol;
+    bool manualOrderIndicator;
+    std::string securityDesc;
+    std::string securityType;
+    std::string crossID;
+    std::vector<CrossEntry> crossEntries;
+
+    std::cout << "Input Symbol" << std::endl;
+    std::cin >> symbol;
+    std::cout << "Input SecurityDesc" << std::endl;
+    std::cin.ignore(1024,'\n');
+    std::getline(std::cin, securityDesc);
+    std::cout << "Input SecurityType" << std::endl;
+    std::cin >> securityType;
+    std::cout << "Input CrossID" << std::endl;
+    std::cin >> crossID;
+    std::cout << "Input Price(double)" << std::endl;
+    std::cin >> price;
+    std::cout << "Input ManualOrderIndicator(bool)" << std::endl;
+    std::cin >> manualOrderIndicator;
+
+    for(int32_t i = 0; i < 2; ++i) {
+        falcon::cme::CrossEntry crossEntry;
+
+        std::cout << "Input side(1=Buy 2=Sell) for entry " << i << std::endl;
+        std::cin >> crossEntry.side_;
+        std::cout << "Input account for entry " << i << std::endl;
+        std::cin >> crossEntry.account_;
+        std::cout << "Input ClOrdID for entry " << i << std::endl;
+        std::cin >> crossEntry.clOrdID_;
+        std::cout << "Input custOrderHandlingInst for entry " << i << std::endl;
+        std::cin >> crossEntry.custOrderHandlingInst_;
+        std::cout << "Input OrderQty for entry " << i << std::endl;
+        std::cin >> crossEntry.orderQty_;
+        std::cout << "Input sideTimeInForce for entry " << i << std::endl;
+        std::cin >> crossEntry.sideTimeInForce_;
+        std::cout << "Input customerOrFirm for entry " << i << std::endl;
+        std::cin >> crossEntry.customerOrFirm_;
+
+        crossEntries.push_back(crossEntry);
+    }
+
+    auto res = cmeApplication.sendNewOrderCross(cmeApplication.getSessionIDbyTargetCompID("CME"),
+                                                price,
+                                                symbol,
+                                                manualOrderIndicator,
+                                                securityDesc,
+                                                securityType,
+                                                crossID,
+                                                crossEntries
+    );
+    if(res)
+        std::cout << "crossID " << crossID << " sent" << std::endl;
+    else
+        std::cout << "crossID " << crossID << " not sent" << std::endl;
+}
+
 void printMenu(){
     std::cout << "Welcome to Falcon!"<< std::endl;
     std::cout << "Please select the action(Input Q to quit and C to clear and print menu): " << std::endl;
@@ -681,6 +739,7 @@ void printMenu(){
     std::cout << "J: Send Quote Cancel" << std::endl;
     std::cout << "K: Send Mass Quote" << std::endl;
     std::cout << "L: Send UDS request" << std::endl;
+    std::cout << "M: Send New Order Cross" << std::endl;
     std::cout << "Q: Log out" << std::endl;
 }
 
@@ -729,6 +788,9 @@ void getMenu(CMEApplication& cmeApplication){
         }
         else if(c == 'L'){
             sendUDSRequest(cmeApplication);
+        }
+        else if(c == 'M'){
+            sendNewOrderCross(cmeApplication);
         }
         else if(c != '\n'){
             std::cout << "Invalid command, please try again!" << std::endl;

@@ -95,6 +95,16 @@ namespace falcon {
             std::vector<QuoteEntry> quoteEntries_;
         };
 
+        struct CrossEntry{
+            char side_;
+            std::string account_;
+            std::string clOrdID_;
+            std::string custOrderHandlingInst_;
+            int32_t orderQty_;
+            char sideTimeInForce_;
+            int32_t customerOrFirm_;
+        };
+
         class CMEApplication : public Application, MessageCracker {
         public:
             explicit CMEApplication(std::string settingFile);
@@ -243,7 +253,7 @@ namespace falcon {
                                        std::string custOrderHandlingInst,
                                        int32_t customerOrFirm,
                                        int32_t NoQuoteSets,
-                                       const std::vector<QuoteSet> quoteSet
+                                       const std::vector<QuoteSet>& quoteSet
             );
 
             virtual bool sendQuoteCancel(const SessionID& sessionID,
@@ -252,6 +262,16 @@ namespace falcon {
                                          bool manualOrderIndicator,
                                          int32_t noQuoteEntries,
                                          const std::vector<QuoteCancelEntry>& quoteCancelEntries
+            );
+
+            virtual bool sendNewOrderCross(const SessionID& sessionID,
+                                           double price,
+                                           std::string symbol,
+                                           bool manualOrderIndicator,
+                                           std::string securityDesc,
+                                           std::string securityType,
+                                           std::string crossID,
+                                           const std::vector<CrossEntry>& crossEntries
             );
         private:
             virtual void setCMEHeader(Message&, const SessionID&);
