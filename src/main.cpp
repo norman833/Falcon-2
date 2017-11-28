@@ -606,38 +606,28 @@ void sendUDSRequest(CMEApplication& cmeApplication){
     for(int32_t j = 0; j < legOptionSize; ++j){
         falcon::cme::LegOption optionEntry;
         std::cout << "Input LegSymbol for entry " << j << std::endl;
-        std::cin >> legSymbol;
-        optionEntry.setLegSymbol(legSymbol);
+        std::cin >> optionEntry.legSymbol_;
         std::cout << "Input LegSecurityDesc for entry " << j << std::endl;
-        std::cin >> legSecurityDesc;
-        optionEntry.setLegSecurityDesc(legSecurityDesc);
+        std::cin >> optionEntry.legSecurityDesc_;
         std::cout << "Input LegRatioQty for entry " << j << std::endl;
-        std::cin >> legRatioQty;
-        optionEntry.setLegRatioQty(legRatioQty);
+        std::cin >> optionEntry.legRatioQty_;
         std::cout << " Input Side(char 1=buy 2=sell) for entry" << j << std::endl;
-        std::cin >> legSide;
-        optionEntry.setLegSide(legSide);
-
+        std::cin >> optionEntry.legSide_;
         legOption.push_back(optionEntry);
     }
     std::cout << "Input for future leg set " << std::endl;
     for(int32_t j = 0; j < legFutureSize; ++j){
         falcon::cme::LegFuture futureEntry;
         std::cout << "Input LegSymbol for entry " << j << std::endl;
-        std::cin >> legSymbol;
-        futureEntry.setLegSymbol(legSymbol);
+        std::cin >> futureEntry.legSymbol_;
         std::cout << "Input LegSecurityDesc for entry " << j << std::endl;
-        std::cin >> legSecurityDesc;
-        futureEntry.setLegSecurityDesc(legSecurityDesc);
+        std::cin >> futureEntry.legSecurityDesc_;
         std::cout << "Input LegOptionRatio for entry " << j << std::endl;
-        std::cin >> legOptionRatio;
-        futureEntry.setLegOptionRatio(legOptionRatio);
+        std::cin >> futureEntry.legOptionRatio_;
         std::cout << " Input Side(char 1=buy 2=sell) for entry" << j << std::endl;
-        std::cin >> legSide;
-        futureEntry.setLegSide(legSide);
+        std::cin >> futureEntry.legSide_;
         std::cout << "Input LegPrice for entry " << j << std::endl;
-        std::cin >> legPrice;
-        futureEntry.setLegPrice(legPrice);
+        std::cin >> futureEntry.legPrice_;
 
         legFuture.push_back(futureEntry);
     }
@@ -805,7 +795,7 @@ int main() {
         CMEApplication cmeApplication("../config/CMEiLink.ini");
         CMEGateWay cmeGateWay;
 
-        cmeGateWay.setCMESessionClient(&cmeApplication);
+        cmeGateWay.setCMESessionClient(&cmeApplication, "CME");
 
         cmeGateWay.start();
 

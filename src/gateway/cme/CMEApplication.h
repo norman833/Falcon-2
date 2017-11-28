@@ -4,6 +4,8 @@
 #include <cstdint>
 #include <mutex>
 
+#include "CMEOrderInterface.h"
+
 #include "quickfix/Application.h"
 #include "quickfix/SessionID.h"
 #include "quickfix/MessageCracker.h"
@@ -14,58 +16,25 @@
 #include "quickfix/SocketInitiator.h"
 #include "quickfix/Message.h"
 
+
 namespace falcon {
     namespace cme {
         using namespace FIX;
-        // Norman:Leg Future Definition
-        class LegFuture{
-        public:
-            LegFuture(std::string legSymbol, std::string legSecurityDesc, char legSide,
-                               double legPrice, double legOptionRatio);
-            LegFuture();
-            ~LegFuture();
-        //public:
-            std::string getLegSymbol() const;
-            void setLegSymbol(std::string legSymbol);
-            std::string getLegSecurityDesc() const;
-            void setLegSecurityDesc(std::string legSecurityDesc);
-            char getLegSide() const;
-            void setLegSide(char legSide);
-            double getLegPrice() const;
-            void setLegPrice(double legPrice);
-            double getLegOptionRatio() const;
-            void setLegOptionRatio(double legOptionRatio);
-        private:
-            std::string legSymbol;
-            std::string legSecurityDesc;
-            char legSide;
-            double legPrice;
-            double legOptionRatio;
-        };
-        //
-        // Norman:Leg Option Definition
-        class LegOption{
-        public:
-            LegOption(std::string legSymbol, std::string legSecurityDesc, char legSide,
-                      int32_t legRatioQty);
-            LegOption();
-            ~LegOption();
-        //public:
-            std::string getLegSymbol() const;
-            void setLegSymbol(std::string legSymbol);
-            std::string getLegSecurityDesc() const;
-            void setLegSecurityDesc(std::string legSecurityDesc);
-            char getLegSide() const;
-            void setLegSide(char legSide);
-            int32_t getLegRatioQty() const;
-            void setLegRatioQty(int32_t legRatioQty);
-        private:
-            std::string legSymbol;
-            std::string legSecurityDesc;
-            char legSide;
-            int32_t legRatioQty;
+
+        struct LegFuture{
+            std::string legSymbol_;
+            std::string legSecurityDesc_;
+            char legSide_;
+            double legPrice_;
+            double legOptionRatio_;
         };
 
+        struct LegOption{
+            std::string legSymbol_;
+            std::string legSecurityDesc_;
+            char legSide_;
+            int32_t legRatioQty_;
+        };
 
         struct QuoteCancelEntry{
             std::string symbol_;
@@ -111,6 +80,8 @@ namespace falcon {
             virtual bool start();
             virtual bool stop(bool force);
             virtual SessionID getSessionIDbyTargetCompID(std::string targetCompID);
+            virtual bool isSessionLoggedOn(const SessionID&);
+            virtual bool setObserver(CMEOrderInterface* observer);
 
             virtual void onCreate( const SessionID& sessionID);
             virtual void onLogon( const SessionID& sessionID);
@@ -123,10 +94,13 @@ namespace falcon {
                 throw( FieldNotFound, IncorrectDataFormat, IncorrectTagValue, UnsupportedMessageType );
 
             virtual void onMessage(const FIX42::TestRequest& testRequest, const SessionID& sessionID);
+
+            virtual void onMessage(const FIX42::Reject& reject, const SessionID& sessionID);
             virtual void onMessage(const FIX42::BusinessMessageReject& businessMessageReject, const SessionID& sessionID);
             virtual void onMessage(const FIX42::ExecutionReport& executionReport, const SessionID& sessionID);
             virtual void onMessage(const FIX42::OrderCancelReject& orderCancelReject, const SessionID& sessionID);
-            virtual void onMessage(const FIX42::QuoteAcknowledgement& quoteAcknowledgement, const SessionID& sessionID);
+
+            //virtual void onMessage(const FIX42::QuoteAcknowledgement& quoteAcknowledgement, const SessionID& sessionID);
 
             virtual bool sendTestRequest(const SessionID& sessionID, std::string msg);
             virtual bool sendOrderCancelRequest(const SessionID& sessionID,
@@ -277,7 +251,7 @@ namespace falcon {
             virtual void setCMEHeader(Message&, const SessionID&);
             virtual void setLogon(Message&, const SessionID&);
             virtual void setLogout(Message&, const SessionID&);
-            virtual bool isSessionLoggedOn(const SessionID&);
+
             SessionSettings settings_;
             FileStoreFactory storeFactory_;
             FileLogFactory logFactory_;
@@ -285,6 +259,8 @@ namespace falcon {
 
             long latestSeqNo = 0;
             std::mutex latestSeqNO_mutex;
+
+            CMEOrderInterface* observer_{nullptr};
         };
     } //namespace cme
 } //namespace falcon

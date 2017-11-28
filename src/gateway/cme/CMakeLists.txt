@@ -1,1 +1,1 @@
-add_library(cme CMEGateWay.cpp CMEApplication.cpp)
+add_library(cme CMEGateWay.cpp CMEApplication.cpp CMEOrderInterface.h)

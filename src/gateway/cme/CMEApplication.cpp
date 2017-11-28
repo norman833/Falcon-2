@@ -2,10 +2,13 @@
 #include "CMEApplication.h"
 #include "Logger.h"
 
+#include "quickfix/fix42/Reject.h"
+#include "quickfix/fix42/BusinessMessageReject.h"
 #include "quickfix/fix42/NewOrderSingle.h"
 #include "quickfix/fix42/TestRequest.h"
 #include "quickfix/fix42/Heartbeat.h"
 #include "quickfix/fix42/OrderCancelRequest.h"
+#include "quickfix/fix42/OrderCancelReject.h"
 #include "quickfix/fix42/ExecutionReport.h"
 #include "quickfix/fix42/OrderStatusRequest.h"
 #include "quickfix/fix42/OrderCancelReplaceRequest.h"
@@ -20,57 +23,6 @@
 namespace falcon {
     namespace cme {
         using  namespace FIX;
-
-        //Norman:LegFuture Definition
-        LegFuture::LegFuture(std::string legSymbol, std::string legSecurityDesc, char legSide,
-                             double legPrice, double legOptionRatio){
-            this->legSymbol = legSymbol;
-            this->legSecurityDesc = legSecurityDesc;
-            this->legSide = legSide;
-            this->legPrice = legPrice;
-            this->legOptionRatio = legOptionRatio;
-        }
-        LegFuture::LegFuture() {
-
-        };
-        LegFuture::~LegFuture() {
-
-        };
-        std::string LegFuture::getLegSymbol() const {return this->legSymbol;}
-        std::string LegFuture::getLegSecurityDesc() const {return this->legSecurityDesc;}
-        char LegFuture::getLegSide() const {return this->legSide;}
-        double LegFuture::getLegPrice() const {return this->legPrice;}
-        double LegFuture::getLegOptionRatio() const {return this->legOptionRatio;}
-        void LegFuture::setLegSymbol(std::string legSymbol) {this->legSymbol=legSymbol;}
-        void LegFuture::setLegSecurityDesc(std::string legSecurityDesc) {this->legSecurityDesc=legSecurityDesc;}
-        void LegFuture::setLegSide(char legSide) {this->legSide=legSide;}
-        void LegFuture::setLegPrice(double legPrice) {this->legPrice=legPrice;}
-        void LegFuture::setLegOptionRatio(double legOptionRatio) {this->legOptionRatio=legOptionRatio;}
-        //
-
-        //Norman:LegOption Definition
-        LegOption::LegOption(std::string legSymbol, std::string legSecurityDesc, char legSide,
-                             int32_t legRatioQty){
-            this->legSymbol = legSymbol;
-            this->legSecurityDesc = legSecurityDesc;
-            this->legSide = legSide;
-            this->legRatioQty = legRatioQty;
-        }
-        LegOption::LegOption() {
-
-        };
-        LegOption::~LegOption() {
-
-        };
-        std::string LegOption::getLegSymbol() const {return this->legSymbol;}
-        std::string LegOption::getLegSecurityDesc() const {return this->legSecurityDesc;}
-        char LegOption::getLegSide() const {return this->legSide;}
-        int32_t LegOption::getLegRatioQty() const {return this->legRatioQty;}
-        void LegOption::setLegSymbol(std::string legSymbol) {this->legSymbol=legSymbol;}
-        void LegOption::setLegSecurityDesc(std::string legSecurityDesc) {this->legSecurityDesc=legSecurityDesc;}
-        void LegOption::setLegSide(char legSide) {this->legSide=legSide;}
-        void LegOption::setLegRatioQty(int32_t legRatioQty) {this->legRatioQty=legRatioQty;}
-        //
 
         CMEApplication::CMEApplication(std::string settingFile) :
                 settings_(settingFile), storeFactory_(settings_), logFactory_(settings_),
@@ -187,41 +139,37 @@ namespace falcon {
 
         void CMEApplication::onMessage(const FIX42::BusinessMessageReject &message, const SessionID &sessionID) {
 
-
-        }
-        void CMEApplication::onMessage(const FIX42::OrderCancelReject &, const SessionID &) {
-
         }
 
-        void CMEApplication::onMessage(const FIX42::QuoteAcknowledgement &quoteAcknowledgement, const SessionID& sessionID) {
-
-        }
-
-        void CMEApplication::onMessage(const FIX42::ExecutionReport &executionReport, const SessionID &sessionID) {
-            auto execType = executionReport.getField(FIX::FIELD::ExecType);
-
-            if(execType == 'I') {////Order Status Request Acknowledgment
-
-            }
-            else if(execType == '0' || execType == '4' || execType == '5'){ //Order Creation Cancel Modification
-
-            }
-            else if(execType == '1' || execType == '2'){//Order Fill
-
-            }
-            else if(execType == 'C'){//Order Elimination
-
-            }
-            else if(execType == '8'){//Reject
-
-            }
-            else if(execType == 'H'){//Trade Cancel
-
+        void CMEApplication::onMessage(const FIX42::Reject& reject, const SessionID& sessionID) {
+            if(this->observer_){
+                this->observer_->onMessage(reject);
             }
             else{
-                std::stringstream sstream;
-                sstream << "Unexpected execution report with execType " << execType << "\n";
-                LOG_ERR(sstream.str());
+                LOG(reject.toString());
+            }
+        }
+
+        void CMEApplication::onMessage(const FIX42::OrderCancelReject& orderCancelReject, const SessionID& sessionID) {
+            if(this->observer_){
+                this->observer_->onMessage(orderCancelReject);
+            }
+            else{
+                LOG(orderCancelReject.toString());
+            }
+        }
+        /*
+        void CMEApplication::onMessage(const FIX42::QuoteAcknowledgement &quoteAcknowledgement, const SessionID& sessionID) {
+        }
+        */
+
+        void CMEApplication::onMessage(const FIX42::ExecutionReport &executionReport, const SessionID &sessionID) {
+            //auto execType = executionReport.getField(FIX::FIELD::ExecType);
+            if(this->observer_){
+                this->observer_->onMessage(executionReport);
+            }
+            else{
+                LOG(executionReport.toString());
             }
         }
 
@@ -270,6 +218,16 @@ namespace falcon {
 
         bool CMEApplication::isSessionLoggedOn(const SessionID &sessionID) {
             return(this->socketInitiator_.getSession(sessionID)->isLoggedOn());
+        }
+
+        bool CMEApplication::setObserver(CMEOrderInterface *observer) {
+            if(!this->observer_){
+                this->observer_ = observer;
+                return true;
+            }
+            else{
+                return false;
+            }
         }
 
         bool CMEApplication::sendTestRequest(const SessionID &sessionID, std::string testRequestID) {
@@ -574,19 +532,19 @@ namespace falcon {
             FIX42::SecurityDefinitionRequest::NoRelatedSym group;
             //Add the fields for option group
             for (int i=0; i<legOptionSize; i++){
-                group.setField(FIX::LegSymbol(legOption[i].getLegSymbol()));
-                group.setField(FIX::LegSecurityDesc(legOption[i].getLegSecurityDesc()));
-                group.setField(FIX::LegRatioQty(legOption[i].getLegRatioQty()));
-                group.setField(FIX::LegSide(legOption[i].getLegSide()));
+                group.setField(FIX::LegSymbol(legOption[i].legSymbol_));
+                group.setField(FIX::LegSecurityDesc(legOption[i].legSecurityDesc_));
+                group.setField(FIX::LegRatioQty(legOption[i].legRatioQty_));
+                group.setField(FIX::LegSide(legOption[i].legSide_));
                 securityDefinitionRequest.addGroup(group);
             }
             //Add the fields for Future group
             for (int i=0; i<legFutureSize; i++){
-                group.setField(FIX::LegSymbol(legFuture[i].getLegSymbol()));
-                group.setField(FIX::LegSecurityDesc(legFuture[i].getLegSecurityDesc()));
-                group.setField(FIX::LegPrice(legFuture[i].getLegPrice()));
-                group.setField(FIX::LegOptionRatio(legFuture[i].getLegOptionRatio()));
-                group.setField(FIX::LegSide(legFuture[i].getLegSide()));
+                group.setField(FIX::LegSymbol(legFuture[i].legSymbol_));
+                group.setField(FIX::LegSecurityDesc(legFuture[i].legSecurityDesc_));
+                group.setField(FIX::LegPrice(legFuture[i].legPrice_));
+                group.setField(FIX::LegOptionRatio(legFuture[i].legOptionRatio_));
+                group.setField(FIX::LegSide(legFuture[i].legSide_));
                 securityDefinitionRequest.addGroup(group);
             }
 
