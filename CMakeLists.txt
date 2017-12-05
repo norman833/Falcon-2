@@ -12,11 +12,13 @@ set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/build)
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/include)
+set(CMAKE_INSTALL_CONFIG_PREFIX ${CMAKE_BINARY_DIR}/config)
 
 message(STATUS "This is BINARY dir " ${CMAKE_BINARY_DIR})
 message(STATUS "This is SOURCE dir " ${CMAKE_SOURCE_DIR})
 message(STATUS "This is LIBRARY_OUTPUT_PATH " ${LIBRARY_OUTPUT_PATH})
 message(STATUS "This is CMAKE_INSTALL_PREFIX " ${CMAKE_INSTALL_PREFIX})
+message(STATUS "This is CMAKE_INSTALL_CONFIG_PREFIX " ${CMAKE_INSTALL_CONFIG_PREFIX})
 
 set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH}
         /lib
@@ -84,6 +86,12 @@ install(FILES src/base/Logger.h
         src/gateway/cme/CMEOrderInterface.h
 
         DESTINATION ${CMAKE_INSTALL_PREFIX})
+
+install(FILES config/CMEiLink.ini
+        config/FIX42.xml
+
+        DESTINATION ${CMAKE_INSTALL_CONFIG_PREFIX})
+
 # Testing
 enable_testing()
 
