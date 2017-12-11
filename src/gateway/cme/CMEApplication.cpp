@@ -69,6 +69,10 @@ namespace falcon {
             std::lock_guard<std::mutex> guard(this->latestSeqNO_mutex);
             this->latestSeqNo = atol(msgSeqNum.c_str());
 
+            std::stringstream sstream;
+            sstream << "App msg latestSeqNo is " << this->latestSeqNo << std::endl;
+            LOG(sstream.str());
+
             this->crack(message, sessionID);
         };
 
@@ -102,11 +106,13 @@ namespace falcon {
                 sstream << "Session Level Reject received from " << sessionID.toString() << std::endl;
             }
 
-            LOG(sstream.str());
-
             auto msgSeqNum = message.getHeader().getField(FIX::FIELD::MsgSeqNum);
             std::lock_guard<std::mutex> guard(this->latestSeqNO_mutex);
             this->latestSeqNo = atol(msgSeqNum.c_str());
+
+            sstream << "latestSeqNo is " << this->latestSeqNo << std::endl;
+
+            LOG(sstream.str());
         };
 
         void CMEApplication::toApp(Message &message, const SessionID &sessionID) throw( DoNotSend ) {
@@ -134,6 +140,10 @@ namespace falcon {
                 auto beginSeqNo = atol(beginSeqNoStr.c_str());
                 if(this->latestSeqNo - beginSeqNo >= 2500)
                 message.setField(FIX::EndSeqNo(beginSeqNo + 2499));
+
+                std::stringstream sstream;
+                sstream << "ResendRequest sent: beginSeqNo " << beginSeqNo << " latestSeqNo " << this->latestSeqNo << "\n";
+                LOG(sstream.str());
             }
         }
 
@@ -164,7 +174,7 @@ namespace falcon {
         */
 
         void CMEApplication::onMessage(const FIX42::ExecutionReport &executionReport, const SessionID &sessionID) {
-            //auto execType = executionReport.getField(FIX::FIELD::ExecType);
+            auto execType = executionReport.getField(FIX::FIELD::ExecType);
             if(this->observer_){
                 this->observer_->onMessage(executionReport);
             }

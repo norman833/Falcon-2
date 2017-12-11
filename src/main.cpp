@@ -124,11 +124,11 @@ void placeNewOrder(CMEApplication& cmeApplication){
     std::cin >> expireDate;
     std::cout << "Input ManualOrderIndicator(bool)" << std::endl;
     std::cin >> manualOrderIndicator;
-    std::cout <<"Input GiveUpFirm(str(3), empty if N/A" << std::endl;
+    std::cout <<"Input GiveUpFirm(str(3), NA if N/A)" << std::endl;
     std::cin >> giveUpFirm;
-    std::cout << "Input CmtaGiveupCD(GU/SX, empty if N/A " << std::endl;
+    std::cout << "Input CmtaGiveupCD(GU/SX(NA if N/A))" << std::endl;
     std::cin >> cmtaGiveupCD;
-    std::cout << "Input allocAccount, empty if N/A" << std::endl;
+    std::cout << "Input allocAccount(str(11), NA if N/A)" << std::endl;
     std::cin >> allocAccount;
 
     std::cout << "Confirm? (Y/N):";
@@ -232,11 +232,11 @@ void amendOrder(CMEApplication& cmeApplication) {
     std::cin >> manualOrderIndicator;
     std::cout << "Enable IFM(Y/N)" << std::endl;
     std::cin >> IFMFlag;
-    std::cout <<"Input GiveUpFirm(str(3), empty if N/A" << std::endl;
+    std::cout <<"Input GiveUpFirm(str(3), NA if N/A)" << std::endl;
     std::cin >> giveUpFirm;
-    std::cout << "Input CmtaGiveupCD(GU/SX, empty if N/A " << std::endl;
+    std::cout << "Input CmtaGiveupCD(GU/SX(NA if N/A))" << std::endl;
     std::cin >> cmtaGiveupCD;
-    std::cout << "Input allocAccount, empty if N/A" << std::endl;
+    std::cout << "Input allocAccount(str(11), NA if N/A)" << std::endl;
     std::cin >> allocAccount;
 
     std::cout << "Confirm? (Y/N):";
