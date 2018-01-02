@@ -165,6 +165,53 @@ void placeNewOrder(CMEApplication& cmeApplication){
         std::cout << "order " << clOrdID << " not sent" << std::endl;
 }
 
+void sendMultipleOrders(CMEApplication& cmeApplication){
+
+    int32_t num;
+    unsigned interval;
+    std::string securityDesc;
+    std::cout << "Input number of orders" << std::endl;
+    std::cin >> num;
+    std::cout << "Input interval of orders" << std::endl;
+    std::cin >> interval;
+    std::cout << "Input SecurityDesc(string)" << std::endl;
+    std::cin >> securityDesc;
+
+    for( auto i = 0; i < interval; ++i){
+        int32_t  qty = 100 + i;
+        double price = qty;
+        std::string clOrdID = "20180104B" + std::to_string(i);
+        auto res = cmeApplication.sendNewOrderSingle(cmeApplication.getSessionIDbyTargetCompID("CME"),
+                                                     "ABC",
+                                                     clOrdID,
+                                                     "F",
+                                                     qty,
+                                                     '2', //orderType
+                                                     price, //price
+                                                     '0', //side
+                                                     '0', //timeInForce
+                                                     0, //stopPx
+                                                     securityDesc,
+                                                     0,
+                                                     "FUT",
+                                                     0,
+                                                     qty,
+                                                     "",//expireDate
+                                                     1,
+                                                     "NA",
+                                                     "NA",
+                                                     "NA"
+        );
+
+        if(res)
+            std::cout << "order " << clOrdID << " sent" << std::endl;
+        else
+            std::cout << "order " << clOrdID << " not sent" << std::endl;
+
+        sleep(interval);
+    }
+}
+
 void amendOrder(CMEApplication& cmeApplication) {
     std::string account;
     std::string clOrdID;
@@ -730,6 +777,7 @@ void printMenu(){
     std::cout << "K: Send Mass Quote" << std::endl;
     std::cout << "L: Send UDS request" << std::endl;
     std::cout << "M: Send New Order Cross" << std::endl;
+    std::cout << "N: Send Multiple Orders" << std::endl;
     std::cout << "Q: Log out" << std::endl;
 }
 
@@ -779,8 +827,11 @@ void getMenu(CMEApplication& cmeApplication){
         else if(c == 'L'){
             sendUDSRequest(cmeApplication);
         }
-        else if(c == 'M'){
+        else if(c == 'M') {
             sendNewOrderCross(cmeApplication);
+        }
+        else if (c == 'N'){
+            sendMultipleOrders(cmeApplication);
         }
         else if(c != '\n'){
             std::cout << "Invalid command, please try again!" << std::endl;
