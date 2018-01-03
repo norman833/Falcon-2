@@ -191,7 +191,7 @@ void sendMultipleOrders(CMEApplication& cmeApplication){
                                                      qty,
                                                      '2', //orderType
                                                      price, //price
-                                                     '0', //side
+                                                     '1', //side buy
                                                      '0', //timeInForce
                                                      0, //stopPx
                                                      securityDesc,
