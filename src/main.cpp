@@ -170,17 +170,20 @@ void sendMultipleOrders(CMEApplication& cmeApplication){
     int32_t num;
     unsigned interval;
     std::string securityDesc;
+    std::string clOrdIDPrefix;
     std::cout << "Input number of orders" << std::endl;
     std::cin >> num;
     std::cout << "Input interval of orders" << std::endl;
     std::cin >> interval;
     std::cout << "Input SecurityDesc(string)" << std::endl;
     std::cin >> securityDesc;
+    std::cout << "Input clOrdIDPrefix(string)" << std::endl;
+    std::cin >> clOrdIDPrefix;
 
     for( auto i = 0; i < interval; ++i){
         int32_t  qty = 100 + i;
         double price = qty;
-        std::string clOrdID = "20180104B" + std::to_string(i);
+        std::string clOrdID = clOrdIDPrefix + std::to_string(i);
         auto res = cmeApplication.sendNewOrderSingle(cmeApplication.getSessionIDbyTargetCompID("CME"),
                                                      "ABC",
                                                      clOrdID,
