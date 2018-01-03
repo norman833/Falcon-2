@@ -180,7 +180,7 @@ void sendMultipleOrders(CMEApplication& cmeApplication){
     std::cout << "Input clOrdIDPrefix(string)" << std::endl;
     std::cin >> clOrdIDPrefix;
 
-    for( auto i = 0; i < interval; ++i){
+    for( auto i = 0; i < num; ++i){
         int32_t  qty = 100 + i;
         double price = qty;
         std::string clOrdID = clOrdIDPrefix + std::to_string(i);
