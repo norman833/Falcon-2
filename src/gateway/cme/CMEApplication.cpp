@@ -139,7 +139,7 @@ namespace falcon {
                 auto beginSeqNoStr = message.getField(FIX::FIELD::BeginSeqNo);
                 auto beginSeqNo = atol(beginSeqNoStr.c_str());
                 //if(this->latestSeqNo - beginSeqNo >= 2500)
-                message.setField(FIX::EndSeqNo(beginSeqNo + 2499));
+                //message.setField(FIX::EndSeqNo(beginSeqNo + 2499));
 
                 std::stringstream sstream;
                 sstream << "ResendRequest sent: beginSeqNo " << beginSeqNo << " latestSeqNo " << this->latestSeqNo << "\n";
