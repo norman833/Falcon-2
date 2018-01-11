@@ -52,31 +52,7 @@ add_subdirectory("src/gateway/cme")
 #test subdir
 add_subdirectory("src/test")
 
-set(SOURCE_FILES)
-
-add_library(Falcon SHARED ${SOURCE_FILES})
 add_executable(FalconServer src/main.cpp)
-
-#find_package(Boost 1.64 REQUIRED COMPONENTS system)
-#find_library(MySQLConn_LIB mysqlcppconn)
-
-find_library(QuickFIX_LIB quickfix)
-find_library(PThread_LIB pthread)
-find_library(XML2_LIB xml2)
-find_library(ZDev_LIB z)
-
-#message(STATUS "Boost libs are " ${Boost_LIBRARIES})
-
-message(STATUS "QuickFix lib is " ${QuickFIX_LIB})
-message(STATUS "XML2 lib is " ${XML2_LIB})
-#message(STATUS "MySQL Connector lib is " ${MySQLConn_LIB})
-message(STATUS "PThread lib is " ${PThread_LIB})
-message(STATUS "ZDev lib is " ${ZDev_LIB})
-
-
-#target_link_libraries(Falcon database base network marketdata marketaccess cme ${QuickFIX_LIB} ${XML2_LIB} ${PThread_LIB} ${ZDev_LIB} )
-
-target_link_libraries(Falcon base cme ${QuickFIX_LIB} ${XML2_LIB} ${PThread_LIB} ${ZDev_LIB} )
 
 target_link_libraries(FalconServer Falcon )
 

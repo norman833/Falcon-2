@@ -77,6 +77,7 @@ namespace falcon {
         class CMEApplication : public Application, MessageCracker {
         public:
             explicit CMEApplication(std::string settingFile);
+            virtual ~CMEApplication();
             virtual bool start();
             virtual bool stop(bool force);
             virtual SessionID getSessionIDbyTargetCompID(std::string targetCompID);

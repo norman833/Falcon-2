@@ -30,6 +30,10 @@ namespace falcon {
             LOG("creating CME session...");
         }
 
+        CMEApplication::~CMEApplication() {
+
+            LOG("destruct CME session...");
+        }
         bool CMEApplication::start() {
             this->socketInitiator_.start();
             return true;

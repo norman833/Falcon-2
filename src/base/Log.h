@@ -7,6 +7,8 @@
 #include <mutex>
 #include <memory>
 #include <ostream>
+#include <string>
+#include <iostream>
 
 namespace falcon {
     namespace base {
@@ -37,13 +39,28 @@ namespace falcon {
         public:
             file_log_policy() : out_stream(new std::ofstream) {}
 
-            void open_ostream(const std::string &name);
+            void open_ostream(const std::string &name){
+                out_stream->open(name.c_str(), std::ios_base::binary | std::ios_base::out | std::ios_base::app);
+                if (!out_stream->is_open()) {
+                    throw (std::runtime_error("LOGGER: Unable to open an output stream"));
+                }
+            };
 
-            void close_ostream();
+            void close_ostream(){
+                if (out_stream) {
+                    out_stream->close();
+                }
+            };
 
-            void write(const std::string &msg);
+            void write(const std::string &msg){
+                (*out_stream) << msg << std::endl;
+            };
 
-            ~file_log_policy();
+            ~file_log_policy(){
+                if (out_stream) {
+                    close_ostream();
+                }
+            };
         };
 
         template<typename log_policy>

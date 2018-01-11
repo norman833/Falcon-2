@@ -1,1 +1,1 @@
-add_library(base Logger.h Log.cpp INIParser.cpp)
+add_library(base Logger.h INIParser.cpp)
