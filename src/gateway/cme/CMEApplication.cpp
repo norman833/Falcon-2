@@ -147,8 +147,11 @@ namespace falcon {
             }
         }
 
-        void CMEApplication::onMessage(const FIX42::BusinessMessageReject &message, const SessionID &sessionID) {
-
+        void CMEApplication::onMessage(const FIX42::BusinessMessageReject& businessMessageReject, const SessionID &sessionID) {
+            if(this->observer_){
+                this->observer_->onMessage(businessMessageReject);
+            }
+            LOG_ERR(businessMessageReject.toString());
         }
 
         void CMEApplication::onMessage(const FIX42::Reject& reject, const SessionID& sessionID) {
@@ -156,7 +159,7 @@ namespace falcon {
                 this->observer_->onMessage(reject);
             }
             else{
-                LOG(reject.toString());
+                LOG_ERR(reject.toString());
             }
         }
 

@@ -81,6 +81,7 @@ target_link_libraries(Falcon base cme ${QuickFIX_LIB} ${XML2_LIB} ${PThread_LIB}
 target_link_libraries(FalconServer Falcon )
 
 install(FILES src/base/Logger.h
+        src/base/Log.h
         src/gateway/cme/CMEGateWay.h
         src/gateway/cme/CMEApplication.h
         src/gateway/cme/CMEOrderInterface.h
