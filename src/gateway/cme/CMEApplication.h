@@ -100,6 +100,7 @@ namespace falcon {
             virtual void onMessage(const FIX42::BusinessMessageReject& businessMessageReject, const SessionID& sessionID);
             virtual void onMessage(const FIX42::ExecutionReport& executionReport, const SessionID& sessionID);
             virtual void onMessage(const FIX42::OrderCancelReject& orderCancelReject, const SessionID& sessionID);
+            virtual void onMessage(const FIX50SP2::OrderMassActionReport& orderMassActionReport);
 
             //virtual void onMessage(const FIX42::QuoteAcknowledgement& quoteAcknowledgement, const SessionID& sessionID);
 

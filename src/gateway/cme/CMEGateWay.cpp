@@ -200,6 +200,33 @@ namespace falcon {
             ));
         }
 
+        bool CMEGateWay::sendOrderMassActionRequest(std::string clOrdID,
+                                                    int32_t massActionScope,
+                                                    int32_t marketSegmentID,
+                                                    std::string symbol,
+                                                    std::string securityDesc,
+                                                    int32_t massCancelRequestType,
+                                                    std::string account,
+                                                    char side,
+                                                    char ordType,
+                                                    char timeInForce,
+                                                    bool manualOrderIndicator) {
+            return(this->sessionClient_->sendOrderMassActionRequest(
+                    this->sessionClient_->getSessionIDbyTargetCompID(this->targetCompID_),
+                    clOrdID,
+                    massActionScope,
+                    marketSegmentID,
+                    symbol,
+                    securityDesc,
+                    massCancelRequestType,
+                    account,
+                    side,
+                    ordType,
+                    timeInForce,
+                    manualOrderIndicator
+            ));
+        }
+
         void CMEGateWay::onMessage(const FIX42::Reject &reject) {
             for( CMEOrderInterface* orderMgr: this->activeOrderMgrs_){
                 orderMgr->onMessage(reject);
@@ -219,8 +246,14 @@ namespace falcon {
         }
 
         void CMEGateWay::onMessage(const FIX42::BusinessMessageReject &businessMessageReject) {
-            for( CMEOrderInterface* orderMgr: this->activeOrderMgrs_){
+            for (CMEOrderInterface *orderMgr: this->activeOrderMgrs_) {
                 orderMgr->onMessage(businessMessageReject);
+            }
+        }
+
+        void CMEGateWay::onMessage(const FIX50SP2::OrderMassActionReport &orderMassActionReport) {
+            for( CMEOrderInterface* orderMgr: this->activeOrderMgrs_){
+                orderMgr->onMessage(orderMassActionReport);
             }
         }
     }// namespace cme

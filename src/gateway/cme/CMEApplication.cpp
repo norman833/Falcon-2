@@ -18,6 +18,7 @@
 #include "quickfix/fix42/MassQuote.h"
 #include "quickfix/fix44/OrderMassStatusRequest.h"
 #include "quickfix/fix50sp2/OrderMassActionRequest.h"
+#include "quickfix/fix50sp2/OrderMassActionReport.h"
 #include "quickfix/fix44/NewOrderCross.h"
 
 namespace falcon {
@@ -175,10 +176,15 @@ namespace falcon {
                 LOG(orderCancelReject.toString());
             }
         }
-        /*
-        void CMEApplication::onMessage(const FIX42::QuoteAcknowledgement &quoteAcknowledgement, const SessionID& sessionID) {
+
+        void CMEApplication::onMessage(const FIX50SP2::OrderMassActionReport& orderMassActionReport){
+            if(this->observer_){
+                this->observer_->onMessage(orderMassActionReport);
+            }
+            else{
+                LOG(orderMassActionReport.toString());
+            }
         }
-        */
 
         void CMEApplication::onMessage(const FIX42::ExecutionReport &executionReport, const SessionID &sessionID) {
             auto execType = executionReport.getField(FIX::FIELD::ExecType);
@@ -200,6 +206,7 @@ namespace falcon {
         }
 
         void CMEApplication::setCMEHeader(Message &message, const SessionID &sessionID) {
+
             auto lastMsgSeqNumProcessed = socketInitiator_.getSession(sessionID)->getExpectedTargetNum()-1;
             auto targetSubID = settings_.get(sessionID).getString("TargetSubID");
             auto senderSubID = settings_.get(sessionID).getString("SenderSubID");

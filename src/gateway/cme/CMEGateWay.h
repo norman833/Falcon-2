@@ -87,11 +87,26 @@ namespace falcon {
                                                 bool manualOrderIndicator
             );
 
+            virtual bool sendOrderMassActionRequest(std::string clOrdID,
+                                                    int32_t massActionScope,
+                                                    int32_t marketSegmentID,
+                                                    std::string symbol,
+                                                    std::string securityDesc,
+                                                    int32_t massCancelRequestType,
+                                                    std::string account,
+                                                    char side,
+                                                    char ordType,
+                                                    char timeInForce,
+                                                    bool manualOrderIndicator
+            );
+
             virtual void onMessage(const FIX42::BusinessMessageReject& businessMessageReject);
             virtual void onMessage(const FIX42::Reject& reject);
 
             virtual void onMessage(const FIX42::ExecutionReport& executionReport);
             virtual void onMessage(const FIX42::OrderCancelReject& orderCancelReject);
+            virtual void onMessage(const FIX50SP2::OrderMassActionReport& orderMassActionReport);
+
         private:
             CMEApplication* sessionClient_{nullptr};
             std::string targetCompID_;

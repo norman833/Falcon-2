@@ -13,6 +13,7 @@ namespace falcon {
 
             virtual void onMessage(const FIX42::ExecutionReport& executionReport) = 0;
             virtual void onMessage(const FIX42::OrderCancelReject& orderCancelReject) = 0;
+            virtual void onMessage(const FIX50SP2::OrderMassActionReport& orderMassActionReport) = 0;
         };
     }// namespace cme
 }// namespace falcon
