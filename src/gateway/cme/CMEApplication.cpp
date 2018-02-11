@@ -206,8 +206,12 @@ namespace falcon {
         }
 
         void CMEApplication::setCMEHeader(Message &message, const SessionID &sessionID) {
+            auto pSession = socketInitiator_.getSession(sessionID);
 
-            auto lastMsgSeqNumProcessed = socketInitiator_.getSession(sessionID)->getExpectedTargetNum()-1;
+            if(!pSession)
+                return;
+
+            auto lastMsgSeqNumProcessed = pSession->getExpectedTargetNum()-1;
             auto targetSubID = settings_.get(sessionID).getString("TargetSubID");
             auto senderSubID = settings_.get(sessionID).getString("SenderSubID");
             auto senderLocationID = settings_.get(sessionID).getString("SenderLocationID");
@@ -219,7 +223,6 @@ namespace falcon {
         }
 
         void CMEApplication::setLogon(Message &message, const SessionID &sessionID) {
-
             auto password = settings_.get(sessionID).getString("RawData");
             auto rawDatalength = password.length();
             auto applicationSystemName = settings_.get(sessionID).getString("ApplicationSystemName");
