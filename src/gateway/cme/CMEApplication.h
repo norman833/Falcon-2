@@ -250,9 +250,11 @@ namespace falcon {
                                            const std::vector<CrossEntry>& crossEntries
             );
         private:
-            virtual void setCMEHeader(Message&, const SessionID&);
-            virtual void setLogon(Message&, const SessionID&);
-            virtual void setLogout(Message&, const SessionID&);
+            virtual void setCMEHeader(Message& message, const SessionID& sessionID);
+            virtual void setLogon(Message& message, const SessionID& sessionID);
+            virtual void setLogout(Message& message, const SessionID& sessionID);
+            virtual std::string createCanonicalRequest(const Message& logon, const SessionID& sessionID);
+            virtual std::string calculateHMAC(const std::string& key, const std::string& canonicalRequest);
 
             SessionSettings settings_;
             FileStoreFactory storeFactory_;

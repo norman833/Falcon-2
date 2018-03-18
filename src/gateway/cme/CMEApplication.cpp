@@ -21,6 +21,12 @@
 #include "quickfix/fix50sp2/OrderMassActionReport.h"
 #include "quickfix/fix44/NewOrderCross.h"
 
+#include "cryptopp/cryptlib.h"
+#include "cryptopp/hmac.h"
+#include "cryptopp/sha.h"
+#include "cryptopp/base64.h"
+#include "cryptopp/filters.h"
+
 namespace falcon {
     namespace cme {
         using  namespace FIX;
@@ -223,24 +229,105 @@ namespace falcon {
         }
 
         void CMEApplication::setLogon(Message &message, const SessionID &sessionID) {
-            auto password = settings_.get(sessionID).getString("RawData");
-            auto rawDatalength = password.length();
+            auto accessKeyID = settings_.get(sessionID).getString("AccessKeyID");
+            auto secretKey = settings_.get(sessionID).getString("SecretKey");
+
             auto applicationSystemName = settings_.get(sessionID).getString("ApplicationSystemName");
             auto tradingSystemVersion = settings_.get(sessionID).getString("TradingSystemVersion");
             auto applicationSystemVendor = settings_.get(sessionID).getString("ApplicationSystemVendor");
 
-            message.setField(FIX::RawData(password));
-            message.setField(FIX::RawDataLength(rawDatalength));
+            message.setField(FIX::EncodedTextLen(accessKeyID.length()));
+            message.setField(FIX::EncodedText(accessKeyID));
+
             message.setField(1603, applicationSystemName);
             message.setField(1604, tradingSystemVersion);
             message.setField(1605, applicationSystemVendor);
+
+            auto canonicalRequest = this->createCanonicalRequest(message, sessionID);
+            auto encodedHMac = this->calculateHMAC(secretKey, canonicalRequest);
+
+            message.setField(FIX::FIELD::EncryptedPasswordMethod, "CME-1-SHA-256");
+            message.setField(FIX::EncryptedPasswordLen(encodedHMac.length()));
+            message.setField(FIX::EncryptedPassword(encodedHMac));
         }
 
         void CMEApplication::setLogout(Message &message, const SessionID &sessionID) {
             FIX::MsgSeqNum msgSeqNum;
             message.getHeader().getField(msgSeqNum);
 
-            message.setField(789, msgSeqNum.getString());//NextExpectedMsgSeqNum
+            message.setField(FIX::FIELD::NextExpectedMsgSeqNum, msgSeqNum.getString());//NextExpectedMsgSeqNum
+        }
+
+        std::string CMEApplication::createCanonicalRequest(const Message &logon, const SessionID &sessionID) {
+            /*
+            tag 34-MsgSeqNum – sequence number sent by client system
+            tag 49-SenderCompID – sender comp ID including the Fault Tolerance Indicator (right-most character)
+            tag 50-SenderSubID – Operator ID
+            tag 52-SendingTime – timestamp in milliseconds, UTC time format. UTC Timestamps are sent in number of nanoseconds since Unix epoch synced to a master clock to microsecond accuracy.
+            tag 57-TargetSubID – recipient of message.
+                For iLink and Drop Copy sessions,
+                    CGW session – ‘G’
+                    MSGW session - two digit market segment ID
+            tag 108-HeartBeatInterval – heartbeat interval specified in the logon message as number of seconds
+            tag 142-SenderLocationID – assigned value used to identify specific message originator's location (i.e. geographic location)
+            tag 369-LastMsgSeqNumProcessed – last message sequence number processed by the client system
+            tag 1603-ApplicationSystemName – identifies system generating the message
+            tag 1604-ApplicationSystemVersion – identifies the version of the system generating the message
+            tag 1605-ApplicationSystemVendor – identifies the vendor of the application system
+            */
+            std::string canonicalRequest{""};
+
+            auto msgSeqNum = logon.getHeader().getField(FIX::FIELD::MsgSeqNum);
+            auto senderCompID = logon.getHeader().getField(FIX::FIELD::SenderCompID);
+            auto sendderSubID = logon.getHeader().getField(FIX::FIELD::SenderSubID);
+            auto sendingTime = logon.getHeader().getField(FIX::FIELD::SendingTime);
+            auto targetSubID = logon.getHeader().getField(FIX::FIELD::TargetSubID);
+            auto heartBeatInterval = logon.getHeader().getField(FIX::FIELD::HeartBtInt);
+            auto senderLocationID = logon.getHeader().getField(FIX::FIELD::SenderLocationID);
+            auto lastMsgSeqNumProcessed = logon.getHeader().getField(FIX::FIELD::LastMsgSeqNumProcessed);
+
+            auto applicationSystemName = logon.getField(1603);
+            auto applicationSystemVersion = logon.getField(1604);
+            auto applicationSystemVendor = logon.getField(1605);
+
+            canonicalRequest = msgSeqNum + "\n" +
+                               senderCompID + "\n" +
+                               sendderSubID + "\n" +
+                               sendingTime + "\n" +
+                               targetSubID + "\n" +
+                               heartBeatInterval + "\n" +
+                               senderLocationID + "\n" +
+                               lastMsgSeqNumProcessed + "\n" +
+                               applicationSystemName + "\n" +
+                               applicationSystemVendor;
+
+            return canonicalRequest;
+        }
+
+        std::string CMEApplication::calculateHMAC(const std::string &key, const std::string &canonicalRequest) {
+            std::string decoded_key, calculatedHmac, encodedHmac;
+
+            // Decode the key since it is base64url encoded
+            CryptoPP::StringSource(key,
+                                   true,
+                                   new CryptoPP::Base64URLDecoder( new CryptoPP::StringSink(decoded_key)) // Base64URLDecoder
+            ); // StringSource
+
+            // Calculate HMAC
+            CryptoPP::HMAC<CryptoPP::SHA256> hmac((CryptoPP::byte*)decoded_key.c_str(), decoded_key.size());
+
+            CryptoPP::StringSource(canonicalRequest,
+                                   true,
+                                   new CryptoPP::HashFilter(hmac, new CryptoPP::StringSink(calculatedHmac)) // HashFilter
+            ); // StringSource
+
+            // base64url encode the HMAC and strip padding
+            CryptoPP::StringSource(calculatedHmac,
+                                   true,
+                                   new CryptoPP::Base64URLEncoder(new CryptoPP::StringSink(encodedHmac)) // Base64URLEncoder
+            ); // StringSource
+
+            return encodedHmac;
         }
 
         bool CMEApplication::isSessionLoggedOn(const SessionID &sessionID) {
