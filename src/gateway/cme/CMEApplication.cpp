@@ -277,6 +277,8 @@ namespace falcon {
             */
             std::string canonicalRequest{""};
 
+            LOG(logon.toXML() );
+
             auto msgSeqNum = logon.getHeader().getField(FIX::FIELD::MsgSeqNum);
             auto senderCompID = logon.getHeader().getField(FIX::FIELD::SenderCompID);
             auto sendderSubID = logon.getHeader().getField(FIX::FIELD::SenderSubID);
@@ -289,6 +291,7 @@ namespace falcon {
             auto applicationSystemName = logon.getField(1603);
             auto applicationSystemVersion = logon.getField(1604);
             auto applicationSystemVendor = logon.getField(1605);
+
 
             canonicalRequest = msgSeqNum + "\n" +
                                senderCompID + "\n" +

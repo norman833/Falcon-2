@@ -249,6 +249,7 @@ namespace falcon {
                                            std::string crossID,
                                            const std::vector<CrossEntry>& crossEntries
             );
+
         private:
             virtual void setCMEHeader(Message& message, const SessionID& sessionID);
             virtual void setLogon(Message& message, const SessionID& sessionID);
