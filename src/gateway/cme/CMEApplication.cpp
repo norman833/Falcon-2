@@ -284,10 +284,10 @@ namespace falcon {
             auto sendderSubID = logon.getHeader().getField(FIX::FIELD::SenderSubID);
             auto sendingTime = logon.getHeader().getField(FIX::FIELD::SendingTime);
             auto targetSubID = logon.getHeader().getField(FIX::FIELD::TargetSubID);
-            auto heartBeatInterval = logon.getHeader().getField(FIX::FIELD::HeartBtInt);
             auto senderLocationID = logon.getHeader().getField(FIX::FIELD::SenderLocationID);
             auto lastMsgSeqNumProcessed = logon.getHeader().getField(FIX::FIELD::LastMsgSeqNumProcessed);
 
+            auto heartBeatInterval = logon.getField(FIX::FIELD::HeartBtInt);
             auto applicationSystemName = logon.getField(1603);
             auto applicationSystemVersion = logon.getField(1604);
             auto applicationSystemVendor = logon.getField(1605);
