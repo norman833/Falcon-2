@@ -124,6 +124,8 @@ namespace falcon {
             sstream << "latestSeqNo is " << this->latestSeqNo << std::endl;
 
             LOG(sstream.str());
+
+            this->crack(message, sessionID);
         };
 
         void CMEApplication::toApp(Message &message, const SessionID &sessionID) throw( DoNotSend ) {
@@ -214,8 +216,8 @@ namespace falcon {
         void CMEApplication::setCMEHeader(Message &message, const SessionID &sessionID) {
             auto pSession = socketInitiator_.getSession(sessionID);
 
-            if(!pSession)
-                return;
+            //if(!pSession)
+            //    return;
 
             auto lastMsgSeqNumProcessed = pSession->getExpectedTargetNum()-1;
             auto targetSubID = settings_.get(sessionID).getString("TargetSubID");
